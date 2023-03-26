@@ -10,7 +10,7 @@ import (
 
 func InitDatabase() {
 	// Setup the mgm default config
-	err := mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI(config.DBDSN()))
+	err := mgm.SetDefaultConfig(nil, config.DBDatabase(), options.Client().ApplyURI(config.DBDSN()))
 	if err != nil {
 		log.WithField("dbDSN", config.DBDSN()).Fatal("Failed to connect:", err)
 	}
