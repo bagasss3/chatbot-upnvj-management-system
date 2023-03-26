@@ -3,14 +3,16 @@ package model
 import (
 	"time"
 
-	"github.com/kamva/mgm/v3"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"gorm.io/gorm"
 )
 
 type Session struct {
-	mgm.DefaultModel      `bson:",inline"`
-	AccessToken           string             `json:"access_token" bson:"access_token"`
-	RefreshToken          string             `json:"refresh_token" bson:"refresh_token"`
-	RefreshTokenExpiredAt time.Time          `json:"refresh_token_expired_at" bson:"refresh_token_expired_at"`
-	UserID                primitive.ObjectID `json:"user_id" bson:"user_id"`
+	Id                    int64          `json:"id"`
+	AccessToken           string         `json:"access_token"`
+	RefreshToken          string         `json:"refresh_token"`
+	RefreshTokenExpiredAt time.Time      `json:"refresh_token_expired_at"`
+	UserID                int64          `json:"user_id"`
+	CreatedAt             time.Time      `json:"created_at"`
+	UpdatedAt             time.Time      `json:"updated_at"`
+	DeletedAt             gorm.DeletedAt `json:"deleted_at"`
 }
