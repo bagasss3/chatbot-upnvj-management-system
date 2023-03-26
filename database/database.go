@@ -3,16 +3,37 @@ package database
 import (
 	"cbupnvj/config"
 
-	"github.com/kamva/mgm/v3"
 	log "github.com/sirupsen/logrus"
-	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-func InitDatabase() {
-	// Setup the mgm default config
-	err := mgm.SetDefaultConfig(nil, config.DBDatabase(), options.Client().ApplyURI(config.DBDSN()))
+func InitDB() *gorm.DB {
+	conn, err := openDB(config.DBDSN())
 	if err != nil {
 		log.WithField("dbDSN", config.DBDSN()).Fatal("Failed to connect:", err)
 	}
+
 	log.Info("Success connect database")
+	return conn
+}
+
+func openDB(dsn string) (*gorm.DB, error) {
+	dialect := mysql.Open(dsn)
+	db, err := gorm.Open(dialect, &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	conn, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+	conn.SetMaxIdleConns(config.MaxIdleConns())
+	conn.SetMaxOpenConns(config.MaxOpenConns())
+	conn.SetConnMaxLifetime(config.ConnMaxLifeTime())
+	conn.SetConnMaxIdleTime(config.ConnMaxIdleTime())
+
+	return db, nil
 }

@@ -2,7 +2,6 @@ package console
 
 import (
 	"cbupnvj/config"
-	"cbupnvj/database"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -16,7 +15,6 @@ var RootCmd = &cobra.Command{
 
 func init() {
 	config.InitConfig()
-	database.InitDatabase()
 }
 
 // Execute :nodoc:

@@ -1,7 +1,9 @@
 package model
 
 import (
-	"github.com/kamva/mgm/v3"
+	"time"
+
+	"gorm.io/gorm"
 )
 
 type UserType string
@@ -12,10 +14,13 @@ const (
 )
 
 type User struct {
-	mgm.DefaultModel `bson:",inline"`
-	Email            string   `json:"email" bson:"email"`
-	Password         string   `json:"password" bson:"password"`
-	Name             string   `json:"name" bson:"name"`
-	Type             UserType `json:"type" bson:"type"`
-	Session          *Session `json:"session" bson:"-"`
+	Id        int64          `json:"id"`
+	Email     string         `json:"email"`
+	Password  string         `json:"password"`
+	Name      string         `json:"name"`
+	Type      UserType       `json:"type"`
+	MajorId   int64          `json:"major_id"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }

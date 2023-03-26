@@ -2,6 +2,7 @@ package console
 
 import (
 	"cbupnvj/config"
+	"cbupnvj/database"
 	"context"
 	"net/http"
 	"os"
@@ -26,6 +27,14 @@ func init() {
 }
 
 func server(cmd *cobra.Command, args []string) {
+	// Initiate Connection
+	MysqlDB := database.InitDB()
+	db, err := MysqlDB.DB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
 	// Create Echo instance
 	httpServer := echo.New()
 

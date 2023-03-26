@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -47,5 +48,29 @@ func DBPassword() string {
 }
 
 func DBDSN() string {
-	return fmt.Sprintf("mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority", DBUser(), DBPassword(), DBHost(), DBDatabase())
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", DBUser(), DBPassword(), DBHost(), DBDatabase())
+}
+
+func MaxIdleConns() int {
+	if !viper.IsSet("database.maxIdleConns") {
+		return 3
+	}
+	return viper.GetInt("database.maxIdleConns")
+}
+
+func MaxOpenConns() int {
+	if !viper.IsSet("database.maxOpenConns") {
+		return 15
+	}
+	return viper.GetInt("database.maxOpenConns")
+}
+
+func ConnMaxLifeTime() time.Duration {
+	time := viper.GetString("database.connMaxLifeTime")
+	return parseTimeDuration(time, DefaultConnMaxLifeTime)
+}
+
+func ConnMaxIdleTime() time.Duration {
+	time := viper.GetString("database.connMaxIdleTime")
+	return parseTimeDuration(time, DefaultConnMaxIdleTime)
 }
