@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS sessions (
   id BIGINT PRIMARY KEY,
   access_token TEXT NOT NULL,
+  access_token_expired_at timestamp NOT NULL,
   refresh_token TEXT NOT NULL,
   refresh_token_expired_at timestamp NOT NULL,
   user_id BIGINT NOT NULL,
