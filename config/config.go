@@ -1,6 +1,7 @@
 package config
 
 import (
+	"cbupnvj/helper"
 	"fmt"
 	"time"
 
@@ -67,10 +68,10 @@ func MaxOpenConns() int {
 
 func ConnMaxLifeTime() time.Duration {
 	time := viper.GetString("database.connMaxLifeTime")
-	return parseTimeDuration(time, DefaultConnMaxLifeTime)
+	return helper.ParseTimeDuration(time, DefaultConnMaxLifeTime)
 }
 
 func ConnMaxIdleTime() time.Duration {
 	time := viper.GetString("database.connMaxIdleTime")
-	return parseTimeDuration(time, DefaultConnMaxIdleTime)
+	return helper.ParseTimeDuration(time, DefaultConnMaxIdleTime)
 }

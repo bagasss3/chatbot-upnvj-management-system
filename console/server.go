@@ -2,7 +2,11 @@ package console
 
 import (
 	"cbupnvj/config"
+	"cbupnvj/controller"
 	"cbupnvj/database"
+	"cbupnvj/repository"
+	"cbupnvj/router"
+	"cbupnvj/service"
 	"context"
 	"net/http"
 	"os"
@@ -39,6 +43,11 @@ func server(cmd *cobra.Command, args []string) {
 	httpServer := echo.New()
 
 	// Initiate Depedency
+	userRepository := repository.NewUserRepository(MysqlDB)
+	userService := service.NewUserService(userRepository)
+	userController := controller.NewUserController(userService)
+
+	router.NewRouter(httpServer.Group("/api"), userController)
 
 	// Graceful Shutdown
 	// Catch Signal
