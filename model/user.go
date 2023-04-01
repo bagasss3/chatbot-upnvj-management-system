@@ -1,8 +1,10 @@
 package model
 
 import (
+	"context"
 	"time"
 
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
@@ -12,6 +14,15 @@ const (
 	UserAdmin      UserType = "ADMIN"
 	UserSuperAdmin UserType = "SUPER_ADMIN"
 )
+
+type CreateAdminRequest struct {
+	Email      string
+	Name       string
+	Type       UserType
+	MajorId    int64
+	Password   string
+	Repassword string
+}
 
 type User struct {
 	Id        int64          `json:"id"`
@@ -23,4 +34,18 @@ type User struct {
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+}
+
+type UserController interface {
+	HandleCreateAdmin() echo.HandlerFunc
+}
+
+type UserService interface {
+	CreateAdmin(ctx context.Context, req CreateAdminRequest) (*User, error)
+}
+
+type UserRepository interface {
+	Create(ctx context.Context, user *User) error
+	FindByID(ctx context.Context, id int64) (*User, error)
+	FindByEmail(ctx context.Context, userEmail string) (*User, error)
 }
