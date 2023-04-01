@@ -75,3 +75,19 @@ func ConnMaxIdleTime() time.Duration {
 	time := viper.GetString("database.connMaxIdleTime")
 	return helper.ParseTimeDuration(time, DefaultConnMaxIdleTime)
 }
+
+func JWTKey() string {
+	return viper.GetString("session.key")
+}
+
+// AccessTokenDuration get access token increment duration in hour
+func AccessTokenDuration() time.Duration {
+	cfg := viper.GetString("session.accessTokenDuration")
+	return helper.ParseTimeDuration(cfg, DefaultAccessTokenDuration)
+}
+
+// RefreshTokenDuration get refresh token increment duration in hour
+func RefreshTokenDuration() time.Duration {
+	cfg := viper.GetString("session.refreshTokenDuration")
+	return helper.ParseTimeDuration(cfg, DefaultRefreshTokenDuration)
+}
