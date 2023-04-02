@@ -92,3 +92,53 @@ func (u *userRepository) ResetPassword(ctx context.Context, user *model.User) er
 
 	return nil
 }
+
+func (u *userRepository) FindAll(ctx context.Context) ([]*model.User, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	var users []*model.User
+	res := u.db.WithContext(ctx).Where("type = ?", "ADMIN").Find(&users)
+	if res.Error != nil {
+		log.Error(res.Error)
+		return users, res.Error
+	}
+
+	return users, nil
+}
+
+func (u *userRepository) Update(ctx context.Context, id int64, user *model.User) error {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx":  ctx,
+		"id":   id,
+		"user": user,
+	})
+
+	err := u.db.WithContext(ctx).Select(
+		"name",
+		"major_id",
+		"password",
+	).Updates(user).Error
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return nil
+}
+
+func (u *userRepository) Delete(ctx context.Context, id int64) error {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+		"id":  id,
+	})
+
+	err := u.db.WithContext(ctx).Where("id = ?", id).Delete(&model.User{}).Error
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return nil
+}
