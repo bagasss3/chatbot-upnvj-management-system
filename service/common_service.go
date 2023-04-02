@@ -2,20 +2,17 @@ package service
 
 import (
 	"cbupnvj/config"
+	"cbupnvj/model"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-type Claims struct {
-	UserID int64 `json:"userID"`
-	jwt.StandardClaims
-}
-
-func generateToken(id int64, tokenExpired time.Duration) (string, error) {
+func generateToken(userAuth *model.UserAuth, tokenExpired time.Duration) (string, error) {
 	expirationTime := time.Now().Add(tokenExpired)
-	claims := &Claims{
-		UserID: id,
+	claims := &model.Claims{
+		UserID: userAuth.UserID,
+		Role:   userAuth.Role,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
