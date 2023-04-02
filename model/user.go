@@ -16,12 +16,19 @@ const (
 )
 
 type CreateAdminRequest struct {
-	Email      string
-	Name       string
-	Type       UserType
-	MajorId    int64
-	Password   string
-	Repassword string
+	Email      string   `json:"email"`
+	Name       string   `json:"name"`
+	Type       UserType `json:"type"`
+	MajorId    int64    `json:"major_id"`
+	Password   string   `json:"password"`
+	Repassword string   `json:"repassword"`
+}
+
+type UpdateAdminRequest struct {
+	Name       string `json:"name"`
+	MajorId    int64  `json:"major_id"`
+	Password   string `json:"password"`
+	Repassword string `json:"repassword"`
 }
 
 type User struct {
@@ -38,10 +45,18 @@ type User struct {
 
 type UserController interface {
 	HandleCreateAdmin() echo.HandlerFunc
+	HandleFindAllAdmin() echo.HandlerFunc
+	HandleFindAdminByID() echo.HandlerFunc
+	HandleUpdateAdmin() echo.HandlerFunc
+	HandleDeleteAdminByID() echo.HandlerFunc
 }
 
 type UserService interface {
 	CreateAdmin(ctx context.Context, req CreateAdminRequest) (*User, error)
+	FindAllAdmin(ctx context.Context) ([]*User, error)
+	FindAdminByID(ctx context.Context, id int64) (*User, error)
+	UpdateAdmin(ctx context.Context, id int64, req UpdateAdminRequest) (*User, error)
+	DeleteAdminByID(ctx context.Context, id int64) (bool, error)
 }
 
 type UserRepository interface {
@@ -49,4 +64,7 @@ type UserRepository interface {
 	FindByID(ctx context.Context, id int64) (*User, error)
 	FindByEmail(ctx context.Context, userEmail string) (*User, error)
 	ResetPassword(ctx context.Context, user *User) error
+	FindAll(ctx context.Context) ([]*User, error)
+	Update(ctx context.Context, id int64, user *User) error
+	Delete(ctx context.Context, id int64) error
 }

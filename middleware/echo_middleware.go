@@ -80,8 +80,26 @@ func MustAuthenticateAccessToken() echo.MiddlewareFunc {
 				return c.JSON(http.StatusUnauthorized, echo.Map{"error": "invalid token"})
 			}
 
-			c.Set("userID", claims.UserID)
-			c.Set("userRole", claims.Role)
+			ctx := SetUserToCtx(c.Request().Context(), NewUserAuth(claims.UserID, claims.Role))
+			c.SetRequest(c.Request().WithContext(ctx))
+			return next(c)
+		}
+	}
+}
+
+func MustSuperAdminOnly() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			ctx := c.Request().Context()
+			ctxUser := GetUserFromCtx(ctx)
+			if ctxUser == nil {
+				return c.JSON(http.StatusUnauthorized, echo.Map{"error": "invalid user auth"})
+			}
+
+			if ctxUser.Role != model.UserSuperAdmin {
+				return c.JSON(http.StatusUnauthorized, echo.Map{"error": "no permission"})
+			}
+
 			return next(c)
 		}
 	}
