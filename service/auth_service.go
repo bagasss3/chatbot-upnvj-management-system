@@ -47,13 +47,18 @@ func (a *authService) LoginByEmailAndPassword(ctx context.Context, req model.Log
 		return nil, constant.ErrUnauthorized
 	}
 
-	accessToken, err := generateToken(user.Id, config.AccessTokenDuration())
+	userAuth := &model.UserAuth{
+		UserID: user.Id,
+		Role:   user.Type,
+	}
+
+	accessToken, err := generateToken(userAuth, config.AccessTokenDuration())
 	if err != nil {
 		log.Error(err)
 		return nil, err
 	}
 
-	refreshToken, err := generateToken(user.Id, config.RefreshTokenDuration())
+	refreshToken, err := generateToken(userAuth, config.RefreshTokenDuration())
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -100,13 +105,24 @@ func (a *authService) RefreshToken(ctx context.Context, req model.RefreshTokenRe
 		return nil, constant.ErrRefreshTokenExpired
 	}
 
-	newAccessToken, err := generateToken(session.UserID, config.AccessTokenDuration())
+	user, err := a.userRepository.FindByID(ctx, session.UserID)
+	if err != nil {
+		log.Error(err)
+		return nil, constant.ErrNotFound
+	}
+
+	userAuth := &model.UserAuth{
+		UserID: user.Id,
+		Role:   user.Type,
+	}
+
+	newAccessToken, err := generateToken(userAuth, config.AccessTokenDuration())
 	if err != nil {
 		log.Error(err)
 		return nil, err
 	}
 
-	newRefreshToken, err := generateToken(session.UserID, config.RefreshTokenDuration())
+	newRefreshToken, err := generateToken(userAuth, config.RefreshTokenDuration())
 	if err != nil {
 		log.Error(err)
 		return nil, err
