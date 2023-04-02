@@ -22,6 +22,32 @@ func GenerateID() int64 {
 	return time.Now().UnixNano() + int64(rand.Intn(10000))
 }
 
+func GeneratePassword() string {
+	rand.Seed(time.Now().UnixNano())
+
+	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	const length = 10
+
+	randBytes := make([]byte, length)
+	for i := 0; i < length; i++ {
+		randBytes[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+
+	randStr := string(randBytes)
+
+	return randStr
+}
+
+func StringToSlice(s string) []string {
+	slice := make([]string, len(s))
+
+	for i, c := range s {
+		slice[i] = string(c)
+	}
+
+	return slice
+}
+
 func HashString(txt string) (string, error) {
 	bt, err := bcrypt.GenerateFromPassword([]byte(txt), 10)
 	if err != nil {

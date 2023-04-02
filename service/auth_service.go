@@ -6,6 +6,7 @@ import (
 	"cbupnvj/helper"
 	"cbupnvj/model"
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -40,7 +41,7 @@ func (a *authService) LoginByEmailAndPassword(ctx context.Context, req model.Log
 		return nil, constant.ErrNotFound
 	}
 
-	checkPwd := helper.IsHashStringMatch([]byte(req.PlainPassword), []byte(user.Password))
+	checkPwd := helper.IsHashStringMatch([]byte(req.Password), []byte(user.Password))
 	if !checkPwd {
 		log.Error("wrong email / password")
 		return nil, constant.ErrUnauthorized
@@ -124,4 +125,42 @@ func (a *authService) RefreshToken(ctx context.Context, req model.RefreshTokenRe
 	}
 
 	return session, nil
+}
+
+func (a *authService) ForgotPassword(ctx context.Context, req model.ForgotPasswordRequest) (bool, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx":     ctx,
+		"request": req,
+	})
+
+	user, err := a.userRepository.FindByEmail(ctx, req.Email)
+	if err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	if user == nil {
+		log.Error(err)
+		return false, constant.ErrNotFound
+	}
+
+	newPlainPassword := helper.GeneratePassword()
+	newHashedPassword, err := helper.HashString(newPlainPassword)
+	if err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	userFieldsToUpdate := &model.User{
+		Id:       user.Id,
+		Password: newHashedPassword,
+	}
+
+	if err = a.userRepository.ResetPassword(ctx, userFieldsToUpdate); err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	sendMail(ctx, user.Email, "Forgot Password", fmt.Sprintf("Your new Password: %s", newPlainPassword))
+	return true, nil
 }
