@@ -75,3 +75,20 @@ func (u *userRepository) FindByEmail(ctx context.Context, userEmail string) (*mo
 		return nil, err
 	}
 }
+
+func (u *userRepository) ResetPassword(ctx context.Context, user *model.User) error {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx":  ctx,
+		"user": user,
+	})
+
+	err := u.db.WithContext(ctx).Select(
+		"password",
+	).Updates(user).Error
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return nil
+}

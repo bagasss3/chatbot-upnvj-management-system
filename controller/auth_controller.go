@@ -28,8 +28,8 @@ func (a *authController) HandleLoginByEmailAndPassword() echo.HandlerFunc {
 		}
 
 		login, err := a.authService.LoginByEmailAndPassword(c.Request().Context(), model.LoginRequest{
-			Email:         req.Email,
-			PlainPassword: req.PlainPassword,
+			Email:    req.Email,
+			Password: req.Password,
 		})
 		if err != nil {
 			log.Error(err)
@@ -57,5 +57,26 @@ func (a *authController) HandleRefreshToken() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, refreshToken)
+	}
+}
+
+func (a *authController) HandleForgotPassword() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		req := model.ForgotPasswordRequest{}
+		if err := c.Bind(&req); err != nil {
+			log.Error(err)
+			return constant.ErrInternal
+		}
+
+		isSend, err := a.authService.ForgotPassword(c.Request().Context(), model.ForgotPasswordRequest{
+			Email: req.Email,
+		})
+
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, isSend)
 	}
 }

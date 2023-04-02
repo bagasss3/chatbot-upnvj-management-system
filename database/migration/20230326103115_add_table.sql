@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
   id BIGINT PRIMARY KEY,
   name VARCHAR(100),
   email VARCHAR(100),
-  password VARCHAR(50),
+  password TEXT,
   type ENUM('ADMIN', 'SUPER_ADMIN'),
   major_id BIGINT,
   created_at timestamp NOT NULL DEFAULT NOW(),
