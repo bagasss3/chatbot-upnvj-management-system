@@ -91,3 +91,11 @@ func RefreshTokenDuration() time.Duration {
 	cfg := viper.GetString("session.refreshTokenDuration")
 	return helper.ParseTimeDuration(cfg, DefaultRefreshTokenDuration)
 }
+
+func MailUsername() string {
+	return viper.GetString("mail.username")
+}
+
+func MailPassword() string {
+	return viper.GetString("mail.password")
+}
