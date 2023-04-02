@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -41,6 +42,9 @@ func server(cmd *cobra.Command, args []string) {
 
 	// Create Echo instance
 	httpServer := echo.New()
+	httpServer.Use(middleware.Logger())
+	httpServer.Use(middleware.Recover())
+	httpServer.Use(middleware.CORS())
 
 	// Initiate Depedency
 	userRepository := repository.NewUserRepository(MysqlDB)
