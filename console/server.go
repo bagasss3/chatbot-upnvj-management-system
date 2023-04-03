@@ -49,14 +49,17 @@ func server(cmd *cobra.Command, args []string) {
 	// Initiate Depedency
 	userRepository := repository.NewUserRepository(MysqlDB)
 	sessionRepository := repository.NewSessionRepository(MysqlDB)
+	intentRepository := repository.NewIntentRepository(MysqlDB)
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
+	intentService := service.NewIntentService(intentRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
+	intentController := controller.NewIntentController(intentService)
 
-	router.NewRouter(httpServer.Group("/api"), userController, authController)
+	router.NewRouter(httpServer.Group("/api"), userController, authController, intentController)
 
 	// Graceful Shutdown
 	// Catch Signal
