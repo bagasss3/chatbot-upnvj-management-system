@@ -2,6 +2,7 @@ package controller
 
 import (
 	"cbupnvj/constant"
+	"cbupnvj/middleware"
 	"cbupnvj/model"
 	"net/http"
 	"strconv"
@@ -124,5 +125,46 @@ func (u *userController) HandleDeleteAdminByID() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, isDeleted)
+	}
+}
+
+func (u *userController) HandleProfile() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ctx := c.Request().Context()
+		ctxUser := middleware.GetUserFromCtx(ctx)
+
+		user, err := u.userService.FindAdminByID(ctx, ctxUser.UserID)
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, user)
+	}
+}
+
+func (u *userController) HandleUpdateProfile() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		req := model.UpdateAdminRequest{}
+		if err := c.Bind(&req); err != nil {
+			log.Error(err)
+			return constant.ErrInternal
+		}
+
+		ctx := c.Request().Context()
+		ctxUser := middleware.GetUserFromCtx(ctx)
+
+		update, err := u.userService.UpdateAdmin(c.Request().Context(), ctxUser.UserID, model.UpdateAdminRequest{
+			Name:       req.Name,
+			MajorId:    req.MajorId,
+			Password:   req.Password,
+			Repassword: req.Repassword,
+		})
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, update)
 	}
 }
