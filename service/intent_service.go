@@ -25,6 +25,11 @@ func (i *intentService) CreateIntent(ctx context.Context, req model.CreateUpdate
 		"request": req,
 	})
 
+	if err := req.Validate(); err != nil {
+		log.Error(err)
+		return nil, constant.HttpValidationOrInternalErr(err)
+	}
+
 	intent := &model.Intent{
 		Id:   helper.GenerateID(),
 		Name: req.Name,
@@ -82,6 +87,11 @@ func (i *intentService) UpdateIntent(ctx context.Context, id int64, req model.Cr
 		"id":  id,
 		"req": req,
 	})
+
+	if err := req.Validate(); err != nil {
+		log.Error(err)
+		return nil, constant.HttpValidationOrInternalErr(err)
+	}
 
 	intent, err := i.FindIntentByID(ctx, id)
 	if err != nil {
