@@ -16,19 +16,27 @@ const (
 )
 
 type CreateAdminRequest struct {
-	Email      string   `json:"email"`
-	Name       string   `json:"name"`
-	Type       UserType `json:"type"`
-	MajorId    int64    `json:"major_id"`
-	Password   string   `json:"password"`
-	Repassword string   `json:"repassword"`
+	Email      string   `json:"email" validate:"required,email"`
+	Name       string   `json:"name" validate:"required,min=3,max=60"`
+	Type       UserType `json:"type" validate:"required"`
+	MajorId    int64    `json:"major_id" validate:"required"`
+	Password   string   `json:"password" validate:"required"`
+	Repassword string   `json:"repassword" validate:"required"`
+}
+
+func (c *CreateAdminRequest) Validate() error {
+	return validate.Struct(c)
 }
 
 type UpdateAdminRequest struct {
-	Name       string `json:"name"`
-	MajorId    int64  `json:"major_id"`
-	Password   string `json:"password"`
-	Repassword string `json:"repassword"`
+	Name       string `json:"name" validate:"required,min=3,max=60"`
+	MajorId    int64  `json:"major_id" validate:"required"`
+	Password   string `json:"password" validate:"required"`
+	Repassword string `json:"repassword" validate:"required"`
+}
+
+func (c *UpdateAdminRequest) Validate() error {
+	return validate.Struct(c)
 }
 
 type User struct {

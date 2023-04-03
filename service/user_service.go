@@ -30,6 +30,11 @@ func (u *userService) CreateAdmin(ctx context.Context, req model.CreateAdminRequ
 		return nil, constant.ErrPasswordMismatch
 	}
 
+	if err := req.Validate(); err != nil {
+		log.Error(err)
+		return nil, constant.HttpValidationOrInternalErr(err)
+	}
+
 	if !isValidUserType(req.Type) {
 		log.Error("Invalid user type")
 		return nil, constant.ErrInvalidArgument
@@ -105,6 +110,11 @@ func (u *userService) UpdateAdmin(ctx context.Context, id int64, req model.Updat
 	if req.Password != req.Repassword {
 		log.Error("Password mismatch")
 		return nil, constant.ErrPasswordMismatch
+	}
+
+	if err := req.Validate(); err != nil {
+		log.Error(err)
+		return nil, constant.HttpValidationOrInternalErr(err)
 	}
 
 	user, err := u.FindAdminByID(ctx, id)
