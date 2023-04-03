@@ -9,7 +9,11 @@ import (
 )
 
 type CreateUpdateIntentRequest struct {
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required,min=3,max=60"`
+}
+
+func (c *CreateUpdateIntentRequest) Validate() error {
+	return validate.Struct(c)
 }
 
 type Intent struct {
