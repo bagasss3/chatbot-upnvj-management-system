@@ -49,6 +49,8 @@ type UserController interface {
 	HandleFindAdminByID() echo.HandlerFunc
 	HandleUpdateAdmin() echo.HandlerFunc
 	HandleDeleteAdminByID() echo.HandlerFunc
+	HandleProfile() echo.HandlerFunc
+	HandleUpdateProfile() echo.HandlerFunc
 }
 
 type UserService interface {
