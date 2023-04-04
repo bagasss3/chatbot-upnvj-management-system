@@ -8,11 +8,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func generateToken(userAuth *model.UserAuth, tokenExpired time.Duration) (string, error) {
+func generateToken(userAuth *model.UserAuth, tokenType model.TokenType, tokenExpired time.Duration) (string, error) {
 	expirationTime := time.Now().Add(tokenExpired)
 	claims := &model.Claims{
 		UserID: userAuth.UserID,
 		Role:   userAuth.Role,
+		Type:   tokenType,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},

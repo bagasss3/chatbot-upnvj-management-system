@@ -52,13 +52,13 @@ func (a *authService) LoginByEmailAndPassword(ctx context.Context, req model.Log
 		Role:   user.Type,
 	}
 
-	accessToken, err := generateToken(userAuth, config.AccessTokenDuration())
+	accessToken, err := generateToken(userAuth, model.ACCESS_TOKEN_TYPE, config.AccessTokenDuration())
 	if err != nil {
 		log.Error(err)
 		return nil, err
 	}
 
-	refreshToken, err := generateToken(userAuth, config.RefreshTokenDuration())
+	refreshToken, err := generateToken(userAuth, model.REFRESH_TOKEN_TYPE, config.RefreshTokenDuration())
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -116,13 +116,13 @@ func (a *authService) RefreshToken(ctx context.Context, req model.RefreshTokenRe
 		Role:   user.Type,
 	}
 
-	newAccessToken, err := generateToken(userAuth, config.AccessTokenDuration())
+	newAccessToken, err := generateToken(userAuth, model.ACCESS_TOKEN_TYPE, config.AccessTokenDuration())
 	if err != nil {
 		log.Error(err)
 		return nil, err
 	}
 
-	newRefreshToken, err := generateToken(userAuth, config.RefreshTokenDuration())
+	newRefreshToken, err := generateToken(userAuth, model.REFRESH_TOKEN_TYPE, config.RefreshTokenDuration())
 	if err != nil {
 		log.Error(err)
 		return nil, err
