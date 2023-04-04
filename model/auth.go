@@ -7,9 +7,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type TokenType string
+
+const (
+	ACCESS_TOKEN_TYPE  TokenType = "ACCESS_TOKEN"
+	REFRESH_TOKEN_TYPE TokenType = "REFRESH_TOKEN"
+)
+
 type Claims struct {
-	UserID int64    `json:"userID"`
-	Role   UserType `json:"role"`
+	UserID int64     `json:"userID"`
+	Role   UserType  `json:"role"`
+	Type   TokenType `json:"type"`
 	jwt.StandardClaims
 }
 

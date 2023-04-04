@@ -40,6 +40,17 @@ func (u *userService) CreateAdmin(ctx context.Context, req model.CreateAdminRequ
 		return nil, constant.ErrInvalidArgument
 	}
 
+	findEmail, err := u.userRepository.FindByEmail(ctx, req.Email)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	if findEmail != nil {
+		log.Error("Email already exists")
+		return nil, constant.ErrAlreadyExists
+	}
+
 	cipherPwd, err := helper.HashString(req.Password)
 	if err != nil {
 		log.Error(err)
