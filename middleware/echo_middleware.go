@@ -47,6 +47,11 @@ func MustAuthenticateAccessToken() echo.MiddlewareFunc {
 				return c.JSON(http.StatusUnauthorized, echo.Map{"error": "invalid token"})
 			}
 
+			if claims.Type != model.ACCESS_TOKEN_TYPE {
+				logrus.Error(token.Valid)
+				return c.JSON(http.StatusUnauthorized, echo.Map{"error": "invalid token not access token"})
+			}
+
 			ctx := SetUserToCtx(c.Request().Context(), NewUserAuth(claims.UserID, claims.Role))
 			c.SetRequest(c.Request().WithContext(ctx))
 			return next(c)
