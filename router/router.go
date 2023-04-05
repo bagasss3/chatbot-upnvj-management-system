@@ -13,13 +13,15 @@ type router struct {
 	intentController    model.IntentController
 	utteranceController model.UtteranceController
 	exampleController   model.ExampleController
+	actionController    model.ActionController
 }
 
 func NewRouter(group *echo.Group, userController model.UserController,
 	authController model.AuthController,
 	intentController model.IntentController,
 	utteranceController model.UtteranceController,
-	exampleController model.ExampleController) {
+	exampleController model.ExampleController,
+	actionController model.ActionController) {
 	rt := &router{
 		group:               group,
 		userController:      userController,
@@ -27,6 +29,7 @@ func NewRouter(group *echo.Group, userController model.UserController,
 		intentController:    intentController,
 		utteranceController: utteranceController,
 		exampleController:   exampleController,
+		actionController:    actionController,
 	}
 
 	rt.RouterInit()
@@ -38,4 +41,5 @@ func (r *router) RouterInit() {
 	r.intentRouter()
 	r.utteranceRouter()
 	r.exampleRouter()
+	r.actionRouter()
 }
