@@ -81,6 +81,7 @@ func (u *utteranceRepository) Update(ctx context.Context, id int64, utterance *m
 
 	err := u.db.WithContext(ctx).Select(
 		"name",
+		"response",
 	).Updates(utterance).Error
 	if err != nil {
 		log.Error(err)
