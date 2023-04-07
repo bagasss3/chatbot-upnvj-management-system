@@ -7,13 +7,14 @@ import (
 )
 
 type router struct {
-	group               *echo.Group
-	userController      model.UserController
-	authController      model.AuthController
-	intentController    model.IntentController
-	utteranceController model.UtteranceController
-	exampleController   model.ExampleController
-	actionController    model.ActionController
+	group                *echo.Group
+	userController       model.UserController
+	authController       model.AuthController
+	intentController     model.IntentController
+	utteranceController  model.UtteranceController
+	exampleController    model.ExampleController
+	actionController     model.ActionController
+	actionHttpController model.ActionHttpController
 }
 
 func NewRouter(group *echo.Group, userController model.UserController,
@@ -21,15 +22,17 @@ func NewRouter(group *echo.Group, userController model.UserController,
 	intentController model.IntentController,
 	utteranceController model.UtteranceController,
 	exampleController model.ExampleController,
-	actionController model.ActionController) {
+	actionController model.ActionController,
+	actionHttpController model.ActionHttpController) {
 	rt := &router{
-		group:               group,
-		userController:      userController,
-		authController:      authController,
-		intentController:    intentController,
-		utteranceController: utteranceController,
-		exampleController:   exampleController,
-		actionController:    actionController,
+		group:                group,
+		userController:       userController,
+		authController:       authController,
+		intentController:     intentController,
+		utteranceController:  utteranceController,
+		exampleController:    exampleController,
+		actionController:     actionController,
+		actionHttpController: actionHttpController,
 	}
 
 	rt.RouterInit()

@@ -53,6 +53,7 @@ func server(cmd *cobra.Command, args []string) {
 	utteranceRepository := repository.NewUtteranceRepository(MysqlDB)
 	exampleRepository := repository.NewExampleRepository(MysqlDB)
 	actionRepository := repository.NewActionRepository(MysqlDB)
+	actionHttpRepository := repository.NewActionHttpRepository(MysqlDB)
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
@@ -60,6 +61,7 @@ func server(cmd *cobra.Command, args []string) {
 	utteranceService := service.NewUtteranceService(utteranceRepository)
 	exampleService := service.NewExampleService(exampleRepository, intentRepository)
 	actionService := service.NewActionService(actionRepository)
+	actionHttpService := service.NewActionHttpService(actionHttpRepository, actionRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
@@ -67,6 +69,7 @@ func server(cmd *cobra.Command, args []string) {
 	utteranceController := controller.NewUtteranceController(utteranceService)
 	exampleController := controller.NewExampleController(exampleService)
 	actionController := controller.NewActionController(actionService)
+	actionHttpController := controller.NewActionHttpController(actionHttpService)
 
 	router.NewRouter(httpServer.Group("/api"),
 		userController,
@@ -74,7 +77,8 @@ func server(cmd *cobra.Command, args []string) {
 		intentController,
 		utteranceController,
 		exampleController,
-		actionController)
+		actionController,
+		actionHttpController)
 
 	// Graceful Shutdown
 	// Catch Signal
