@@ -55,6 +55,7 @@ func server(cmd *cobra.Command, args []string) {
 	actionHttpRepository := repository.NewActionHttpRepository(MysqlDB)
 	reqBodyRepository := repository.NewReqBodyRepository(MysqlDB)
 	krsActionRepository := repository.NewKrsActionRepository(MysqlDB)
+	entityRepository := repository.NewEntityRepository(MysqlDB)
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
@@ -64,6 +65,7 @@ func server(cmd *cobra.Command, args []string) {
 	actionHttpService := service.NewActionHttpService(actionHttpRepository)
 	reqBodyService := service.NewReqBodyService(reqBodyRepository, actionHttpRepository)
 	krsActionService := service.NewKrsActionService(krsActionRepository)
+	entityService := service.NewEntityService(entityRepository, intentRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
@@ -73,6 +75,7 @@ func server(cmd *cobra.Command, args []string) {
 	actionHttpController := controller.NewActionHttpController(actionHttpService)
 	reqBodyController := controller.NewReqBodyController(reqBodyService)
 	krsActionController := controller.NewKrsActionController(krsActionService)
+	entityController := controller.NewEntityController(entityService)
 
 	router.NewRouter(httpServer.Group("/api"),
 		userController,
@@ -82,7 +85,8 @@ func server(cmd *cobra.Command, args []string) {
 		exampleController,
 		actionHttpController,
 		reqBodyController,
-		krsActionController)
+		krsActionController,
+		entityController)
 
 	// Graceful Shutdown
 	// Catch Signal
