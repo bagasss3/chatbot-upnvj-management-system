@@ -52,27 +52,27 @@ func server(cmd *cobra.Command, args []string) {
 	intentRepository := repository.NewIntentRepository(MysqlDB)
 	utteranceRepository := repository.NewUtteranceRepository(MysqlDB)
 	exampleRepository := repository.NewExampleRepository(MysqlDB)
-	actionRepository := repository.NewActionRepository(MysqlDB)
 	actionHttpRepository := repository.NewActionHttpRepository(MysqlDB)
 	reqBodyRepository := repository.NewReqBodyRepository(MysqlDB)
+	krsActionRepository := repository.NewKrsActionRepository(MysqlDB)
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
 	intentService := service.NewIntentService(intentRepository)
 	utteranceService := service.NewUtteranceService(utteranceRepository)
 	exampleService := service.NewExampleService(exampleRepository, intentRepository)
-	actionService := service.NewActionService(actionRepository)
-	actionHttpService := service.NewActionHttpService(actionHttpRepository, actionRepository)
+	actionHttpService := service.NewActionHttpService(actionHttpRepository)
 	reqBodyService := service.NewReqBodyService(reqBodyRepository, actionHttpRepository)
+	krsActionService := service.NewKrsActionService(krsActionRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
 	intentController := controller.NewIntentController(intentService)
 	utteranceController := controller.NewUtteranceController(utteranceService)
 	exampleController := controller.NewExampleController(exampleService)
-	actionController := controller.NewActionController(actionService)
 	actionHttpController := controller.NewActionHttpController(actionHttpService)
 	reqBodyController := controller.NewReqBodyController(reqBodyService)
+	krsActionController := controller.NewKrsActionController(krsActionService)
 
 	router.NewRouter(httpServer.Group("/api"),
 		userController,
@@ -80,9 +80,9 @@ func server(cmd *cobra.Command, args []string) {
 		intentController,
 		utteranceController,
 		exampleController,
-		actionController,
 		actionHttpController,
-		reqBodyController)
+		reqBodyController,
+		krsActionController)
 
 	// Graceful Shutdown
 	// Catch Signal

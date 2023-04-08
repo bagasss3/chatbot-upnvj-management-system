@@ -22,7 +22,7 @@ func NewActionHttpController(actionHttpService model.ActionHttpService) model.Ac
 
 func (a *actionHttpController) HandleCreateActionHttp() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := model.CreateActionHttpRequest{}
+		req := model.CreateUpdateActionHttpRequest{}
 		if err := c.Bind(&req); err != nil {
 			log.Error(err)
 			return constant.ErrInternal
@@ -38,17 +38,29 @@ func (a *actionHttpController) HandleCreateActionHttp() echo.HandlerFunc {
 	}
 }
 
-func (a *actionHttpController) HandleFindActionHttpByActionID() echo.HandlerFunc {
+func (a *actionHttpController) HandleFindAllActionHttp() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		actionIdParam := c.Param("actionId")
-
-		actionId, err := strconv.ParseInt(actionIdParam, 10, 64)
+		actionHttps, err := a.actionHttpService.FindAllActionHttp(c.Request().Context())
 		if err != nil {
 			log.Error(err)
 			return err
 		}
 
-		actionHttp, err := a.actionHttpService.FindActionHttpByID(c.Request().Context(), actionId)
+		return c.JSON(http.StatusOK, actionHttps)
+	}
+}
+
+func (a *actionHttpController) HandleFindActionHttpByID() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		idParam := c.Param("id")
+
+		id, err := strconv.ParseInt(idParam, 10, 64)
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		actionHttp, err := a.actionHttpService.FindActionHttpByID(c.Request().Context(), id)
 		if err != nil {
 			log.Error(err)
 			return err
@@ -60,20 +72,20 @@ func (a *actionHttpController) HandleFindActionHttpByActionID() echo.HandlerFunc
 
 func (a *actionHttpController) HandleUpdateActionHttp() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := model.UpdateActionHttpRequest{}
+		req := model.CreateUpdateActionHttpRequest{}
 		if err := c.Bind(&req); err != nil {
 			log.Error(err)
 			return constant.ErrInternal
 		}
 
-		actionIdParam := c.Param("actionId")
-		actionId, err := strconv.ParseInt(actionIdParam, 10, 64)
+		idParam := c.Param("id")
+		id, err := strconv.ParseInt(idParam, 10, 64)
 		if err != nil {
 			log.Error(err)
 			return err
 		}
 
-		update, err := a.actionHttpService.UpdateActionHttp(c.Request().Context(), actionId, req)
+		update, err := a.actionHttpService.UpdateActionHttp(c.Request().Context(), id, req)
 		if err != nil {
 			log.Error(err)
 			return err
@@ -85,15 +97,15 @@ func (a *actionHttpController) HandleUpdateActionHttp() echo.HandlerFunc {
 
 func (a *actionHttpController) HandleDeleteActionHttp() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		actionIdParam := c.Param("actionId")
+		idParam := c.Param("id")
 
-		actionId, err := strconv.ParseInt(actionIdParam, 10, 64)
+		id, err := strconv.ParseInt(idParam, 10, 64)
 		if err != nil {
 			log.Error(err)
 			return err
 		}
 
-		isDeleted, err := a.actionHttpService.DeleteActionHttp(c.Request().Context(), actionId)
+		isDeleted, err := a.actionHttpService.DeleteActionHttp(c.Request().Context(), id)
 		if err != nil {
 			log.Error(err)
 			return err
