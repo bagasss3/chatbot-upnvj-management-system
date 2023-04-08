@@ -33,7 +33,31 @@ func (a *actionHttpRepository) Create(ctx context.Context, actionHttp *model.Act
 	return nil
 }
 
-func (a *actionHttpRepository) FindByID(ctx context.Context, actionId int64) (*model.ActionHttp, error) {
+func (a *actionHttpRepository) FindByID(ctx context.Context, id int64) (*model.ActionHttp, error) {
+	if id <= 0 {
+		return nil, nil
+	}
+
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+		"id":  id,
+	})
+
+	actionHttp := &model.ActionHttp{}
+	err := a.db.WithContext(ctx).Where("id = ?", id).Take(actionHttp).Error
+	switch err {
+	case nil:
+	case gorm.ErrRecordNotFound:
+		return nil, nil
+	default:
+		log.Error(err)
+		return nil, err
+	}
+
+	return actionHttp, nil
+}
+
+func (a *actionHttpRepository) FindByActionID(ctx context.Context, actionId int64) (*model.ActionHttp, error) {
 	if actionId <= 0 {
 		return nil, nil
 	}
