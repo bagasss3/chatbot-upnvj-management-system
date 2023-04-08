@@ -8,8 +8,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type CreateActionHttpRequest struct {
-	ActionId     int64  `json:"action_id" validate:"required"`
+type CreateUpdateActionHttpRequest struct {
+	Name         string `json:"name" validate:"required,min=3,max=60"`
 	GetHttpReq   string `json:"get_http_req" validate:"required"`
 	PostHttpReq  string `json:"post_http_req" validate:"omitempty"`
 	PutHttpReq   string `json:"put_http_req" validate:"omitempty"`
@@ -18,26 +18,13 @@ type CreateActionHttpRequest struct {
 	TextResponse string `json:"text_response" validate:"required,min=3,max=100"`
 }
 
-func (c *CreateActionHttpRequest) Validate() error {
-	return validate.Struct(c)
-}
-
-type UpdateActionHttpRequest struct {
-	GetHttpReq   string `json:"get_http_req" validate:"required"`
-	PostHttpReq  string `json:"post_http_req" validate:"omitempty"`
-	PutHttpReq   string `json:"put_http_req" validate:"omitempty"`
-	DelHttpReq   string `json:"del_http_req" validate:"omitempty"`
-	ApiKey       string `json:"api_key" validate:"omitempty"`
-	TextResponse string `json:"text_response" validate:"required,min=3,max=100"`
-}
-
-func (c *UpdateActionHttpRequest) Validate() error {
+func (c *CreateUpdateActionHttpRequest) Validate() error {
 	return validate.Struct(c)
 }
 
 type ActionHttp struct {
 	Id           int64          `json:"id"`
-	ActionId     int64          `json:"action_id"`
+	Name         string         `json:"name"`
 	GetHttpReq   string         `json:"get_http_req"`
 	PostHttpReq  string         `json:"post_http_req"`
 	PutHttpReq   string         `json:"put_http_req"`
@@ -51,22 +38,24 @@ type ActionHttp struct {
 
 type ActionHttpController interface {
 	HandleCreateActionHttp() echo.HandlerFunc
-	HandleFindActionHttpByActionID() echo.HandlerFunc
+	HandleFindAllActionHttp() echo.HandlerFunc
+	HandleFindActionHttpByID() echo.HandlerFunc
 	HandleUpdateActionHttp() echo.HandlerFunc
 	HandleDeleteActionHttp() echo.HandlerFunc
 }
 
 type ActionHttpService interface {
-	CreateActionHttp(ctx context.Context, req CreateActionHttpRequest) (*ActionHttp, error)
-	FindActionHttpByID(ctx context.Context, actionId int64) (*ActionHttp, error)
-	UpdateActionHttp(ctx context.Context, actionId int64, req UpdateActionHttpRequest) (*ActionHttp, error)
-	DeleteActionHttp(ctx context.Context, actionId int64) (bool, error)
+	CreateActionHttp(ctx context.Context, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
+	FindAllActionHttp(ctx context.Context) ([]*ActionHttp, error)
+	FindActionHttpByID(ctx context.Context, id int64) (*ActionHttp, error)
+	UpdateActionHttp(ctx context.Context, id int64, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
+	DeleteActionHttp(ctx context.Context, id int64) (bool, error)
 }
 
 type ActionHttpRepository interface {
 	Create(ctx context.Context, actionHttp *ActionHttp) error
+	FindAll(ctx context.Context) ([]*ActionHttp, error)
 	FindByID(ctx context.Context, id int64) (*ActionHttp, error)
-	FindByActionID(ctx context.Context, actionId int64) (*ActionHttp, error)
 	Update(ctx context.Context, actionHttp *ActionHttp) error
-	Delete(ctx context.Context, actionId int64) error
+	Delete(ctx context.Context, id int64) error
 }

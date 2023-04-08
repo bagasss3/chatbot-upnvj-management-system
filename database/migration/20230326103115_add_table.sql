@@ -43,14 +43,6 @@ CREATE TABLE IF NOT EXISTS utterances (
   deleted_at timestamp NULL
 );
 
-CREATE TABLE IF NOT EXISTS actions (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(150) NOT NULL,
-  created_at timestamp NOT NULL DEFAULT NOW(),
-  updated_at timestamp NOT NULL DEFAULT NOW(),
-  deleted_at timestamp NULL
-);
-
 CREATE TABLE IF NOT EXISTS stories (
   id BIGINT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
@@ -94,7 +86,7 @@ ALTER TABLE rules ADD FOREIGN KEY (intent_id) REFERENCES intents(id) ON DELETE R
 
 CREATE TABLE IF NOT EXISTS action_https (
   id BIGINT PRIMARY KEY,
-  action_id BIGINT NOT NULL,
+  name VARCHAR(150) NOT NULL,
   get_http_req TEXT NOT NULL,
   post_http_req TEXT NOT NULL,
   put_http_req TEXT NOT NULL,
@@ -106,19 +98,15 @@ CREATE TABLE IF NOT EXISTS action_https (
   deleted_at timestamp NULL
 );
 
-ALTER TABLE action_https ADD FOREIGN KEY (action_id) REFERENCES actions(id) ON DELETE RESTRICT ON UPDATE CASCADE;
-
 CREATE TABLE IF NOT EXISTS krs_actions (
   id BIGINT PRIMARY KEY,
-  action_id BIGINT NOT NULL,
+  name VARCHAR(150) NOT NULL,
   get_http_req TEXT NOT NULL,
   api_key TEXT NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
   deleted_at timestamp NULL
 );
-
-ALTER TABLE krs_actions ADD FOREIGN KEY (action_id) REFERENCES actions(id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 CREATE TABLE IF NOT EXISTS req_bodies (
   id BIGINT PRIMARY KEY,
@@ -188,7 +176,6 @@ DROP TABLE IF EXISTS rules;
 DROP TABLE IF EXISTS examples;
 DROP TABLE IF EXISTS entities;
 DROP TABLE IF EXISTS stories;
-DROP TABLE IF EXISTS actions;
 DROP TABLE IF EXISTS utterances;
 DROP TABLE IF EXISTS intents;
 DROP TABLE IF EXISTS sessions;
