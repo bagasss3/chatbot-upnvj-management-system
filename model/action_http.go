@@ -65,7 +65,8 @@ type ActionHttpService interface {
 
 type ActionHttpRepository interface {
 	Create(ctx context.Context, actionHttp *ActionHttp) error
-	FindByID(ctx context.Context, actionId int64) (*ActionHttp, error)
+	FindByID(ctx context.Context, id int64) (*ActionHttp, error)
+	FindByActionID(ctx context.Context, actionId int64) (*ActionHttp, error)
 	Update(ctx context.Context, actionHttp *ActionHttp) error
 	Delete(ctx context.Context, actionId int64) error
 }

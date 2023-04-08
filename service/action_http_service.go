@@ -43,7 +43,7 @@ func (a *actionHttpService) CreateActionHttp(ctx context.Context, req model.Crea
 		return nil, constant.ErrNotFound
 	}
 
-	isActionUsed, err := a.FindActionHttpByID(ctx, req.ActionId)
+	isActionUsed, err := a.actionHttpRepository.FindByActionID(ctx, req.ActionId)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -84,7 +84,7 @@ func (a *actionHttpService) FindActionHttpByID(ctx context.Context, actionId int
 		return nil, constant.ErrInvalidArgument
 	}
 
-	actionHttp, err := a.actionHttpRepository.FindByID(ctx, actionId)
+	actionHttp, err := a.actionHttpRepository.FindByActionID(ctx, actionId)
 	if err != nil {
 		log.Error(err)
 		return nil, err
