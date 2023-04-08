@@ -10,27 +10,25 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type actionController struct {
-	actionService model.ActionService
+type krsActionController struct {
+	krsActionService model.KrsActionService
 }
 
-func NewActionController(actionService model.ActionService) model.ActionController {
-	return &actionController{
-		actionService: actionService,
+func NewKrsActionController(krsActionService model.KrsActionService) model.KrsActionController {
+	return &krsActionController{
+		krsActionService: krsActionService,
 	}
 }
 
-func (a *actionController) HandleCreateAction() echo.HandlerFunc {
+func (k *krsActionController) HandleCreateKrsAction() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := model.CreateUpdateActionRequest{}
+		req := model.CreateUpdateKrsActionRequest{}
 		if err := c.Bind(&req); err != nil {
 			log.Error(err)
 			return constant.ErrInternal
 		}
 
-		create, err := a.actionService.CreateAction(c.Request().Context(), model.CreateUpdateActionRequest{
-			Name: req.Name,
-		})
+		create, err := k.krsActionService.CreateKrsAction(c.Request().Context(), req)
 		if err != nil {
 			log.Error(err)
 			return err
@@ -40,19 +38,19 @@ func (a *actionController) HandleCreateAction() echo.HandlerFunc {
 	}
 }
 
-func (a *actionController) HandleFindAllAction() echo.HandlerFunc {
+func (k *krsActionController) HandleFindAllKrsAction() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		actions, err := a.actionService.FindAllAction(c.Request().Context())
+		krsActions, err := k.krsActionService.FindAllKrsAction(c.Request().Context())
 		if err != nil {
 			log.Error(err)
 			return err
 		}
 
-		return c.JSON(http.StatusOK, actions)
+		return c.JSON(http.StatusOK, krsActions)
 	}
 }
 
-func (a *actionController) HandleFindActionByID() echo.HandlerFunc {
+func (k *krsActionController) HandleFindKrsActionByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		idParam := c.Param("id")
 
@@ -62,19 +60,19 @@ func (a *actionController) HandleFindActionByID() echo.HandlerFunc {
 			return err
 		}
 
-		action, err := a.actionService.FindActionByID(c.Request().Context(), id)
+		krsAction, err := k.krsActionService.FindKrsActionByID(c.Request().Context(), id)
 		if err != nil {
 			log.Error(err)
 			return err
 		}
 
-		return c.JSON(http.StatusOK, action)
+		return c.JSON(http.StatusOK, krsAction)
 	}
 }
 
-func (a *actionController) HandleUpdateAction() echo.HandlerFunc {
+func (k *krsActionController) HandleUpdateKrsAction() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := model.CreateUpdateActionRequest{}
+		req := model.CreateUpdateKrsActionRequest{}
 		if err := c.Bind(&req); err != nil {
 			log.Error(err)
 			return constant.ErrInternal
@@ -87,9 +85,7 @@ func (a *actionController) HandleUpdateAction() echo.HandlerFunc {
 			return err
 		}
 
-		update, err := a.actionService.UpdateAction(c.Request().Context(), id, model.CreateUpdateActionRequest{
-			Name: req.Name,
-		})
+		update, err := k.krsActionService.UpdateKrsAction(c.Request().Context(), id, req)
 		if err != nil {
 			log.Error(err)
 			return err
@@ -99,7 +95,7 @@ func (a *actionController) HandleUpdateAction() echo.HandlerFunc {
 	}
 }
 
-func (a *actionController) HandleDeleteAction() echo.HandlerFunc {
+func (k *krsActionController) HandleDeleteKrsAction() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		idParam := c.Param("id")
 
@@ -109,7 +105,7 @@ func (a *actionController) HandleDeleteAction() echo.HandlerFunc {
 			return err
 		}
 
-		isDeleted, err := a.actionService.DeleteAction(c.Request().Context(), id)
+		isDeleted, err := k.krsActionService.DeleteKrsAction(c.Request().Context(), id)
 		if err != nil {
 			log.Error(err)
 			return err

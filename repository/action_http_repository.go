@@ -33,6 +33,21 @@ func (a *actionHttpRepository) Create(ctx context.Context, actionHttp *model.Act
 	return nil
 }
 
+func (a *actionHttpRepository) FindAll(ctx context.Context) ([]*model.ActionHttp, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	var actionHttps []*model.ActionHttp
+	res := a.db.WithContext(ctx).Find(&actionHttps)
+	if res.Error != nil {
+		log.Error(res.Error)
+		return nil, res.Error
+	}
+
+	return actionHttps, nil
+}
+
 func (a *actionHttpRepository) FindByID(ctx context.Context, id int64) (*model.ActionHttp, error) {
 	if id <= 0 {
 		return nil, nil
@@ -57,30 +72,6 @@ func (a *actionHttpRepository) FindByID(ctx context.Context, id int64) (*model.A
 	return actionHttp, nil
 }
 
-func (a *actionHttpRepository) FindByActionID(ctx context.Context, actionId int64) (*model.ActionHttp, error) {
-	if actionId <= 0 {
-		return nil, nil
-	}
-
-	log := logrus.WithFields(logrus.Fields{
-		"ctx":      ctx,
-		"actionId": actionId,
-	})
-
-	actionHttp := &model.ActionHttp{}
-	err := a.db.WithContext(ctx).Where("action_id = ?", actionId).Take(actionHttp).Error
-	switch err {
-	case nil:
-	case gorm.ErrRecordNotFound:
-		return nil, nil
-	default:
-		log.Error(err)
-		return nil, err
-	}
-
-	return actionHttp, nil
-}
-
 func (a *actionHttpRepository) Update(ctx context.Context, actionHttp *model.ActionHttp) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":        ctx,
@@ -88,6 +79,7 @@ func (a *actionHttpRepository) Update(ctx context.Context, actionHttp *model.Act
 	})
 
 	err := a.db.WithContext(ctx).Select(
+		"name",
 		"get_http_req",
 		"post_http_req",
 		"put_http_req",
@@ -103,13 +95,13 @@ func (a *actionHttpRepository) Update(ctx context.Context, actionHttp *model.Act
 	return nil
 }
 
-func (a *actionHttpRepository) Delete(ctx context.Context, actionId int64) error {
+func (a *actionHttpRepository) Delete(ctx context.Context, id int64) error {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx":      ctx,
-		"actionId": actionId,
+		"ctx": ctx,
+		"id":  id,
 	})
 
-	err := a.db.WithContext(ctx).Where("action_id = ?", actionId).Delete(&model.ActionHttp{}).Error
+	err := a.db.WithContext(ctx).Where("id = ?", id).Delete(&model.ActionHttp{}).Error
 	if err != nil {
 		log.Error(err)
 		return err
