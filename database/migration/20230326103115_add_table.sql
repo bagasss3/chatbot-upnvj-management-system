@@ -73,10 +73,10 @@ ALTER TABLE examples ADD FOREIGN KEY (intent_id) REFERENCES intents(id) ON DELET
 
 CREATE TABLE IF NOT EXISTS rules (
   id BIGINT PRIMARY KEY,
-  example TEXT NOT NULL,
+  rule_title TEXT NOT NULL,
   intent_id BIGINT NOT NULL,
   response_id BIGINT NOT NULL,
-  type ENUM('UTTERANCE', 'ACTION'),
+  type ENUM('UTTERANCE', 'ACTION_HTTP'),
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
   deleted_at timestamp NULL
