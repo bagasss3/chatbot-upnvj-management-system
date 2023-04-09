@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS utterances (
 
 CREATE TABLE IF NOT EXISTS stories (
   id BIGINT PRIMARY KEY,
-  name VARCHAR(150) NOT NULL,
+  story_title TEXT NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW(),
   deleted_at timestamp NULL
@@ -121,7 +121,7 @@ ALTER TABLE req_bodies ADD FOREIGN KEY (action_http_id) REFERENCES action_https(
 CREATE TABLE IF NOT EXISTS steps (
   id BIGINT PRIMARY KEY,
   story_id BIGINT NOT NULL,
-  type ENUM('INTENT', 'UTTERANCE','ACTION'),
+  type ENUM('INTENT', 'UTTERANCE','ACTION_HTTP'),
   response_id BIGINT NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW()
