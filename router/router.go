@@ -18,6 +18,8 @@ type router struct {
 	krsActionController  model.KrsActionController
 	entityController     model.EntityController
 	ruleController       model.RuleController
+	storyController      model.StoryController
+	stepController       model.StepController
 }
 
 func NewRouter(group *echo.Group, userController model.UserController,
@@ -29,7 +31,9 @@ func NewRouter(group *echo.Group, userController model.UserController,
 	reqBodyController model.ReqBodyController,
 	krsActionController model.KrsActionController,
 	entityController model.EntityController,
-	ruleController model.RuleController) {
+	ruleController model.RuleController,
+	storyController model.StoryController,
+	stepController model.StepController) {
 	rt := &router{
 		group:                group,
 		userController:       userController,
@@ -42,6 +46,8 @@ func NewRouter(group *echo.Group, userController model.UserController,
 		krsActionController:  krsActionController,
 		entityController:     entityController,
 		ruleController:       ruleController,
+		storyController:      storyController,
+		stepController:       stepController,
 	}
 
 	rt.RouterInit()

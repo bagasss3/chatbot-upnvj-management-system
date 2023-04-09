@@ -47,6 +47,8 @@ func server(cmd *cobra.Command, args []string) {
 	httpServer.Use(middleware.CORS())
 
 	// Initiate Depedency
+	gormTransationer := repository.NewGormTransactioner(MysqlDB)
+
 	userRepository := repository.NewUserRepository(MysqlDB)
 	sessionRepository := repository.NewSessionRepository(MysqlDB)
 	intentRepository := repository.NewIntentRepository(MysqlDB)
@@ -57,6 +59,8 @@ func server(cmd *cobra.Command, args []string) {
 	krsActionRepository := repository.NewKrsActionRepository(MysqlDB)
 	entityRepository := repository.NewEntityRepository(MysqlDB)
 	ruleRepository := repository.NewRuleRepository(MysqlDB)
+	storyRepository := repository.NewStoryRepository(MysqlDB)
+	stepRepository := repository.NewStepRepository(MysqlDB)
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
@@ -68,6 +72,8 @@ func server(cmd *cobra.Command, args []string) {
 	krsActionService := service.NewKrsActionService(krsActionRepository)
 	entityService := service.NewEntityService(entityRepository, intentRepository)
 	ruleService := service.NewRuleService(ruleRepository, intentRepository, actionHttpRepository, utteranceRepository)
+	storyService := service.NewStoryService(storyRepository, stepRepository, gormTransationer)
+	stepService := service.NewStepService(storyRepository, stepRepository, intentRepository, utteranceRepository, actionHttpRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
@@ -79,6 +85,8 @@ func server(cmd *cobra.Command, args []string) {
 	krsActionController := controller.NewKrsActionController(krsActionService)
 	entityController := controller.NewEntityController(entityService)
 	ruleController := controller.NewRuleController(ruleService)
+	storyController := controller.NewStoryController(storyService)
+	stepController := controller.NewStepController(stepService)
 
 	router.NewRouter(httpServer.Group("/api"),
 		userController,
@@ -90,7 +98,9 @@ func server(cmd *cobra.Command, args []string) {
 		reqBodyController,
 		krsActionController,
 		entityController,
-		ruleController)
+		ruleController,
+		storyController,
+		stepController)
 
 	// Graceful Shutdown
 	// Catch Signal
