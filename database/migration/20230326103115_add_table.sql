@@ -141,12 +141,12 @@ ALTER TABLE log_intents ADD FOREIGN KEY (intent_id) REFERENCES intents(id) ON DE
 
 CREATE TABLE IF NOT EXISTS configurations (
   id BIGINT PRIMARY KEY,
-  dietclassifier_epoch INT NOT NULL,
-  fallbackclassifier_treshold INT NOT NULL,
-  responseselector_epoch INT NOT NULL,
-  tedpolicy_epoch INT NOT NULL,
+  diet_classifier_epoch INT NOT NULL,
+  fallback_classifier_treshold FLOAT NOT NULL,
+  response_selector_epoch INT NOT NULL,
+  ted_policy_epoch INT NOT NULL,
   fallback_utterance_id BIGINT NOT NULL,
-  fallback_treshold INT NOT NULL,
+  fallback_treshold FLOAT NOT NULL,
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW()
 );

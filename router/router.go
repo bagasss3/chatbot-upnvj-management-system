@@ -7,19 +7,20 @@ import (
 )
 
 type router struct {
-	group                *echo.Group
-	userController       model.UserController
-	authController       model.AuthController
-	intentController     model.IntentController
-	utteranceController  model.UtteranceController
-	exampleController    model.ExampleController
-	actionHttpController model.ActionHttpController
-	reqBodyController    model.ReqBodyController
-	krsActionController  model.KrsActionController
-	entityController     model.EntityController
-	ruleController       model.RuleController
-	storyController      model.StoryController
-	stepController       model.StepController
+	group                   *echo.Group
+	userController          model.UserController
+	authController          model.AuthController
+	intentController        model.IntentController
+	utteranceController     model.UtteranceController
+	exampleController       model.ExampleController
+	actionHttpController    model.ActionHttpController
+	reqBodyController       model.ReqBodyController
+	krsActionController     model.KrsActionController
+	entityController        model.EntityController
+	ruleController          model.RuleController
+	storyController         model.StoryController
+	stepController          model.StepController
+	configurationController model.ConfigurationController
 }
 
 func NewRouter(group *echo.Group, userController model.UserController,
@@ -33,21 +34,23 @@ func NewRouter(group *echo.Group, userController model.UserController,
 	entityController model.EntityController,
 	ruleController model.RuleController,
 	storyController model.StoryController,
-	stepController model.StepController) {
+	stepController model.StepController,
+	configurationController model.ConfigurationController) {
 	rt := &router{
-		group:                group,
-		userController:       userController,
-		authController:       authController,
-		intentController:     intentController,
-		utteranceController:  utteranceController,
-		exampleController:    exampleController,
-		actionHttpController: actionHttpController,
-		reqBodyController:    reqBodyController,
-		krsActionController:  krsActionController,
-		entityController:     entityController,
-		ruleController:       ruleController,
-		storyController:      storyController,
-		stepController:       stepController,
+		group:                   group,
+		userController:          userController,
+		authController:          authController,
+		intentController:        intentController,
+		utteranceController:     utteranceController,
+		exampleController:       exampleController,
+		actionHttpController:    actionHttpController,
+		reqBodyController:       reqBodyController,
+		krsActionController:     krsActionController,
+		entityController:        entityController,
+		ruleController:          ruleController,
+		storyController:         storyController,
+		stepController:          stepController,
+		configurationController: configurationController,
 	}
 
 	rt.RouterInit()
@@ -61,4 +64,5 @@ func (r *router) RouterInit() {
 	r.exampleRouter()
 	r.actionRouter()
 	r.conversationRouter()
+	r.configurationRouter()
 }
