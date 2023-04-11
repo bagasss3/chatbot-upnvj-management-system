@@ -62,6 +62,7 @@ func server(cmd *cobra.Command, args []string) {
 	storyRepository := repository.NewStoryRepository(MysqlDB)
 	stepRepository := repository.NewStepRepository(MysqlDB)
 	configurationRepository := repository.NewConfigurationRepository(MysqlDB)
+	trainingHistoryRepository := repository.NewTrainingHistoryRepository(MysqlDB)
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
@@ -76,6 +77,7 @@ func server(cmd *cobra.Command, args []string) {
 	storyService := service.NewStoryService(storyRepository, stepRepository, gormTransationer)
 	stepService := service.NewStepService(storyRepository, stepRepository, intentRepository, utteranceRepository, actionHttpRepository)
 	configurationService := service.NewConfigurationService(configurationRepository, utteranceRepository)
+	trainingHistoryService := service.NewTrainingHistoryService(trainingHistoryRepository, userRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
@@ -90,6 +92,7 @@ func server(cmd *cobra.Command, args []string) {
 	storyController := controller.NewStoryController(storyService)
 	stepController := controller.NewStepController(stepService)
 	configurationController := controller.NewConfigurationController(configurationService)
+	trainingHistoryController := controller.NewTrainingHistoryController(trainingHistoryService)
 
 	router.NewRouter(httpServer.Group("/api"),
 		userController,
@@ -104,7 +107,8 @@ func server(cmd *cobra.Command, args []string) {
 		ruleController,
 		storyController,
 		stepController,
-		configurationController)
+		configurationController,
+		trainingHistoryController)
 
 	// Graceful Shutdown
 	// Catch Signal
