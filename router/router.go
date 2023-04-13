@@ -22,6 +22,7 @@ type router struct {
 	stepController            model.StepController
 	configurationController   model.ConfigurationController
 	trainingHistoryController model.TrainingHistoryController
+	logIntentController       model.LogIntentController
 }
 
 func NewRouter(group *echo.Group, userController model.UserController,
@@ -37,7 +38,8 @@ func NewRouter(group *echo.Group, userController model.UserController,
 	storyController model.StoryController,
 	stepController model.StepController,
 	configurationController model.ConfigurationController,
-	trainingHistoryController model.TrainingHistoryController) {
+	trainingHistoryController model.TrainingHistoryController,
+	logIntentController model.LogIntentController) {
 	rt := &router{
 		group:                     group,
 		userController:            userController,
@@ -54,6 +56,7 @@ func NewRouter(group *echo.Group, userController model.UserController,
 		stepController:            stepController,
 		configurationController:   configurationController,
 		trainingHistoryController: trainingHistoryController,
+		logIntentController:       logIntentController,
 	}
 
 	rt.RouterInit()
