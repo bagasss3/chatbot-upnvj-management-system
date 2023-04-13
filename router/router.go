@@ -7,20 +7,21 @@ import (
 )
 
 type router struct {
-	group                   *echo.Group
-	userController          model.UserController
-	authController          model.AuthController
-	intentController        model.IntentController
-	utteranceController     model.UtteranceController
-	exampleController       model.ExampleController
-	actionHttpController    model.ActionHttpController
-	reqBodyController       model.ReqBodyController
-	krsActionController     model.KrsActionController
-	entityController        model.EntityController
-	ruleController          model.RuleController
-	storyController         model.StoryController
-	stepController          model.StepController
-	configurationController model.ConfigurationController
+	group                     *echo.Group
+	userController            model.UserController
+	authController            model.AuthController
+	intentController          model.IntentController
+	utteranceController       model.UtteranceController
+	exampleController         model.ExampleController
+	actionHttpController      model.ActionHttpController
+	reqBodyController         model.ReqBodyController
+	krsActionController       model.KrsActionController
+	entityController          model.EntityController
+	ruleController            model.RuleController
+	storyController           model.StoryController
+	stepController            model.StepController
+	configurationController   model.ConfigurationController
+	trainingHistoryController model.TrainingHistoryController
 }
 
 func NewRouter(group *echo.Group, userController model.UserController,
@@ -35,22 +36,24 @@ func NewRouter(group *echo.Group, userController model.UserController,
 	ruleController model.RuleController,
 	storyController model.StoryController,
 	stepController model.StepController,
-	configurationController model.ConfigurationController) {
+	configurationController model.ConfigurationController,
+	trainingHistoryController model.TrainingHistoryController) {
 	rt := &router{
-		group:                   group,
-		userController:          userController,
-		authController:          authController,
-		intentController:        intentController,
-		utteranceController:     utteranceController,
-		exampleController:       exampleController,
-		actionHttpController:    actionHttpController,
-		reqBodyController:       reqBodyController,
-		krsActionController:     krsActionController,
-		entityController:        entityController,
-		ruleController:          ruleController,
-		storyController:         storyController,
-		stepController:          stepController,
-		configurationController: configurationController,
+		group:                     group,
+		userController:            userController,
+		authController:            authController,
+		intentController:          intentController,
+		utteranceController:       utteranceController,
+		exampleController:         exampleController,
+		actionHttpController:      actionHttpController,
+		reqBodyController:         reqBodyController,
+		krsActionController:       krsActionController,
+		entityController:          entityController,
+		ruleController:            ruleController,
+		storyController:           storyController,
+		stepController:            stepController,
+		configurationController:   configurationController,
+		trainingHistoryController: trainingHistoryController,
 	}
 
 	rt.RouterInit()
