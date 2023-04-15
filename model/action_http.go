@@ -42,6 +42,7 @@ type ActionHttpController interface {
 	HandleFindActionHttpByID() echo.HandlerFunc
 	HandleUpdateActionHttp() echo.HandlerFunc
 	HandleDeleteActionHttp() echo.HandlerFunc
+	HandleCountAllActionHttp() echo.HandlerFunc
 }
 
 type ActionHttpService interface {
@@ -50,6 +51,7 @@ type ActionHttpService interface {
 	FindActionHttpByID(ctx context.Context, id int64) (*ActionHttp, error)
 	UpdateActionHttp(ctx context.Context, id int64, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
 	DeleteActionHttp(ctx context.Context, id int64) (bool, error)
+	CountAllActionHttp(ctx context.Context) (int64, error)
 }
 
 type ActionHttpRepository interface {
@@ -58,4 +60,5 @@ type ActionHttpRepository interface {
 	FindByID(ctx context.Context, id int64) (*ActionHttp, error)
 	Update(ctx context.Context, actionHttp *ActionHttp) error
 	Delete(ctx context.Context, id int64) error
+	CountAll(ctx context.Context) (int64, error)
 }

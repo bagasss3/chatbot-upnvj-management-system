@@ -10,4 +10,6 @@ func (r *router) utteranceRouter() {
 	r.group.GET("/utterance/:id", r.utteranceController.HandleFindUtteranceByID(), middleware.MustAuthenticateAccessToken())
 	r.group.PUT("/utterance/:id", r.utteranceController.HandleUpdateUtterance(), middleware.MustAuthenticateAccessToken())
 	r.group.DELETE("/utterance/:id", r.utteranceController.HandleDeleteUtterance(), middleware.MustAuthenticateAccessToken())
+
+	r.group.GET("/utterance/count", r.utteranceController.HandleCountAllUtterance(), middleware.MustAuthenticateAccessToken())
 }

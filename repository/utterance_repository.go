@@ -105,3 +105,17 @@ func (u *utteranceRepository) Delete(ctx context.Context, id int64) error {
 
 	return nil
 }
+
+func (u *utteranceRepository) CountAll(ctx context.Context) (int64, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+	var count int64
+	err := u.db.WithContext(ctx).Model(&model.Utterance{}).Count(&count).Error
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	return count, nil
+}

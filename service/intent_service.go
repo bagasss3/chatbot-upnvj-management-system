@@ -129,3 +129,17 @@ func (i *intentService) DeleteIntent(ctx context.Context, id int64) (bool, error
 
 	return true, nil
 }
+
+func (i *intentService) CountAllIntent(ctx context.Context) (int64, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	count, err := i.intentRepository.CountAll(ctx)
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	return count, nil
+}

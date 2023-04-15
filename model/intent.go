@@ -30,6 +30,7 @@ type IntentController interface {
 	HandleFindIntentByID() echo.HandlerFunc
 	HandleUpdateIntent() echo.HandlerFunc
 	HandleDeleteIntent() echo.HandlerFunc
+	HandleCountAllIntent() echo.HandlerFunc
 }
 
 type IntentService interface {
@@ -38,6 +39,7 @@ type IntentService interface {
 	FindIntentByID(ctx context.Context, id int64) (*Intent, error)
 	UpdateIntent(ctx context.Context, id int64, req CreateUpdateIntentRequest) (*Intent, error)
 	DeleteIntent(ctx context.Context, id int64) (bool, error)
+	CountAllIntent(ctx context.Context) (int64, error)
 }
 
 type IntentRepository interface {
@@ -46,4 +48,5 @@ type IntentRepository interface {
 	FindAll(ctx context.Context) ([]*Intent, error)
 	Update(ctx context.Context, id int64, intent *Intent) error
 	Delete(ctx context.Context, id int64) error
+	CountAll(ctx context.Context) (int64, error)
 }

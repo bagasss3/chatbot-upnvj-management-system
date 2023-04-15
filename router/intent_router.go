@@ -19,4 +19,6 @@ func (r *router) intentRouter() {
 	r.group.POST("/dashboard/log/intent", r.logIntentController.HandleCreateOrUpdateLogIntent(), middleware.MustAuthenticateAccessToken())
 	r.group.GET("/dashboard/log/intent", r.logIntentController.HandleFindAllLogIntent(), middleware.MustAuthenticateAccessToken())
 	r.group.GET("/dashboard/log/intent/:intentId", r.logIntentController.HandleFindLogIntentByIntentID(), middleware.MustAuthenticateAccessToken())
+
+	r.group.GET("/intent/count", r.intentController.HandleCountAllIntent(), middleware.MustAuthenticateAccessToken())
 }

@@ -114,3 +114,15 @@ func (a *actionHttpController) HandleDeleteActionHttp() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, isDeleted)
 	}
 }
+
+func (a *actionHttpController) HandleCountAllActionHttp() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		count, err := a.actionHttpService.CountAllActionHttp(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, count)
+	}
+}
