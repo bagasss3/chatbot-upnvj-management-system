@@ -21,4 +21,6 @@ func (r *router) actionRouter() {
 	r.group.GET("/action/krs/:id", r.krsActionController.HandleFindKrsActionByID(), middleware.MustAuthenticateAccessToken())
 	r.group.PUT("/action/krs/:id", r.krsActionController.HandleUpdateKrsAction(), middleware.MustAuthenticateAccessToken())
 	r.group.DELETE("/action/krs/:id", r.krsActionController.HandleDeleteKrsAction(), middleware.MustAuthenticateAccessToken())
+
+	r.group.GET("/action/http/count", r.actionHttpController.HandleCountAllActionHttp(), middleware.MustAuthenticateAccessToken())
 }

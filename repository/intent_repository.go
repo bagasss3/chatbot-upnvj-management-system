@@ -104,3 +104,17 @@ func (i *intentRepository) Delete(ctx context.Context, id int64) error {
 
 	return nil
 }
+
+func (i *intentRepository) CountAll(ctx context.Context) (int64, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+	var count int64
+	err := i.db.WithContext(ctx).Model(&model.Intent{}).Count(&count).Error
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	return count, nil
+}

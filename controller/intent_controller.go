@@ -118,3 +118,15 @@ func (i *intentController) HandleDeleteIntent() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, isDeleted)
 	}
 }
+
+func (i *intentController) HandleCountAllIntent() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		count, err := i.intentService.CountAllIntent(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, count)
+	}
+}
