@@ -142,3 +142,17 @@ func (a *actionHttpService) DeleteActionHttp(ctx context.Context, id int64) (boo
 
 	return true, nil
 }
+
+func (a *actionHttpService) CountAllActionHttp(ctx context.Context) (int64, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	count, err := a.actionHttpRepository.CountAll(ctx)
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	return count, nil
+}

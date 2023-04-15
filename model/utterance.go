@@ -32,6 +32,7 @@ type UtteranceController interface {
 	HandleFindUtteranceByID() echo.HandlerFunc
 	HandleUpdateUtterance() echo.HandlerFunc
 	HandleDeleteUtterance() echo.HandlerFunc
+	HandleCountAllUtterance() echo.HandlerFunc
 }
 
 type UtteranceService interface {
@@ -40,6 +41,7 @@ type UtteranceService interface {
 	FindUtteranceByID(ctx context.Context, id int64) (*Utterance, error)
 	UpdateUtterance(ctx context.Context, id int64, req CreateUpdateUtteranceRequest) (*Utterance, error)
 	DeleteUtterance(ctx context.Context, id int64) (bool, error)
+	CountAllUtterance(ctx context.Context) (int64, error)
 }
 
 type UtteranceRepository interface {
@@ -48,4 +50,5 @@ type UtteranceRepository interface {
 	FindAll(ctx context.Context) ([]*Utterance, error)
 	Update(ctx context.Context, id int64, utterance *Utterance) error
 	Delete(ctx context.Context, id int64) error
+	CountAll(ctx context.Context) (int64, error)
 }
