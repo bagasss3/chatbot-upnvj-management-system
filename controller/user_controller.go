@@ -145,7 +145,7 @@ func (u *userController) HandleProfile() echo.HandlerFunc {
 
 func (u *userController) HandleUpdateProfile() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := model.UpdateAdminRequest{}
+		req := model.UpdateUserPasswordRequest{}
 		if err := c.Bind(&req); err != nil {
 			log.Error(err)
 			return constant.ErrInternal
@@ -154,12 +154,7 @@ func (u *userController) HandleUpdateProfile() echo.HandlerFunc {
 		ctx := c.Request().Context()
 		ctxUser := middleware.GetUserFromCtx(ctx)
 
-		update, err := u.userService.UpdateAdmin(c.Request().Context(), ctxUser.UserID, model.UpdateAdminRequest{
-			Name:       req.Name,
-			MajorId:    req.MajorId,
-			Password:   req.Password,
-			Repassword: req.Repassword,
-		})
+		update, err := u.userService.UpdateProfile(c.Request().Context(), ctxUser.UserID, req)
 		if err != nil {
 			log.Error(err)
 			return err

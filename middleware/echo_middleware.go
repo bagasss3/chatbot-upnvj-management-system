@@ -36,7 +36,7 @@ func MustAuthenticateAccessToken() echo.MiddlewareFunc {
 				}
 				if jwt.ValidationErrorExpired != 0 {
 					logrus.Error(err)
-					return c.JSON(http.StatusForbidden, echo.Map{"error": "token has expired"})
+					return c.JSON(http.StatusUnauthorized, echo.Map{"error": "token has expired"})
 				}
 				logrus.Error(err)
 				return c.JSON(http.StatusUnauthorized, echo.Map{"error": "invalid token"})
