@@ -175,6 +175,53 @@ func (u *userService) DeleteAdminByID(ctx context.Context, id int64) (bool, erro
 	return true, nil
 }
 
+func (u *userService) UpdateProfile(ctx context.Context, id int64, req model.UpdateUserPasswordRequest) (bool, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+		"id":  id,
+		"req": req,
+	})
+
+	if req.Password != req.Repassword {
+		log.Error("Password mismatch")
+		return false, constant.ErrPasswordMismatch
+	}
+
+	if err := req.Validate(); err != nil {
+		log.Error(err)
+		return false, constant.HttpValidationOrInternalErr(err)
+	}
+
+	user, err := u.FindAdminByID(ctx, id)
+	if err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	checkPwd := helper.IsHashStringMatch([]byte(req.OldPassword), []byte(user.Password))
+	if !checkPwd {
+		log.Error("wrong password")
+		return false, constant.ErrUnauthorized
+	}
+
+	newPlainPassword := helper.GeneratePassword()
+	newHashedPassword, err := helper.HashString(newPlainPassword)
+	if err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	user.Password = newHashedPassword
+
+	err = u.userRepository.Update(ctx, user.Id, user)
+	if err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	return true, nil
+}
+
 func isValidUserType(t model.UserType) bool {
 	return t == model.UserAdmin || t == model.UserSuperAdmin
 }

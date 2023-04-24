@@ -39,6 +39,16 @@ func (c *UpdateAdminRequest) Validate() error {
 	return validate.Struct(c)
 }
 
+type UpdateUserPasswordRequest struct {
+	OldPassword string `json:"oldpassword" validate:"required"`
+	Password    string `json:"password" validate:"required"`
+	Repassword  string `json:"repassword" validate:"required"`
+}
+
+func (c *UpdateUserPasswordRequest) Validate() error {
+	return validate.Struct(c)
+}
+
 type User struct {
 	Id        int64          `json:"id"`
 	Email     string         `json:"email"`
@@ -67,6 +77,7 @@ type UserService interface {
 	FindAdminByID(ctx context.Context, id int64) (*User, error)
 	UpdateAdmin(ctx context.Context, id int64, req UpdateAdminRequest) (*User, error)
 	DeleteAdminByID(ctx context.Context, id int64) (bool, error)
+	UpdateProfile(ctx context.Context, id int64, req UpdateUserPasswordRequest) (bool, error)
 }
 
 type UserRepository interface {
