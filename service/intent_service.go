@@ -58,13 +58,13 @@ func (i *intentService) FindAllIntent(ctx context.Context) ([]*model.Intent, err
 	return intents, nil
 }
 
-func (i *intentService) FindIntentByID(ctx context.Context, id int64) (*model.Intent, error) {
+func (i *intentService) FindIntentByID(ctx context.Context, id string) (*model.Intent, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -81,7 +81,7 @@ func (i *intentService) FindIntentByID(ctx context.Context, id int64) (*model.In
 	return intent, nil
 }
 
-func (i *intentService) UpdateIntent(ctx context.Context, id int64, req model.CreateUpdateIntentRequest) (*model.Intent, error) {
+func (i *intentService) UpdateIntent(ctx context.Context, id string, req model.CreateUpdateIntentRequest) (*model.Intent, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -109,7 +109,7 @@ func (i *intentService) UpdateIntent(ctx context.Context, id int64, req model.Cr
 	return intent, nil
 }
 
-func (i *intentService) DeleteIntent(ctx context.Context, id int64) (bool, error) {
+func (i *intentService) DeleteIntent(ctx context.Context, id string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

@@ -88,12 +88,12 @@ func (li *logIntentService) FindAllLogIntent(ctx context.Context) ([]*model.LogI
 	return logIntents, nil
 }
 
-func (li *logIntentService) FindLogIntentByIntentID(ctx context.Context, intentId int64) (*model.LogIntent, error) {
+func (li *logIntentService) FindLogIntentByIntentID(ctx context.Context, intentId string) (*model.LogIntent, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 	})
 
-	if intentId <= 0 {
+	if intentId == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 

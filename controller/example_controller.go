@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -43,12 +42,7 @@ func (e *exampleController) HandleCreateExample() echo.HandlerFunc {
 
 func (e *exampleController) HandleFindAllExample() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		examples, err := e.exampleService.FindAllExampleByIntentID(c.Request().Context(), id)
 		if err != nil {
@@ -62,20 +56,8 @@ func (e *exampleController) HandleFindAllExample() echo.HandlerFunc {
 
 func (e *exampleController) HandleFindExampleByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		intentIdParam := c.Param("intentId")
-		exampleIdParam := c.Param("exampleId")
-
-		intentId, err := strconv.ParseInt(intentIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		exampleId, err := strconv.ParseInt(exampleIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		intentId := c.Param("intentId")
+		exampleId := c.Param("exampleId")
 
 		example, err := e.exampleService.FindExampleByIntentID(c.Request().Context(), intentId, exampleId)
 		if err != nil {
@@ -89,20 +71,8 @@ func (e *exampleController) HandleFindExampleByID() echo.HandlerFunc {
 
 func (e *exampleController) HandleUpdateExample() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		intentIdParam := c.Param("intentId")
-		exampleIdParam := c.Param("exampleId")
-
-		intentId, err := strconv.ParseInt(intentIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		exampleId, err := strconv.ParseInt(exampleIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		intentId := c.Param("intentId")
+		exampleId := c.Param("exampleId")
 
 		req := model.UpdateExampleRequest{}
 		if err := c.Bind(&req); err != nil {
@@ -122,20 +92,8 @@ func (e *exampleController) HandleUpdateExample() echo.HandlerFunc {
 
 func (e *exampleController) HandleDeleteExample() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		intentIdParam := c.Param("intentId")
-		exampleIdParam := c.Param("exampleId")
-
-		intentId, err := strconv.ParseInt(intentIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		exampleId, err := strconv.ParseInt(exampleIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		intentId := c.Param("intentId")
+		exampleId := c.Param("exampleId")
 
 		isDeleted, err := e.exampleService.DeleteExample(c.Request().Context(), intentId, exampleId)
 		if err != nil {

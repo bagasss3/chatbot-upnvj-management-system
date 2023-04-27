@@ -33,8 +33,8 @@ func (u *userRepository) Create(ctx context.Context, user *model.User) error {
 	return nil
 }
 
-func (u *userRepository) FindByID(ctx context.Context, id int64) (*model.User, error) {
-	if id <= 0 {
+func (u *userRepository) FindByID(ctx context.Context, id string) (*model.User, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -63,7 +63,7 @@ func (u *userRepository) FindByEmail(ctx context.Context, userEmail string) (*mo
 		"userEmail": userEmail,
 	})
 
-	id := int64(0)
+	id := string("")
 	err := u.db.Model(model.User{}).Select("id").Take(&id, "email = ?", userEmail).Error
 	switch err {
 	case nil:
@@ -108,7 +108,7 @@ func (u *userRepository) FindAll(ctx context.Context) ([]*model.User, error) {
 	return users, nil
 }
 
-func (u *userRepository) Update(ctx context.Context, id int64, user *model.User) error {
+func (u *userRepository) Update(ctx context.Context, id string, user *model.User) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":  ctx,
 		"id":   id,
@@ -128,7 +128,7 @@ func (u *userRepository) Update(ctx context.Context, id int64, user *model.User)
 	return nil
 }
 
-func (u *userRepository) Delete(ctx context.Context, id int64) error {
+func (u *userRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

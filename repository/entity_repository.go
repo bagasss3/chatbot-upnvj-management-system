@@ -33,7 +33,7 @@ func (e *entityRepository) Create(ctx context.Context, entity *model.Entity) err
 	return nil
 }
 
-func (e *entityRepository) FindAll(ctx context.Context, intentId int64) ([]*model.Entity, error) {
+func (e *entityRepository) FindAll(ctx context.Context, intentId string) ([]*model.Entity, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":      ctx,
 		"intentId": intentId,
@@ -49,8 +49,8 @@ func (e *entityRepository) FindAll(ctx context.Context, intentId int64) ([]*mode
 	return entities, nil
 }
 
-func (e *entityRepository) FindByID(ctx context.Context, id int64) (*model.Entity, error) {
-	if id <= 0 {
+func (e *entityRepository) FindByID(ctx context.Context, id string) (*model.Entity, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -73,7 +73,7 @@ func (e *entityRepository) FindByID(ctx context.Context, id int64) (*model.Entit
 	return entity, nil
 }
 
-func (e *entityRepository) Delete(ctx context.Context, id int64) error {
+func (e *entityRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

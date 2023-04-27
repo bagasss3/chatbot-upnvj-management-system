@@ -5,7 +5,6 @@ import (
 	"cbupnvj/middleware"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -60,13 +59,7 @@ func (u *userController) HandleFindAllAdmin() echo.HandlerFunc {
 
 func (u *userController) HandleFindAdminByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		user, err := u.userService.FindAdminByID(c.Request().Context(), id)
 		if err != nil {
@@ -86,18 +79,11 @@ func (u *userController) HandleUpdateAdmin() echo.HandlerFunc {
 			return constant.ErrInternal
 		}
 
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		update, err := u.userService.UpdateAdmin(c.Request().Context(), id, model.UpdateAdminRequest{
-			Name:       req.Name,
-			MajorId:    req.MajorId,
-			Password:   req.Password,
-			Repassword: req.Repassword,
+			Name:    req.Name,
+			MajorId: req.MajorId,
 		})
 		if err != nil {
 			log.Error(err)
@@ -110,13 +96,7 @@ func (u *userController) HandleUpdateAdmin() echo.HandlerFunc {
 
 func (u *userController) HandleDeleteAdminByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		isDeleted, err := u.userService.DeleteAdminByID(c.Request().Context(), id)
 		if err != nil {

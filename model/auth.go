@@ -15,14 +15,14 @@ const (
 )
 
 type Claims struct {
-	UserID int64     `json:"userID"`
+	UserID string    `json:"userID"`
 	Role   UserType  `json:"role"`
 	Type   TokenType `json:"type"`
 	jwt.StandardClaims
 }
 
 type UserAuth struct {
-	UserID int64    `json:"userID"`
+	UserID string   `json:"userID"`
 	Role   UserType `json:"role"`
 }
 

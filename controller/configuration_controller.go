@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -40,13 +39,7 @@ func (co *configurationController) HandleCreateConfiguration() echo.HandlerFunc 
 
 func (co *configurationController) HandleFindConfiguration() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		conf, err := co.configurationService.FindConfiguration(c.Request().Context(), id)
 		if err != nil {
@@ -66,12 +59,7 @@ func (co *configurationController) HandleUpdateConfiguration() echo.HandlerFunc 
 			return constant.ErrInternal
 		}
 
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		update, err := co.configurationService.UpdateConfiguration(c.Request().Context(), id, req)
 		if err != nil {

@@ -33,8 +33,8 @@ func (e *exampleRepository) Create(ctx context.Context, example *model.Example) 
 	return nil
 }
 
-func (e *exampleRepository) FindByID(ctx context.Context, intentId, exampleId int64) (*model.Example, error) {
-	if exampleId <= 0 || intentId <= 0 {
+func (e *exampleRepository) FindByID(ctx context.Context, intentId, exampleId string) (*model.Example, error) {
+	if exampleId == "" || intentId == "" {
 		return nil, nil
 	}
 
@@ -58,7 +58,7 @@ func (e *exampleRepository) FindByID(ctx context.Context, intentId, exampleId in
 	return example, nil
 }
 
-func (e *exampleRepository) FindAllByIntentID(ctx context.Context, intentId int64) ([]*model.Example, error) {
+func (e *exampleRepository) FindAllByIntentID(ctx context.Context, intentId string) ([]*model.Example, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":      ctx,
 		"intentId": intentId,
@@ -74,7 +74,7 @@ func (e *exampleRepository) FindAllByIntentID(ctx context.Context, intentId int6
 	return examples, nil
 }
 
-func (e *exampleRepository) Update(ctx context.Context, id int64, example *model.Example) error {
+func (e *exampleRepository) Update(ctx context.Context, id string, example *model.Example) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":     ctx,
 		"id":      id,
@@ -92,7 +92,7 @@ func (e *exampleRepository) Update(ctx context.Context, id int64, example *model
 	return nil
 }
 
-func (e *exampleRepository) Delete(ctx context.Context, id int64) error {
+func (e *exampleRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

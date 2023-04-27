@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -40,12 +39,8 @@ func (s *stepController) HandleCreateStep() echo.HandlerFunc {
 
 func (s *stepController) HandleFindAllStepByStoryID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		storyIdParam := c.Param("storyId")
-		storyId, err := strconv.ParseInt(storyIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		storyId := c.Param("storyId")
+
 		stories, err := s.stepService.FindAllStepByStoryID(c.Request().Context(), storyId)
 		if err != nil {
 			log.Error(err)
@@ -58,20 +53,8 @@ func (s *stepController) HandleFindAllStepByStoryID() echo.HandlerFunc {
 
 func (s *stepController) HandleFindStepByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		storyIdParam := c.Param("storyId")
-		storyId, err := strconv.ParseInt(storyIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
+		storyId := c.Param("storyId")
 
 		step, err := s.stepService.FindStepByID(c.Request().Context(), id, storyId)
 		if err != nil {
@@ -91,20 +74,8 @@ func (s *stepController) HandleUpdateStep() echo.HandlerFunc {
 			return constant.ErrInternal
 		}
 
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		storyIdParam := c.Param("storyId")
-		storyId, err := strconv.ParseInt(storyIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
+		storyId := c.Param("storyId")
 
 		update, err := s.stepService.UpdateStep(c.Request().Context(), id, storyId, req)
 		if err != nil {
@@ -118,20 +89,8 @@ func (s *stepController) HandleUpdateStep() echo.HandlerFunc {
 
 func (s *stepController) HandleDeleteStep() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		storyIdParam := c.Param("storyId")
-		storyId, err := strconv.ParseInt(storyIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
+		storyId := c.Param("storyId")
 
 		isDeleted, err := s.stepService.DeleteStep(c.Request().Context(), id, storyId)
 		if err != nil {

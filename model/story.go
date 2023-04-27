@@ -17,7 +17,7 @@ func (c *CreateUpdateStoryRequest) Validate() error {
 }
 
 type Story struct {
-	Id         int64          `json:"id"`
+	Id         string         `json:"id"`
 	StoryTitle string         `json:"story_title"`
 	CreatedAt  time.Time      `json:"created_at"`
 	UpdatedAt  time.Time      `json:"updated_at"`
@@ -35,15 +35,15 @@ type StoryController interface {
 type StoryService interface {
 	CreateStory(ctx context.Context, req CreateUpdateStoryRequest) (*Story, error)
 	FindAllStory(ctx context.Context) ([]*Story, error)
-	FindStoryByID(ctx context.Context, id int64) (*Story, error)
-	UpdateStory(ctx context.Context, id int64, req CreateUpdateStoryRequest) (*Story, error)
-	DeleteStory(ctx context.Context, id int64) (bool, error)
+	FindStoryByID(ctx context.Context, id string) (*Story, error)
+	UpdateStory(ctx context.Context, id string, req CreateUpdateStoryRequest) (*Story, error)
+	DeleteStory(ctx context.Context, id string) (bool, error)
 }
 
 type StoryRepository interface {
 	Create(ctx context.Context, story *Story) error
 	FindAll(ctx context.Context) ([]*Story, error)
-	FindByID(ctx context.Context, id int64) (*Story, error)
-	Update(ctx context.Context, id int64, Story *Story) error
-	Delete(ctx context.Context, id int64) error
+	FindByID(ctx context.Context, id string) (*Story, error)
+	Update(ctx context.Context, id string, Story *Story) error
+	Delete(ctx context.Context, id string) error
 }

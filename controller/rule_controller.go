@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -52,13 +51,7 @@ func (r *ruleController) HandleFindAllRule() echo.HandlerFunc {
 
 func (r *ruleController) HandleFindRuleByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		rule, err := r.ruleService.FindRuleByID(c.Request().Context(), id)
 		if err != nil {
@@ -78,12 +71,7 @@ func (r *ruleController) HandleUpdateRule() echo.HandlerFunc {
 			return constant.ErrInternal
 		}
 
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		update, err := r.ruleService.UpdateRule(c.Request().Context(), id, req)
 		if err != nil {
@@ -97,13 +85,7 @@ func (r *ruleController) HandleUpdateRule() echo.HandlerFunc {
 
 func (r *ruleController) HandleDeleteRule() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		isDeleted, err := r.ruleService.DeleteRule(c.Request().Context(), id)
 		if err != nil {

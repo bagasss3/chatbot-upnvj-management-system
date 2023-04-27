@@ -33,8 +33,8 @@ func (u *utteranceRepository) Create(ctx context.Context, utterance *model.Utter
 	return nil
 }
 
-func (u *utteranceRepository) FindByID(ctx context.Context, id int64) (*model.Utterance, error) {
-	if id <= 0 {
+func (u *utteranceRepository) FindByID(ctx context.Context, id string) (*model.Utterance, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -72,7 +72,7 @@ func (u *utteranceRepository) FindAll(ctx context.Context) ([]*model.Utterance, 
 	return utterances, nil
 }
 
-func (u *utteranceRepository) Update(ctx context.Context, id int64, utterance *model.Utterance) error {
+func (u *utteranceRepository) Update(ctx context.Context, id string, utterance *model.Utterance) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":       ctx,
 		"id":        id,
@@ -91,7 +91,7 @@ func (u *utteranceRepository) Update(ctx context.Context, id int64, utterance *m
 	return nil
 }
 
-func (u *utteranceRepository) Delete(ctx context.Context, id int64) error {
+func (u *utteranceRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

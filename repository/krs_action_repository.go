@@ -48,8 +48,8 @@ func (k *krsActionRepository) FindAll(ctx context.Context) ([]*model.KrsAction, 
 	return krsActions, nil
 }
 
-func (k *krsActionRepository) FindByID(ctx context.Context, id int64) (*model.KrsAction, error) {
-	if id <= 0 {
+func (k *krsActionRepository) FindByID(ctx context.Context, id string) (*model.KrsAction, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -91,7 +91,7 @@ func (k *krsActionRepository) Update(ctx context.Context, krsAction *model.KrsAc
 	return nil
 }
 
-func (k *krsActionRepository) Delete(ctx context.Context, id int64) error {
+func (k *krsActionRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

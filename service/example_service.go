@@ -58,13 +58,13 @@ func (e *exampleService) CreateExample(ctx context.Context, req model.CreateExam
 	return example, nil
 }
 
-func (e *exampleService) FindAllExampleByIntentID(ctx context.Context, id int64) ([]*model.Example, error) {
+func (e *exampleService) FindAllExampleByIntentID(ctx context.Context, id string) ([]*model.Example, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "" {
 		log.Error(constant.ErrNotFound)
 		return nil, constant.ErrNotFound
 	}
@@ -78,7 +78,7 @@ func (e *exampleService) FindAllExampleByIntentID(ctx context.Context, id int64)
 	return examples, nil
 }
 
-func (e *exampleService) FindExampleByIntentID(ctx context.Context, intentId, exampleId int64) (*model.Example, error) {
+func (e *exampleService) FindExampleByIntentID(ctx context.Context, intentId, exampleId string) (*model.Example, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":       ctx,
 		"IntentId":  intentId,
@@ -99,7 +99,7 @@ func (e *exampleService) FindExampleByIntentID(ctx context.Context, intentId, ex
 	return example, nil
 }
 
-func (e *exampleService) UpdateExample(ctx context.Context, intentId, exampleId int64, req model.UpdateExampleRequest) (*model.Example, error) {
+func (e *exampleService) UpdateExample(ctx context.Context, intentId, exampleId string, req model.UpdateExampleRequest) (*model.Example, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":       ctx,
 		"IntentId":  intentId,
@@ -127,7 +127,7 @@ func (e *exampleService) UpdateExample(ctx context.Context, intentId, exampleId 
 	return example, nil
 }
 
-func (e *exampleService) DeleteExample(ctx context.Context, intentId, exampleId int64) (bool, error) {
+func (e *exampleService) DeleteExample(ctx context.Context, intentId, exampleId string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":       ctx,
 		"IntentId":  intentId,
