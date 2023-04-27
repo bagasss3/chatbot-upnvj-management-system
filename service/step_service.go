@@ -72,7 +72,7 @@ func (s *stepService) CreateStep(ctx context.Context, req model.CreateStepReques
 	return step, nil
 }
 
-func (s *stepService) FindAllStepByStoryID(ctx context.Context, storyId int64) ([]*model.Step, error) {
+func (s *stepService) FindAllStepByStoryID(ctx context.Context, storyId string) ([]*model.Step, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":     ctx,
 		"storyId": storyId,
@@ -87,14 +87,14 @@ func (s *stepService) FindAllStepByStoryID(ctx context.Context, storyId int64) (
 	return steps, nil
 }
 
-func (s *stepService) FindStepByID(ctx context.Context, id, storyId int64) (*model.Step, error) {
+func (s *stepService) FindStepByID(ctx context.Context, id, storyId string) (*model.Step, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":     ctx,
 		"id":      id,
 		"storyId": storyId,
 	})
 
-	if id <= 0 || storyId <= 0 {
+	if id == "" || storyId == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -111,7 +111,7 @@ func (s *stepService) FindStepByID(ctx context.Context, id, storyId int64) (*mod
 	return step, nil
 }
 
-func (s *stepService) UpdateStep(ctx context.Context, id, storyId int64, req model.UpdateStepRequest) (*model.Step, error) {
+func (s *stepService) UpdateStep(ctx context.Context, id, storyId string, req model.UpdateStepRequest) (*model.Step, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":     ctx,
 		"id":      id,
@@ -148,7 +148,7 @@ func (s *stepService) UpdateStep(ctx context.Context, id, storyId int64, req mod
 	return step, nil
 }
 
-func (s *stepService) DeleteStep(ctx context.Context, id, storyId int64) (bool, error) {
+func (s *stepService) DeleteStep(ctx context.Context, id, storyId string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -169,7 +169,7 @@ func (s *stepService) DeleteStep(ctx context.Context, id, storyId int64) (bool, 
 	return true, nil
 }
 
-func (s *stepService) ValidateStep(ctx context.Context, responseId int64, stepType model.StepType) error {
+func (s *stepService) ValidateStep(ctx context.Context, responseId string, stepType model.StepType) error {
 	if stepType != model.StepAction && stepType != model.StepIntent && stepType != model.StepUtterance {
 		return constant.ErrInvalidArgument
 	}

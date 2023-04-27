@@ -59,13 +59,13 @@ func (u *utteranceService) FindAllUtterance(ctx context.Context) ([]*model.Utter
 	return utterances, nil
 }
 
-func (u *utteranceService) FindUtteranceByID(ctx context.Context, id int64) (*model.Utterance, error) {
+func (u *utteranceService) FindUtteranceByID(ctx context.Context, id string) (*model.Utterance, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -82,7 +82,7 @@ func (u *utteranceService) FindUtteranceByID(ctx context.Context, id int64) (*mo
 	return utterance, nil
 }
 
-func (u *utteranceService) UpdateUtterance(ctx context.Context, id int64, req model.CreateUpdateUtteranceRequest) (*model.Utterance, error) {
+func (u *utteranceService) UpdateUtterance(ctx context.Context, id string, req model.CreateUpdateUtteranceRequest) (*model.Utterance, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -111,7 +111,7 @@ func (u *utteranceService) UpdateUtterance(ctx context.Context, id int64, req mo
 	return utterance, nil
 }
 
-func (u *utteranceService) DeleteUtterance(ctx context.Context, id int64) (bool, error) {
+func (u *utteranceService) DeleteUtterance(ctx context.Context, id string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

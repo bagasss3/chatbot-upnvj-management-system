@@ -33,8 +33,8 @@ func (c *configurationRepository) Create(ctx context.Context, configuration *mod
 	return nil
 }
 
-func (c *configurationRepository) FindByID(ctx context.Context, id int64) (*model.Configuration, error) {
-	if id <= 0 {
+func (c *configurationRepository) FindByID(ctx context.Context, id string) (*model.Configuration, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -57,7 +57,7 @@ func (c *configurationRepository) FindByID(ctx context.Context, id int64) (*mode
 	return conf, nil
 }
 
-func (c *configurationRepository) Update(ctx context.Context, id int64, configuration *model.Configuration) error {
+func (c *configurationRepository) Update(ctx context.Context, id string, configuration *model.Configuration) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":           ctx,
 		"id":            id,

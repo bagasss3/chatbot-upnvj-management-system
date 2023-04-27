@@ -33,7 +33,7 @@ func (s *stepRepository) Create(ctx context.Context, step *model.Step) error {
 	return nil
 }
 
-func (s *stepRepository) FindAll(ctx context.Context, storyId int64) ([]*model.Step, error) {
+func (s *stepRepository) FindAll(ctx context.Context, storyId string) ([]*model.Step, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 	})
@@ -48,8 +48,8 @@ func (s *stepRepository) FindAll(ctx context.Context, storyId int64) ([]*model.S
 	return steps, nil
 }
 
-func (s *stepRepository) FindByID(ctx context.Context, id, storyId int64) (*model.Step, error) {
-	if id <= 0 || storyId <= 0 {
+func (s *stepRepository) FindByID(ctx context.Context, id, storyId string) (*model.Step, error) {
+	if id == "" || storyId == "" {
 		return nil, nil
 	}
 
@@ -73,7 +73,7 @@ func (s *stepRepository) FindByID(ctx context.Context, id, storyId int64) (*mode
 	return step, nil
 }
 
-func (s *stepRepository) Update(ctx context.Context, id int64, step *model.Step) error {
+func (s *stepRepository) Update(ctx context.Context, id string, step *model.Step) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":  ctx,
 		"id":   id,
@@ -92,7 +92,7 @@ func (s *stepRepository) Update(ctx context.Context, id int64, step *model.Step)
 	return nil
 }
 
-func (s *stepRepository) Delete(ctx context.Context, id int64) error {
+func (s *stepRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -107,7 +107,7 @@ func (s *stepRepository) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (s *stepRepository) DeleteAllByStoryID(ctx context.Context, storyId int64) error {
+func (s *stepRepository) DeleteAllByStoryID(ctx context.Context, storyId string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":     ctx,
 		"storyId": storyId,

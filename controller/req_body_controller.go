@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -40,12 +39,7 @@ func (r *reqBodyController) HandleCreateReqBody() echo.HandlerFunc {
 
 func (r *reqBodyController) HandleFindAllReqBodyByActionHttpID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		actionHttpIdParam := c.Param("actionHttpId")
-		actionHttpId, err := strconv.ParseInt(actionHttpIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		actionHttpId := c.Param("actionHttpId")
 
 		reqBodies, err := r.reqBodyService.FindAllReqBodyByActionHttpID(c.Request().Context(), actionHttpId)
 		if err != nil {
@@ -65,19 +59,8 @@ func (r *reqBodyController) HandleUpdateReqBody() echo.HandlerFunc {
 			return constant.ErrInternal
 		}
 
-		actionHttpIdParam := c.Param("actionHttpId")
-		actionHttpId, err := strconv.ParseInt(actionHttpIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		reqBodyIdParam := c.Param("reqBodyId")
-		reqBodyId, err := strconv.ParseInt(reqBodyIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		actionHttpId := c.Param("actionHttpId")
+		reqBodyId := c.Param("reqBodyId")
 
 		update, err := r.reqBodyService.UpdateReqBody(c.Request().Context(), reqBodyId, actionHttpId, req)
 		if err != nil {
@@ -91,19 +74,8 @@ func (r *reqBodyController) HandleUpdateReqBody() echo.HandlerFunc {
 
 func (r *reqBodyController) HandleDeleteReqBody() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		actionHttpIdParam := c.Param("actionHttpId")
-		actionHttpId, err := strconv.ParseInt(actionHttpIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		reqBodyIdParam := c.Param("reqBodyId")
-		reqBodyId, err := strconv.ParseInt(reqBodyIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		actionHttpId := c.Param("actionHttpId")
+		reqBodyId := c.Param("reqBodyId")
 
 		isDeleted, err := r.reqBodyService.DeleteReqBody(c.Request().Context(), reqBodyId, actionHttpId)
 		if err != nil {

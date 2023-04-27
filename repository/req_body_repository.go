@@ -33,7 +33,7 @@ func (r *reqBodyRepository) Create(ctx context.Context, reqBody *model.ReqBody) 
 	return nil
 }
 
-func (r *reqBodyRepository) FindAll(ctx context.Context, actionHttpID int64) ([]*model.ReqBody, error) {
+func (r *reqBodyRepository) FindAll(ctx context.Context, actionHttpID string) ([]*model.ReqBody, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":          ctx,
 		"actionHttpID": actionHttpID,
@@ -49,8 +49,8 @@ func (r *reqBodyRepository) FindAll(ctx context.Context, actionHttpID int64) ([]
 	return reqBodies, nil
 }
 
-func (r *reqBodyRepository) FindByID(ctx context.Context, id int64) (*model.ReqBody, error) {
-	if id <= 0 {
+func (r *reqBodyRepository) FindByID(ctx context.Context, id string) (*model.ReqBody, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -73,7 +73,7 @@ func (r *reqBodyRepository) FindByID(ctx context.Context, id int64) (*model.ReqB
 	return reqBody, nil
 }
 
-func (r *reqBodyRepository) Update(ctx context.Context, actionHttpID int64, reqBody *model.ReqBody) error {
+func (r *reqBodyRepository) Update(ctx context.Context, actionHttpID string, reqBody *model.ReqBody) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":          ctx,
 		"actionHttpID": actionHttpID,
@@ -91,7 +91,7 @@ func (r *reqBodyRepository) Update(ctx context.Context, actionHttpID int64, reqB
 	return nil
 }
 
-func (r *reqBodyRepository) Delete(ctx context.Context, id int64) error {
+func (r *reqBodyRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

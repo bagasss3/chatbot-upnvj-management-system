@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -55,13 +54,7 @@ func (u *utteranceController) HandleFindAllUtterance() echo.HandlerFunc {
 
 func (u *utteranceController) HandleFindUtteranceByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		utterance, err := u.utteranceService.FindUtteranceByID(c.Request().Context(), id)
 		if err != nil {
@@ -81,12 +74,7 @@ func (u *utteranceController) HandleUpdateUtterance() echo.HandlerFunc {
 			return constant.ErrInternal
 		}
 
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		update, err := u.utteranceService.UpdateUtterance(c.Request().Context(), id, model.CreateUpdateUtteranceRequest{
 			Name:     req.Name,
@@ -103,13 +91,7 @@ func (u *utteranceController) HandleUpdateUtterance() echo.HandlerFunc {
 
 func (u *utteranceController) HandleDeleteUtterance() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		isDeleted, err := u.utteranceService.DeleteUtterance(c.Request().Context(), id)
 		if err != nil {

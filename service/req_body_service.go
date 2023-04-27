@@ -58,7 +58,7 @@ func (r *reqBodyService) CreateReqBody(ctx context.Context, req model.CreateReqB
 	return reqBody, nil
 }
 
-func (r *reqBodyService) FindAllReqBodyByActionHttpID(ctx context.Context, actionHttpID int64) ([]*model.ReqBody, error) {
+func (r *reqBodyService) FindAllReqBodyByActionHttpID(ctx context.Context, actionHttpID string) ([]*model.ReqBody, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":          ctx,
 		"actionHttpID": actionHttpID,
@@ -73,7 +73,7 @@ func (r *reqBodyService) FindAllReqBodyByActionHttpID(ctx context.Context, actio
 	return reqBodies, nil
 }
 
-func (r *reqBodyService) FindByID(ctx context.Context, id int64) (*model.ReqBody, error) {
+func (r *reqBodyService) FindByID(ctx context.Context, id string) (*model.ReqBody, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -92,7 +92,7 @@ func (r *reqBodyService) FindByID(ctx context.Context, id int64) (*model.ReqBody
 	return reqBody, nil
 }
 
-func (r *reqBodyService) UpdateReqBody(ctx context.Context, id, actionHttpID int64, req model.UpdateReqBodyRequest) (*model.ReqBody, error) {
+func (r *reqBodyService) UpdateReqBody(ctx context.Context, id, actionHttpID string, req model.UpdateReqBodyRequest) (*model.ReqBody, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":          ctx,
 		"id":           id,
@@ -137,7 +137,7 @@ func (r *reqBodyService) UpdateReqBody(ctx context.Context, id, actionHttpID int
 	return reqBody, nil
 }
 
-func (r *reqBodyService) DeleteReqBody(ctx context.Context, id, actionHttpID int64) (bool, error) {
+func (r *reqBodyService) DeleteReqBody(ctx context.Context, id, actionHttpID string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":          ctx,
 		"id":           id,

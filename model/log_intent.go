@@ -8,7 +8,7 @@ import (
 )
 
 type CreateUpdateLogIntentRequest struct {
-	IntentId int64 `json:"intent_id" validate:"required"`
+	IntentId string `json:"intent_id" validate:"required"`
 }
 
 func (c *CreateUpdateLogIntentRequest) Validate() error {
@@ -16,8 +16,8 @@ func (c *CreateUpdateLogIntentRequest) Validate() error {
 }
 
 type LogIntent struct {
-	Id        int64     `json:"id"`
-	IntentId  int64     `json:"intent_id"`
+	Id        string    `json:"id"`
+	IntentId  string    `json:"intent_id"`
 	Mention   int       `json:"mention"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -31,13 +31,13 @@ type LogIntentController interface {
 
 type LogIntentService interface {
 	CreateOrUpdateLogIntent(ctx context.Context, req CreateUpdateLogIntentRequest) (*LogIntent, error)
-	FindLogIntentByIntentID(ctx context.Context, intentId int64) (*LogIntent, error)
+	FindLogIntentByIntentID(ctx context.Context, intentId string) (*LogIntent, error)
 	FindAllLogIntent(ctx context.Context) ([]*LogIntent, error)
 }
 
 type LogIntentRepository interface {
 	Create(ctx context.Context, li *LogIntent) error
-	FindByIntentID(ctx context.Context, intentId int64) (*LogIntent, error)
+	FindByIntentID(ctx context.Context, intentId string) (*LogIntent, error)
 	FindAll(ctx context.Context) ([]*LogIntent, error)
-	Update(ctx context.Context, intentId int64, li *LogIntent) error
+	Update(ctx context.Context, intentId string, li *LogIntent) error
 }

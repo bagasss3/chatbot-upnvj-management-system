@@ -73,13 +73,13 @@ func (r *ruleService) FindAllRule(ctx context.Context) ([]*model.Rule, error) {
 	return rules, nil
 }
 
-func (r *ruleService) FindRuleByID(ctx context.Context, id int64) (*model.Rule, error) {
+func (r *ruleService) FindRuleByID(ctx context.Context, id string) (*model.Rule, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -96,7 +96,7 @@ func (r *ruleService) FindRuleByID(ctx context.Context, id int64) (*model.Rule, 
 	return rule, nil
 }
 
-func (r *ruleService) UpdateRule(ctx context.Context, id int64, req model.CreateUpdateRuleRequest) (*model.Rule, error) {
+func (r *ruleService) UpdateRule(ctx context.Context, id string, req model.CreateUpdateRuleRequest) (*model.Rule, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -134,7 +134,7 @@ func (r *ruleService) UpdateRule(ctx context.Context, id int64, req model.Create
 	return rule, nil
 }
 
-func (r *ruleService) DeleteRule(ctx context.Context, id int64) (bool, error) {
+func (r *ruleService) DeleteRule(ctx context.Context, id string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -155,7 +155,7 @@ func (r *ruleService) DeleteRule(ctx context.Context, id int64) (bool, error) {
 	return true, nil
 }
 
-func (r *ruleService) ValidateRule(ctx context.Context, intentId, dataId int64, ruleType model.RuleType) error {
+func (r *ruleService) ValidateRule(ctx context.Context, intentId, dataId string, ruleType model.RuleType) error {
 	if ruleType != model.RuleAction && ruleType != model.RuleUtterance {
 		return constant.ErrInvalidArgument
 	}

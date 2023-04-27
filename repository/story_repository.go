@@ -48,8 +48,8 @@ func (s *storyRepository) FindAll(ctx context.Context) ([]*model.Story, error) {
 	return stories, nil
 }
 
-func (s *storyRepository) FindByID(ctx context.Context, id int64) (*model.Story, error) {
-	if id <= 0 {
+func (s *storyRepository) FindByID(ctx context.Context, id string) (*model.Story, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -72,7 +72,7 @@ func (s *storyRepository) FindByID(ctx context.Context, id int64) (*model.Story,
 	return story, nil
 }
 
-func (s *storyRepository) Update(ctx context.Context, id int64, story *model.Story) error {
+func (s *storyRepository) Update(ctx context.Context, id string, story *model.Story) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":   ctx,
 		"id":    id,
@@ -90,7 +90,7 @@ func (s *storyRepository) Update(ctx context.Context, id int64, story *model.Sto
 	return nil
 }
 
-func (s *storyRepository) Delete(ctx context.Context, id int64) error {
+func (s *storyRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

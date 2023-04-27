@@ -58,7 +58,7 @@ func (e *entityService) CreateEntity(ctx context.Context, req model.CreateEntity
 	return entity, nil
 }
 
-func (e *entityService) FindAllEntity(ctx context.Context, intentId int64) ([]*model.Entity, error) {
+func (e *entityService) FindAllEntity(ctx context.Context, intentId string) ([]*model.Entity, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 	})
@@ -72,13 +72,13 @@ func (e *entityService) FindAllEntity(ctx context.Context, intentId int64) ([]*m
 	return entities, nil
 }
 
-func (e *entityService) FindEntityByID(ctx context.Context, id, intentId int64) (*model.Entity, error) {
+func (e *entityService) FindEntityByID(ctx context.Context, id, intentId string) (*model.Entity, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 || intentId <= 0 {
+	if id == "" || intentId == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -105,7 +105,7 @@ func (e *entityService) FindEntityByID(ctx context.Context, id, intentId int64) 
 	return entity, nil
 }
 
-func (e *entityService) DeleteEntity(ctx context.Context, id, intentId int64) (bool, error) {
+func (e *entityService) DeleteEntity(ctx context.Context, id, intentId string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

@@ -18,7 +18,7 @@ func (c *CreateUpdateUtteranceRequest) Validate() error {
 }
 
 type Utterance struct {
-	Id        int64          `json:"id"`
+	Id        string         `json:"id"`
 	Name      string         `json:"name"`
 	Response  string         `json:"response"`
 	CreatedAt time.Time      `json:"created_at"`
@@ -38,17 +38,17 @@ type UtteranceController interface {
 type UtteranceService interface {
 	CreateUtterance(ctx context.Context, req CreateUpdateUtteranceRequest) (*Utterance, error)
 	FindAllUtterance(ctx context.Context) ([]*Utterance, error)
-	FindUtteranceByID(ctx context.Context, id int64) (*Utterance, error)
-	UpdateUtterance(ctx context.Context, id int64, req CreateUpdateUtteranceRequest) (*Utterance, error)
-	DeleteUtterance(ctx context.Context, id int64) (bool, error)
+	FindUtteranceByID(ctx context.Context, id string) (*Utterance, error)
+	UpdateUtterance(ctx context.Context, id string, req CreateUpdateUtteranceRequest) (*Utterance, error)
+	DeleteUtterance(ctx context.Context, id string) (bool, error)
 	CountAllUtterance(ctx context.Context) (int64, error)
 }
 
 type UtteranceRepository interface {
 	Create(ctx context.Context, utterance *Utterance) error
-	FindByID(ctx context.Context, id int64) (*Utterance, error)
+	FindByID(ctx context.Context, id string) (*Utterance, error)
 	FindAll(ctx context.Context) ([]*Utterance, error)
-	Update(ctx context.Context, id int64, utterance *Utterance) error
-	Delete(ctx context.Context, id int64) error
+	Update(ctx context.Context, id string, utterance *Utterance) error
+	Delete(ctx context.Context, id string) error
 	CountAll(ctx context.Context) (int64, error)
 }

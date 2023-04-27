@@ -62,13 +62,13 @@ func (c *configurationService) CreateConfiguration(ctx context.Context, req mode
 	return conf, nil
 }
 
-func (c *configurationService) FindConfiguration(ctx context.Context, id int64) (*model.Configuration, error) {
+func (c *configurationService) FindConfiguration(ctx context.Context, id string) (*model.Configuration, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -86,7 +86,7 @@ func (c *configurationService) FindConfiguration(ctx context.Context, id int64) 
 	return conf, nil
 }
 
-func (c *configurationService) UpdateConfiguration(ctx context.Context, id int64, req model.CreateUpdateConfigurationRequest) (*model.Configuration, error) {
+func (c *configurationService) UpdateConfiguration(ctx context.Context, id string, req model.CreateUpdateConfigurationRequest) (*model.Configuration, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

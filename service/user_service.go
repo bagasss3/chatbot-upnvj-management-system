@@ -88,13 +88,13 @@ func (u *userService) FindAllAdmin(ctx context.Context) ([]*model.User, error) {
 	return users, nil
 }
 
-func (u *userService) FindAdminByID(ctx context.Context, id int64) (*model.User, error) {
+func (u *userService) FindAdminByID(ctx context.Context, id string) (*model.User, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -111,17 +111,12 @@ func (u *userService) FindAdminByID(ctx context.Context, id int64) (*model.User,
 	return user, nil
 }
 
-func (u *userService) UpdateAdmin(ctx context.Context, id int64, req model.UpdateAdminRequest) (*model.User, error) {
+func (u *userService) UpdateAdmin(ctx context.Context, id string, req model.UpdateAdminRequest) (*model.User, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 		"req": req,
 	})
-
-	if req.Password != req.Repassword {
-		log.Error("Password mismatch")
-		return nil, constant.ErrPasswordMismatch
-	}
 
 	if err := req.Validate(); err != nil {
 		log.Error(err)
@@ -134,16 +129,8 @@ func (u *userService) UpdateAdmin(ctx context.Context, id int64, req model.Updat
 		return nil, err
 	}
 
-	newPlainPassword := helper.GeneratePassword()
-	newHashedPassword, err := helper.HashString(newPlainPassword)
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
-
 	user.Name = req.Name
 	user.MajorId = req.MajorId
-	user.Password = newHashedPassword
 
 	err = u.userRepository.Update(ctx, user.Id, user)
 	if err != nil {
@@ -154,7 +141,7 @@ func (u *userService) UpdateAdmin(ctx context.Context, id int64, req model.Updat
 	return user, nil
 }
 
-func (u *userService) DeleteAdminByID(ctx context.Context, id int64) (bool, error) {
+func (u *userService) DeleteAdminByID(ctx context.Context, id string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -175,7 +162,7 @@ func (u *userService) DeleteAdminByID(ctx context.Context, id int64) (bool, erro
 	return true, nil
 }
 
-func (u *userService) UpdateProfile(ctx context.Context, id int64, req model.UpdateUserPasswordRequest) (bool, error) {
+func (u *userService) UpdateProfile(ctx context.Context, id string, req model.UpdateUserPasswordRequest) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

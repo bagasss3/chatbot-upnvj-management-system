@@ -16,8 +16,8 @@ const (
 )
 
 type CreateStepRequest struct {
-	StoryId    int64    `json:"story_id" validate:"required"`
-	ResponseId int64    `json:"response_id" validate:"required"`
+	StoryId    string   `json:"story_id" validate:"required"`
+	ResponseId string   `json:"response_id" validate:"required"`
 	Type       StepType `json:"type" validate:"required"`
 }
 
@@ -26,7 +26,7 @@ func (c *CreateStepRequest) Validate() error {
 }
 
 type UpdateStepRequest struct {
-	ResponseId int64    `json:"response_id" validate:"required"`
+	ResponseId string   `json:"response_id" validate:"required"`
 	Type       StepType `json:"type" validate:"required"`
 }
 
@@ -35,10 +35,10 @@ func (c *UpdateStepRequest) Validate() error {
 }
 
 type Step struct {
-	Id         int64     `json:"id"`
-	StoryId    int64     `json:"story_id"`
+	Id         string    `json:"id"`
+	StoryId    string    `json:"story_id"`
 	Type       StepType  `json:"type"`
-	ResponseId int64     `json:"response_id"`
+	ResponseId string    `json:"response_id"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
@@ -53,17 +53,17 @@ type StepController interface {
 
 type StepService interface {
 	CreateStep(ctx context.Context, req CreateStepRequest) (*Step, error)
-	FindAllStepByStoryID(ctx context.Context, storyId int64) ([]*Step, error)
-	FindStepByID(ctx context.Context, id, storyId int64) (*Step, error)
-	UpdateStep(ctx context.Context, id, storyId int64, req UpdateStepRequest) (*Step, error)
-	DeleteStep(ctx context.Context, id, storyId int64) (bool, error)
+	FindAllStepByStoryID(ctx context.Context, storyId string) ([]*Step, error)
+	FindStepByID(ctx context.Context, id, storyId string) (*Step, error)
+	UpdateStep(ctx context.Context, id, storyId string, req UpdateStepRequest) (*Step, error)
+	DeleteStep(ctx context.Context, id, storyId string) (bool, error)
 }
 
 type StepRepository interface {
 	Create(ctx context.Context, step *Step) error
-	FindAll(ctx context.Context, storyId int64) ([]*Step, error)
-	FindByID(ctx context.Context, id, storyId int64) (*Step, error)
-	Update(ctx context.Context, id int64, step *Step) error
-	Delete(ctx context.Context, id int64) error
-	DeleteAllByStoryID(ctx context.Context, storyId int64) error
+	FindAll(ctx context.Context, storyId string) ([]*Step, error)
+	FindByID(ctx context.Context, id, storyId string) (*Step, error)
+	Update(ctx context.Context, id string, step *Step) error
+	Delete(ctx context.Context, id string) error
+	DeleteAllByStoryID(ctx context.Context, storyId string) error
 }

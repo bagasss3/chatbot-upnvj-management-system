@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -52,13 +51,7 @@ func (s *storyController) HandleFindAllStory() echo.HandlerFunc {
 
 func (s *storyController) HandleFindStoryByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		story, err := s.storyService.FindStoryByID(c.Request().Context(), id)
 		if err != nil {
@@ -78,12 +71,7 @@ func (s *storyController) HandleUpdateStory() echo.HandlerFunc {
 			return constant.ErrInternal
 		}
 
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		update, err := s.storyService.UpdateStory(c.Request().Context(), id, req)
 		if err != nil {
@@ -97,13 +85,7 @@ func (s *storyController) HandleUpdateStory() echo.HandlerFunc {
 
 func (s *storyController) HandleDeleteStory() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		isDeleted, err := s.storyService.DeleteStory(c.Request().Context(), id)
 		if err != nil {

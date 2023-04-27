@@ -48,8 +48,8 @@ func (a *actionHttpRepository) FindAll(ctx context.Context) ([]*model.ActionHttp
 	return actionHttps, nil
 }
 
-func (a *actionHttpRepository) FindByID(ctx context.Context, id int64) (*model.ActionHttp, error) {
-	if id <= 0 {
+func (a *actionHttpRepository) FindByID(ctx context.Context, id string) (*model.ActionHttp, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -95,7 +95,7 @@ func (a *actionHttpRepository) Update(ctx context.Context, actionHttp *model.Act
 	return nil
 }
 
-func (a *actionHttpRepository) Delete(ctx context.Context, id int64) error {
+func (a *actionHttpRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

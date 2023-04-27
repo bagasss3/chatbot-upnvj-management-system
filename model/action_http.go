@@ -23,7 +23,7 @@ func (c *CreateUpdateActionHttpRequest) Validate() error {
 }
 
 type ActionHttp struct {
-	Id           int64          `json:"id"`
+	Id           string         `json:"id"`
 	Name         string         `json:"name"`
 	GetHttpReq   string         `json:"get_http_req"`
 	PostHttpReq  string         `json:"post_http_req"`
@@ -48,17 +48,17 @@ type ActionHttpController interface {
 type ActionHttpService interface {
 	CreateActionHttp(ctx context.Context, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
 	FindAllActionHttp(ctx context.Context) ([]*ActionHttp, error)
-	FindActionHttpByID(ctx context.Context, id int64) (*ActionHttp, error)
-	UpdateActionHttp(ctx context.Context, id int64, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
-	DeleteActionHttp(ctx context.Context, id int64) (bool, error)
+	FindActionHttpByID(ctx context.Context, id string) (*ActionHttp, error)
+	UpdateActionHttp(ctx context.Context, id string, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
+	DeleteActionHttp(ctx context.Context, id string) (bool, error)
 	CountAllActionHttp(ctx context.Context) (int64, error)
 }
 
 type ActionHttpRepository interface {
 	Create(ctx context.Context, actionHttp *ActionHttp) error
 	FindAll(ctx context.Context) ([]*ActionHttp, error)
-	FindByID(ctx context.Context, id int64) (*ActionHttp, error)
+	FindByID(ctx context.Context, id string) (*ActionHttp, error)
 	Update(ctx context.Context, actionHttp *ActionHttp) error
-	Delete(ctx context.Context, id int64) error
+	Delete(ctx context.Context, id string) error
 	CountAll(ctx context.Context) (int64, error)
 }

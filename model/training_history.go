@@ -15,7 +15,7 @@ const (
 )
 
 type CreateTrainingHistoryRequest struct {
-	UserId    int64  `json:"user_id" validate:"required"`
+	UserId    string `json:"user_id" validate:"required"`
 	TotalTime int    `json:"total_time" validate:"required"`
 	Status    Status `json:"status" validate:"required"`
 }
@@ -25,8 +25,8 @@ func (c *CreateTrainingHistoryRequest) Validate() error {
 }
 
 type TrainingHistory struct {
-	Id        int64     `json:"id"`
-	UserId    int64     `json:"user_id"`
+	Id        string    `json:"id"`
+	UserId    string    `json:"user_id"`
 	TotalTime int       `json:"total_time"`
 	Status    Status    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`

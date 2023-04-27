@@ -64,13 +64,13 @@ func (a *actionHttpService) FindAllActionHttp(ctx context.Context) ([]*model.Act
 	return actionHttps, nil
 }
 
-func (a *actionHttpService) FindActionHttpByID(ctx context.Context, id int64) (*model.ActionHttp, error) {
+func (a *actionHttpService) FindActionHttpByID(ctx context.Context, id string) (*model.ActionHttp, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "0" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -87,7 +87,7 @@ func (a *actionHttpService) FindActionHttpByID(ctx context.Context, id int64) (*
 	return actionHttp, nil
 }
 
-func (a *actionHttpService) UpdateActionHttp(ctx context.Context, id int64, req model.CreateUpdateActionHttpRequest) (*model.ActionHttp, error) {
+func (a *actionHttpService) UpdateActionHttp(ctx context.Context, id string, req model.CreateUpdateActionHttpRequest) (*model.ActionHttp, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -122,7 +122,7 @@ func (a *actionHttpService) UpdateActionHttp(ctx context.Context, id int64, req 
 	return actionHttp, nil
 }
 
-func (a *actionHttpService) DeleteActionHttp(ctx context.Context, id int64) (bool, error) {
+func (a *actionHttpService) DeleteActionHttp(ctx context.Context, id string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

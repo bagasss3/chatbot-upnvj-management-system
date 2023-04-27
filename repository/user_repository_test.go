@@ -23,7 +23,7 @@ func TestUserRepository_FindByID(t *testing.T) {
 		mock.ExpectQuery("^SELECT .+ FROM \"users\"").
 			WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(123))
 
-		res, err := repo.FindByID(ctx, 123)
+		res, err := repo.FindByID(ctx, "")
 		require.NoError(t, err)
 		require.NotNil(t, res)
 	})

@@ -2,6 +2,7 @@ package helper
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -18,8 +19,8 @@ func ParseTimeDuration(t string, defaultt time.Duration) time.Duration {
 }
 
 // GenerateID based on curr time
-func GenerateID() int64 {
-	return time.Now().UnixNano() + int64(rand.Intn(10000))
+func GenerateID() string {
+	return fmt.Sprintf("%d", time.Now().UnixNano()+int64(rand.Intn(10000)))
 }
 
 func GeneratePassword() string {
