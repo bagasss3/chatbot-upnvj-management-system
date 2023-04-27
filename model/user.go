@@ -19,7 +19,7 @@ type CreateAdminRequest struct {
 	Email      string   `json:"email" validate:"required,email"`
 	Name       string   `json:"name" validate:"required,min=3,max=60"`
 	Type       UserType `json:"type" validate:"required"`
-	MajorId    int64    `json:"major_id" validate:"required"`
+	MajorId    string   `json:"major_id" validate:"required"`
 	Password   string   `json:"password" validate:"required"`
 	Repassword string   `json:"repassword" validate:"required"`
 }
@@ -29,10 +29,8 @@ func (c *CreateAdminRequest) Validate() error {
 }
 
 type UpdateAdminRequest struct {
-	Name       string `json:"name" validate:"required,min=3,max=60"`
-	MajorId    int64  `json:"major_id" validate:"required"`
-	Password   string `json:"password" validate:"required"`
-	Repassword string `json:"repassword" validate:"required"`
+	Name    string `json:"name" validate:"required,min=3,max=60"`
+	MajorId string `json:"major_id" validate:"required"`
 }
 
 func (c *UpdateAdminRequest) Validate() error {
@@ -50,12 +48,12 @@ func (c *UpdateUserPasswordRequest) Validate() error {
 }
 
 type User struct {
-	Id        int64          `json:"id"`
+	Id        string         `json:"id"`
 	Email     string         `json:"email"`
 	Password  string         `json:"password"`
 	Name      string         `json:"name"`
 	Type      UserType       `json:"type"`
-	MajorId   int64          `json:"major_id"`
+	MajorId   string         `json:"major_id"`
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
@@ -74,18 +72,18 @@ type UserController interface {
 type UserService interface {
 	CreateAdmin(ctx context.Context, req CreateAdminRequest) (*User, error)
 	FindAllAdmin(ctx context.Context) ([]*User, error)
-	FindAdminByID(ctx context.Context, id int64) (*User, error)
-	UpdateAdmin(ctx context.Context, id int64, req UpdateAdminRequest) (*User, error)
-	DeleteAdminByID(ctx context.Context, id int64) (bool, error)
-	UpdateProfile(ctx context.Context, id int64, req UpdateUserPasswordRequest) (bool, error)
+	FindAdminByID(ctx context.Context, id string) (*User, error)
+	UpdateAdmin(ctx context.Context, id string, req UpdateAdminRequest) (*User, error)
+	DeleteAdminByID(ctx context.Context, id string) (bool, error)
+	UpdateProfile(ctx context.Context, id string, req UpdateUserPasswordRequest) (bool, error)
 }
 
 type UserRepository interface {
 	Create(ctx context.Context, user *User) error
-	FindByID(ctx context.Context, id int64) (*User, error)
+	FindByID(ctx context.Context, id string) (*User, error)
 	FindByEmail(ctx context.Context, userEmail string) (*User, error)
 	ResetPassword(ctx context.Context, user *User) error
 	FindAll(ctx context.Context) ([]*User, error)
-	Update(ctx context.Context, id int64, user *User) error
-	Delete(ctx context.Context, id int64) error
+	Update(ctx context.Context, id string, user *User) error
+	Delete(ctx context.Context, id string) error
 }

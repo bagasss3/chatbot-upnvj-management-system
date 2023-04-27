@@ -48,8 +48,8 @@ func (r *ruleRepository) FindAll(ctx context.Context) ([]*model.Rule, error) {
 	return rules, nil
 }
 
-func (r *ruleRepository) FindByID(ctx context.Context, id int64) (*model.Rule, error) {
-	if id <= 0 {
+func (r *ruleRepository) FindByID(ctx context.Context, id string) (*model.Rule, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -72,7 +72,7 @@ func (r *ruleRepository) FindByID(ctx context.Context, id int64) (*model.Rule, e
 	return rule, nil
 }
 
-func (r *ruleRepository) Update(ctx context.Context, id int64, rule *model.Rule) error {
+func (r *ruleRepository) Update(ctx context.Context, id string, rule *model.Rule) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":  ctx,
 		"id":   id,
@@ -93,7 +93,7 @@ func (r *ruleRepository) Update(ctx context.Context, id int64, rule *model.Rule)
 	return nil
 }
 
-func (r *ruleRepository) Delete(ctx context.Context, id int64) error {
+func (r *ruleRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

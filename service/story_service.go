@@ -63,13 +63,13 @@ func (s *storyService) FindAllStory(ctx context.Context) ([]*model.Story, error)
 	return stories, nil
 }
 
-func (s *storyService) FindStoryByID(ctx context.Context, id int64) (*model.Story, error) {
+func (s *storyService) FindStoryByID(ctx context.Context, id string) (*model.Story, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -86,7 +86,7 @@ func (s *storyService) FindStoryByID(ctx context.Context, id int64) (*model.Stor
 	return story, nil
 }
 
-func (s *storyService) UpdateStory(ctx context.Context, id int64, req model.CreateUpdateStoryRequest) (*model.Story, error) {
+func (s *storyService) UpdateStory(ctx context.Context, id string, req model.CreateUpdateStoryRequest) (*model.Story, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -115,7 +115,7 @@ func (s *storyService) UpdateStory(ctx context.Context, id int64, req model.Crea
 	return story, nil
 }
 
-func (s *storyService) DeleteStory(ctx context.Context, id int64) (bool, error) {
+func (s *storyService) DeleteStory(ctx context.Context, id string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

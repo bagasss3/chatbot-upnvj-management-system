@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -54,13 +53,7 @@ func (i *intentController) HandleFindAllIntent() echo.HandlerFunc {
 
 func (i *intentController) HandleFindIntentByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		intent, err := i.intentService.FindIntentByID(c.Request().Context(), id)
 		if err != nil {
@@ -80,12 +73,7 @@ func (i *intentController) HandleUpdateIntent() echo.HandlerFunc {
 			return constant.ErrInternal
 		}
 
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		update, err := i.intentService.UpdateIntent(c.Request().Context(), id, model.CreateUpdateIntentRequest{
 			Name: req.Name,
@@ -101,13 +89,7 @@ func (i *intentController) HandleUpdateIntent() echo.HandlerFunc {
 
 func (i *intentController) HandleDeleteIntent() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		idParam := c.Param("id")
-
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		id := c.Param("id")
 
 		isDeleted, err := i.intentService.DeleteIntent(c.Request().Context(), id)
 		if err != nil {

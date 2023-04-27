@@ -48,8 +48,8 @@ func (li *logIntentRepository) FindAll(ctx context.Context) ([]*model.LogIntent,
 	return logintents, nil
 }
 
-func (li *logIntentRepository) FindByIntentID(ctx context.Context, intentId int64) (*model.LogIntent, error) {
-	if intentId <= 0 {
+func (li *logIntentRepository) FindByIntentID(ctx context.Context, intentId string) (*model.LogIntent, error) {
+	if intentId == "" {
 		return nil, nil
 	}
 
@@ -72,7 +72,7 @@ func (li *logIntentRepository) FindByIntentID(ctx context.Context, intentId int6
 	return logIntent, nil
 }
 
-func (li *logIntentRepository) Update(ctx context.Context, intentId int64, logIntent *model.LogIntent) error {
+func (li *logIntentRepository) Update(ctx context.Context, intentId string, logIntent *model.LogIntent) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":       ctx,
 		"intentId":  intentId,

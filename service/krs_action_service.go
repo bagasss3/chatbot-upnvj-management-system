@@ -60,13 +60,13 @@ func (k *krsActionService) FindAllKrsAction(ctx context.Context) ([]*model.KrsAc
 	return krsActions, nil
 }
 
-func (k *krsActionService) FindKrsActionByID(ctx context.Context, id int64) (*model.KrsAction, error) {
+func (k *krsActionService) FindKrsActionByID(ctx context.Context, id string) (*model.KrsAction, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	if id <= 0 {
+	if id == "" {
 		return nil, constant.ErrInvalidArgument
 	}
 
@@ -83,7 +83,7 @@ func (k *krsActionService) FindKrsActionByID(ctx context.Context, id int64) (*mo
 	return krsAction, nil
 }
 
-func (k *krsActionService) UpdateKrsAction(ctx context.Context, id int64, req model.CreateUpdateKrsActionRequest) (*model.KrsAction, error) {
+func (k *krsActionService) UpdateKrsAction(ctx context.Context, id string, req model.CreateUpdateKrsActionRequest) (*model.KrsAction, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
@@ -114,7 +114,7 @@ func (k *krsActionService) UpdateKrsAction(ctx context.Context, id int64, req mo
 	return krsAction, nil
 }
 
-func (k *krsActionService) DeleteKrsAction(ctx context.Context, id int64) (bool, error) {
+func (k *krsActionService) DeleteKrsAction(ctx context.Context, id string) (bool, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

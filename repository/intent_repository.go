@@ -33,8 +33,8 @@ func (i *intentRepository) Create(ctx context.Context, intent *model.Intent) err
 	return nil
 }
 
-func (i *intentRepository) FindByID(ctx context.Context, id int64) (*model.Intent, error) {
-	if id <= 0 {
+func (i *intentRepository) FindByID(ctx context.Context, id string) (*model.Intent, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -72,7 +72,7 @@ func (i *intentRepository) FindAll(ctx context.Context) ([]*model.Intent, error)
 	return intents, nil
 }
 
-func (i *intentRepository) Update(ctx context.Context, id int64, intent *model.Intent) error {
+func (i *intentRepository) Update(ctx context.Context, id string, intent *model.Intent) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":    ctx,
 		"id":     id,
@@ -90,7 +90,7 @@ func (i *intentRepository) Update(ctx context.Context, id int64, intent *model.I
 	return nil
 }
 
-func (i *intentRepository) Delete(ctx context.Context, id int64) error {
+func (i *intentRepository) Delete(ctx context.Context, id string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,

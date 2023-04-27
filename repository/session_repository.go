@@ -33,8 +33,8 @@ func (s *sessionRepository) Create(ctx context.Context, session *model.Session) 
 	return nil
 }
 
-func (s *sessionRepository) FindByID(ctx context.Context, id int64) (*model.Session, error) {
-	if id <= 0 {
+func (s *sessionRepository) FindByID(ctx context.Context, id string) (*model.Session, error) {
+	if id == "" {
 		return nil, nil
 	}
 
@@ -63,7 +63,7 @@ func (s *sessionRepository) FindByRefreshToken(ctx context.Context, refreshToken
 		"accessToken": refreshToken,
 	})
 
-	id := int64(0)
+	id := string("")
 	err := s.db.Model(model.Session{}).Select("id").Take(&id, "refresh_token = ?", refreshToken).Error
 	switch err {
 	case nil:

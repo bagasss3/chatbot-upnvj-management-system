@@ -6,7 +6,7 @@ import (
 )
 
 // NewUserFromSession return new user from session
-func NewUserAuth(user int64, role model.UserType) model.UserAuth {
+func NewUserAuth(user string, role model.UserType) model.UserAuth {
 	return model.UserAuth{
 		UserID: user,
 		Role:   role,

@@ -16,8 +16,8 @@ const (
 )
 
 type CreateUpdateRuleRequest struct {
-	IntentId   int64    `json:"intent_id" validate:"required"`
-	ResponseId int64    `json:"response_id" validate:"required"`
+	IntentId   string   `json:"intent_id" validate:"required"`
+	ResponseId string   `json:"response_id" validate:"required"`
 	RuleTitle  string   `json:"rule_title" validate:"required,min=3,max=60"`
 	Type       RuleType `json:"type" validate:"required"`
 }
@@ -27,9 +27,9 @@ func (c *CreateUpdateRuleRequest) Validate() error {
 }
 
 type Rule struct {
-	Id         int64          `json:"id"`
-	IntentId   int64          `json:"intent_id"`
-	ResponseId int64          `json:"response_id"`
+	Id         string         `json:"id"`
+	IntentId   string         `json:"intent_id"`
+	ResponseId string         `json:"response_id"`
 	RuleTitle  string         `json:"rule_title"`
 	Type       RuleType       `json:"type"`
 	CreatedAt  time.Time      `json:"created_at"`
@@ -48,15 +48,15 @@ type RuleController interface {
 type RuleService interface {
 	CreateRule(ctx context.Context, req CreateUpdateRuleRequest) (*Rule, error)
 	FindAllRule(ctx context.Context) ([]*Rule, error)
-	FindRuleByID(ctx context.Context, id int64) (*Rule, error)
-	UpdateRule(ctx context.Context, id int64, req CreateUpdateRuleRequest) (*Rule, error)
-	DeleteRule(ctx context.Context, id int64) (bool, error)
+	FindRuleByID(ctx context.Context, id string) (*Rule, error)
+	UpdateRule(ctx context.Context, id string, req CreateUpdateRuleRequest) (*Rule, error)
+	DeleteRule(ctx context.Context, id string) (bool, error)
 }
 
 type RuleRepository interface {
 	Create(ctx context.Context, rule *Rule) error
 	FindAll(ctx context.Context) ([]*Rule, error)
-	FindByID(ctx context.Context, id int64) (*Rule, error)
-	Update(ctx context.Context, id int64, rule *Rule) error
-	Delete(ctx context.Context, id int64) error
+	FindByID(ctx context.Context, id string) (*Rule, error)
+	Update(ctx context.Context, id string, rule *Rule) error
+	Delete(ctx context.Context, id string) error
 }

@@ -4,7 +4,6 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/model"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -40,12 +39,7 @@ func (e *entityController) HandleCreateEntity() echo.HandlerFunc {
 
 func (e *entityController) HandleFindAllEntity() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		intentIdParam := c.Param("intentId")
-		intentId, err := strconv.ParseInt(intentIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		intentId := c.Param("intentId")
 
 		entities, err := e.entityService.FindAllEntity(c.Request().Context(), intentId)
 		if err != nil {
@@ -59,19 +53,8 @@ func (e *entityController) HandleFindAllEntity() echo.HandlerFunc {
 
 func (e *entityController) HandleFindEntityByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		intentIdParam := c.Param("intentId")
-		intentId, err := strconv.ParseInt(intentIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		intentId := c.Param("intentId")
+		id := c.Param("id")
 
 		entity, err := e.entityService.FindEntityByID(c.Request().Context(), id, intentId)
 		if err != nil {
@@ -85,19 +68,8 @@ func (e *entityController) HandleFindEntityByID() echo.HandlerFunc {
 
 func (e *entityController) HandleDeleteEntity() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		intentIdParam := c.Param("intentId")
-		intentId, err := strconv.ParseInt(intentIdParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		idParam := c.Param("id")
-		id, err := strconv.ParseInt(idParam, 10, 64)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
+		intentId := c.Param("intentId")
+		id := c.Param("id")
 
 		entity, err := e.entityService.DeleteEntity(c.Request().Context(), id, intentId)
 		if err != nil {
