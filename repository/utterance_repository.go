@@ -57,13 +57,18 @@ func (u *utteranceRepository) FindByID(ctx context.Context, id string) (*model.U
 	return utterance, nil
 }
 
-func (u *utteranceRepository) FindAll(ctx context.Context) ([]*model.Utterance, error) {
+func (u *utteranceRepository) FindAll(ctx context.Context, name string) ([]*model.Utterance, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 	})
 
 	var utterances []*model.Utterance
-	res := u.db.WithContext(ctx).Find(&utterances)
+	var res *gorm.DB
+	if name == "" {
+		res = u.db.WithContext(ctx).Find(&utterances)
+	} else {
+		res = u.db.WithContext(ctx).Where("name LIKE ?", "%"+name+"%").Find(&utterances)
+	}
 	if res.Error != nil {
 		log.Error(res.Error)
 		return utterances, res.Error

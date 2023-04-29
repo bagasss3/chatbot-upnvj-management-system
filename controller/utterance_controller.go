@@ -42,7 +42,8 @@ func (u *utteranceController) HandleCreateUtterance() echo.HandlerFunc {
 
 func (u *utteranceController) HandleFindAllUtterance() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		utterances, err := u.utteranceService.FindAllUtterance(c.Request().Context())
+		name := c.QueryParam("name")
+		utterances, err := u.utteranceService.FindAllUtterance(c.Request().Context(), name)
 		if err != nil {
 			log.Error(err)
 			return err

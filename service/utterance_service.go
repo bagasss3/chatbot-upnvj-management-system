@@ -45,12 +45,13 @@ func (u *utteranceService) CreateUtterance(ctx context.Context, req model.Create
 	return utterance, nil
 }
 
-func (u *utteranceService) FindAllUtterance(ctx context.Context) ([]*model.Utterance, error) {
+func (u *utteranceService) FindAllUtterance(ctx context.Context, name string) ([]*model.Utterance, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
-	utterances, err := u.utteranceRepository.FindAll(ctx)
+	utterances, err := u.utteranceRepository.FindAll(ctx, name)
 	if err != nil {
 		log.Error(err)
 		return nil, err
