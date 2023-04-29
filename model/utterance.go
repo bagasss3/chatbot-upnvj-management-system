@@ -37,7 +37,7 @@ type UtteranceController interface {
 
 type UtteranceService interface {
 	CreateUtterance(ctx context.Context, req CreateUpdateUtteranceRequest) (*Utterance, error)
-	FindAllUtterance(ctx context.Context) ([]*Utterance, error)
+	FindAllUtterance(ctx context.Context, name string) ([]*Utterance, error)
 	FindUtteranceByID(ctx context.Context, id string) (*Utterance, error)
 	UpdateUtterance(ctx context.Context, id string, req CreateUpdateUtteranceRequest) (*Utterance, error)
 	DeleteUtterance(ctx context.Context, id string) (bool, error)
@@ -47,7 +47,7 @@ type UtteranceService interface {
 type UtteranceRepository interface {
 	Create(ctx context.Context, utterance *Utterance) error
 	FindByID(ctx context.Context, id string) (*Utterance, error)
-	FindAll(ctx context.Context) ([]*Utterance, error)
+	FindAll(ctx context.Context, name string) ([]*Utterance, error)
 	Update(ctx context.Context, id string, utterance *Utterance) error
 	Delete(ctx context.Context, id string) error
 	CountAll(ctx context.Context) (int64, error)
