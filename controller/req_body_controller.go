@@ -21,27 +21,28 @@ func NewReqBodyController(reqBodyService model.ReqBodyService) model.ReqBodyCont
 
 func (r *reqBodyController) HandleCreateReqBody() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := model.CreateReqBodyRequest{}
+		req := model.CreateReqBodyActionArrayRequest{}
 		if err := c.Bind(&req); err != nil {
 			log.Error(err)
 			return constant.ErrInternal
 		}
 
-		create, err := r.reqBodyService.CreateReqBody(c.Request().Context(), req)
+		bool, err := r.reqBodyService.CreateReqBody(c.Request().Context(), req)
 		if err != nil {
 			log.Error(err)
 			return err
 		}
 
-		return c.JSON(http.StatusOK, create)
+		return c.JSON(http.StatusOK, bool)
 	}
 }
 
 func (r *reqBodyController) HandleFindAllReqBodyByActionHttpID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		actionHttpId := c.Param("actionHttpId")
+		method := c.QueryParam("method")
 
-		reqBodies, err := r.reqBodyService.FindAllReqBodyByActionHttpID(c.Request().Context(), actionHttpId)
+		reqBodies, err := r.reqBodyService.FindAllReqBodyByActionHttpID(c.Request().Context(), actionHttpId, method)
 		if err != nil {
 			log.Error(err)
 			return err

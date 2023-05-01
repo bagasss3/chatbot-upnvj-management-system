@@ -47,7 +47,7 @@ type ActionHttpController interface {
 
 type ActionHttpService interface {
 	CreateActionHttp(ctx context.Context, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
-	FindAllActionHttp(ctx context.Context) ([]*ActionHttp, error)
+	FindAllActionHttp(ctx context.Context, name string) ([]*ActionHttp, error)
 	FindActionHttpByID(ctx context.Context, id string) (*ActionHttp, error)
 	UpdateActionHttp(ctx context.Context, id string, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
 	DeleteActionHttp(ctx context.Context, id string) (bool, error)
@@ -56,7 +56,7 @@ type ActionHttpService interface {
 
 type ActionHttpRepository interface {
 	Create(ctx context.Context, actionHttp *ActionHttp) error
-	FindAll(ctx context.Context) ([]*ActionHttp, error)
+	FindAll(ctx context.Context, name string) ([]*ActionHttp, error)
 	FindByID(ctx context.Context, id string) (*ActionHttp, error)
 	Update(ctx context.Context, actionHttp *ActionHttp) error
 	Delete(ctx context.Context, id string) error

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type StepType string
@@ -65,5 +66,5 @@ type StepRepository interface {
 	FindByID(ctx context.Context, id, storyId string) (*Step, error)
 	Update(ctx context.Context, id string, step *Step) error
 	Delete(ctx context.Context, id string) error
-	DeleteAllByStoryID(ctx context.Context, storyId string) error
+	DeleteAllByStoryID(ctx context.Context, tx *gorm.DB, storyId string) error
 }

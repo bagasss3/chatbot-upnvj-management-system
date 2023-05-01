@@ -19,6 +19,7 @@ var (
 	ErrRefreshTokenExpired = echo.NewHTTPError(http.StatusNotAcceptable, "refresh token expired")
 	ErrPasswordMismatch    = echo.NewHTTPError(http.StatusBadRequest, "password mismatch")
 	ErrAlreadyExists       = echo.NewHTTPError(http.StatusBadRequest, "record already exists")
+	ErrFieldEmpty          = echo.NewHTTPError(http.StatusBadRequest, "requirement field empty")
 )
 
 // httpValidationOrInternalErr return valdiation or internal error

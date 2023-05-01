@@ -128,14 +128,14 @@ func (s *storyService) DeleteStory(ctx context.Context, id string) (bool, error)
 	}
 
 	tx := s.gormTransactioner.Begin(ctx)
-	err = s.storyRepository.Delete(ctx, id)
+	err = s.storyRepository.DeleteWithContext(ctx, tx, id)
 	if err != nil {
 		log.Error(err)
 		s.gormTransactioner.Rollback(tx)
 		return false, err
 	}
 
-	err = s.stepRepository.DeleteAllByStoryID(ctx, id)
+	err = s.stepRepository.DeleteAllByStoryID(ctx, tx, id)
 	if err != nil {
 		log.Error(err)
 		s.gormTransactioner.Rollback(tx)

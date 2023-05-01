@@ -46,4 +46,5 @@ type StoryRepository interface {
 	FindByID(ctx context.Context, id string) (*Story, error)
 	Update(ctx context.Context, id string, Story *Story) error
 	Delete(ctx context.Context, id string) error
+	DeleteWithContext(ctx context.Context, tx *gorm.DB, id string) error
 }
