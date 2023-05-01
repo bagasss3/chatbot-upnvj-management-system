@@ -104,3 +104,18 @@ func (s *storyRepository) Delete(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (s *storyRepository) DeleteWithContext(ctx context.Context, tx *gorm.DB, id string) error {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+		"id":  id,
+	})
+
+	err := tx.WithContext(ctx).Where("id = ?", id).Delete(&model.Story{}).Error
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return nil
+}
