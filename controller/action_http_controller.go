@@ -39,7 +39,9 @@ func (a *actionHttpController) HandleCreateActionHttp() echo.HandlerFunc {
 
 func (a *actionHttpController) HandleFindAllActionHttp() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		actionHttps, err := a.actionHttpService.FindAllActionHttp(c.Request().Context())
+		name := c.QueryParam("name")
+
+		actionHttps, err := a.actionHttpService.FindAllActionHttp(c.Request().Context(), name)
 		if err != nil {
 			log.Error(err)
 			return err

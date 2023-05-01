@@ -107,13 +107,13 @@ func (s *stepRepository) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
-func (s *stepRepository) DeleteAllByStoryID(ctx context.Context, storyId string) error {
+func (s *stepRepository) DeleteAllByStoryID(ctx context.Context, tx *gorm.DB, storyId string) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":     ctx,
 		"storyId": storyId,
 	})
 
-	err := s.db.WithContext(ctx).Where("story_id = ?", storyId).Delete(&model.Step{}).Error
+	err := tx.WithContext(ctx).Where("story_id = ?", storyId).Delete(&model.Step{}).Error
 	if err != nil {
 		log.Error(err)
 		return err

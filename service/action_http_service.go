@@ -11,11 +11,13 @@ import (
 
 type actionHttpService struct {
 	actionHttpRepository model.ActionHttpRepository
+	reqBodyRepository    model.ReqBodyRepository
 }
 
-func NewActionHttpService(actionHttpRepository model.ActionHttpRepository) model.ActionHttpService {
+func NewActionHttpService(actionHttpRepository model.ActionHttpRepository, reqBodyRepository model.ReqBodyRepository) model.ActionHttpService {
 	return &actionHttpService{
 		actionHttpRepository: actionHttpRepository,
+		reqBodyRepository:    reqBodyRepository,
 	}
 }
 
@@ -50,12 +52,13 @@ func (a *actionHttpService) CreateActionHttp(ctx context.Context, req model.Crea
 	return actionHttp, nil
 }
 
-func (a *actionHttpService) FindAllActionHttp(ctx context.Context) ([]*model.ActionHttp, error) {
+func (a *actionHttpService) FindAllActionHttp(ctx context.Context, name string) ([]*model.ActionHttp, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
-	actionHttps, err := a.actionHttpRepository.FindAll(ctx)
+	actionHttps, err := a.actionHttpRepository.FindAll(ctx, name)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -103,6 +106,32 @@ func (a *actionHttpService) UpdateActionHttp(ctx context.Context, id string, req
 	if err != nil {
 		log.Error(err)
 		return nil, err
+	}
+
+	if req.PostHttpReq == "" {
+		actionPost, err := a.reqBodyRepository.FindAll(ctx, actionHttp.Id, model.HttpMethodPost)
+		if err != nil {
+			log.Error(err)
+			return nil, err
+		}
+
+		if len(actionPost) > 0 {
+			log.Error("Post http can't be empty")
+			return nil, constant.ErrFieldEmpty
+		}
+	}
+
+	if req.PutHttpReq == "" {
+		actionPut, err := a.reqBodyRepository.FindAll(ctx, actionHttp.Id, model.HttpMethodPut)
+		if err != nil {
+			log.Error(err)
+			return nil, err
+		}
+
+		if len(actionPut) > 0 {
+			log.Error("Put http can't be empty")
+			return nil, constant.ErrFieldEmpty
+		}
 	}
 
 	actionHttp.Name = req.Name

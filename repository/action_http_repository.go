@@ -33,13 +33,19 @@ func (a *actionHttpRepository) Create(ctx context.Context, actionHttp *model.Act
 	return nil
 }
 
-func (a *actionHttpRepository) FindAll(ctx context.Context) ([]*model.ActionHttp, error) {
+func (a *actionHttpRepository) FindAll(ctx context.Context, name string) ([]*model.ActionHttp, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
 	var actionHttps []*model.ActionHttp
-	res := a.db.WithContext(ctx).Find(&actionHttps)
+	var res *gorm.DB
+	if name == "" {
+		res = a.db.WithContext(ctx).Find(&actionHttps)
+	} else {
+		res = a.db.WithContext(ctx).Where("name LIKE ?", "%"+name+"%").Find(&actionHttps)
+	}
 	if res.Error != nil {
 		log.Error(res.Error)
 		return nil, res.Error

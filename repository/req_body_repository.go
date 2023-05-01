@@ -18,13 +18,13 @@ func NewReqBodyRepository(db *gorm.DB) model.ReqBodyRepository {
 	}
 }
 
-func (r *reqBodyRepository) Create(ctx context.Context, reqBody *model.ReqBody) error {
+func (r *reqBodyRepository) Create(ctx context.Context, tx *gorm.DB, reqBody *model.ReqBody) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":     ctx,
 		"reqBody": reqBody,
 	})
 
-	err := r.db.WithContext(ctx).Create(reqBody).Error
+	err := tx.WithContext(ctx).Create(reqBody).Error
 	if err != nil {
 		log.Error(err)
 		return err
@@ -33,14 +33,14 @@ func (r *reqBodyRepository) Create(ctx context.Context, reqBody *model.ReqBody) 
 	return nil
 }
 
-func (r *reqBodyRepository) FindAll(ctx context.Context, actionHttpID string) ([]*model.ReqBody, error) {
+func (r *reqBodyRepository) FindAll(ctx context.Context, actionHttpID string, method model.HttpMethod) ([]*model.ReqBody, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":          ctx,
 		"actionHttpID": actionHttpID,
 	})
 
 	var reqBodies []*model.ReqBody
-	res := r.db.WithContext(ctx).Where("action_http_id = ?", actionHttpID).Find(&reqBodies)
+	res := r.db.WithContext(ctx).Where("action_http_id = ?", actionHttpID).Where("method = ?", method).Find(&reqBodies)
 	if res.Error != nil {
 		log.Error(res.Error)
 		return nil, res.Error
