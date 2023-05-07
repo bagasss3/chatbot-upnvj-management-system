@@ -6,6 +6,7 @@ import (
 	"cbupnvj/model"
 	"cbupnvj/repository"
 	"context"
+	"fmt"
 
 	"github.com/sirupsen/logrus"
 )
@@ -45,19 +46,42 @@ func (r *reqBodyService) CreateReqBody(ctx context.Context, req model.CreateReqB
 		log.Error(constant.ErrNotFound)
 		return false, constant.ErrNotFound
 	}
-
-	if actionHttpID.PostHttpReq == "" || actionHttpID.PutHttpReq == "" {
+	fmt.Println(len(req.GetFields), len(req.PostFields), len(req.PutFields))
+	if len(req.GetFields) <= 0 && len(req.PostFields) <= 0 && len(req.PutFields) <= 0 {
 		log.Error(constant.ErrFieldEmpty)
 		return false, constant.ErrFieldEmpty
 	}
 
-	if len(req.PostFields) <= 0 && len(req.PutFields) <= 0 {
-		log.Error("both fields are not more than 0")
-		return false, constant.ErrInvalidArgument
+	tx := r.gormTransactioner.Begin(ctx)
+	if len(req.GetFields) > 0 {
+		for i := range req.GetFields {
+			if err := req.GetFields[i].Validate(); err != nil {
+				log.Error(err)
+				r.gormTransactioner.Rollback(tx)
+				return false, constant.HttpValidationOrInternalErr(err)
+			}
+
+			reqBody := &model.ReqBody{
+				Id:           helper.GenerateID(),
+				ActionHttpId: actionHttpID.Id,
+				ReqName:      req.GetFields[i].ReqName,
+				Method:       model.HttpMethodGet,
+			}
+
+			err = r.reqBodyRepository.Create(ctx, tx, reqBody)
+			if err != nil {
+				log.Error(err)
+				r.gormTransactioner.Rollback(tx)
+				return false, err
+			}
+		}
 	}
 
-	tx := r.gormTransactioner.Begin(ctx)
 	if len(req.PostFields) > 0 {
+		if actionHttpID.PostHttpReq == "" {
+			log.Error(constant.ErrFieldEmpty)
+			return false, constant.ErrFieldEmpty
+		}
 		for i := range req.PostFields {
 			if err := req.PostFields[i].Validate(); err != nil {
 				log.Error(err)
@@ -83,6 +107,10 @@ func (r *reqBodyService) CreateReqBody(ctx context.Context, req model.CreateReqB
 	}
 
 	if len(req.PutFields) > 0 {
+		if actionHttpID.PutHttpReq == "" {
+			log.Error(constant.ErrFieldEmpty)
+			return false, constant.ErrFieldEmpty
+		}
 		for i := range req.PutFields {
 			if err := req.PutFields[i].Validate(); err != nil {
 				log.Error(err)
@@ -124,11 +152,15 @@ func (r *reqBodyService) FindAllReqBodyByActionHttpID(ctx context.Context, actio
 	})
 
 	var m model.HttpMethod
-	if method == string(model.HttpMethodPost) {
+	switch method {
+	case string(model.HttpMethodGet):
+		m = model.HttpMethodGet
+	case string(model.HttpMethodPost):
 		m = model.HttpMethodPost
-	} else {
+	case string(model.HttpMethodPut):
 		m = model.HttpMethodPut
 	}
+
 	reqBodies, err := r.reqBodyRepository.FindAll(ctx, actionHttpID, m)
 	if err != nil {
 		log.Error(err)
@@ -193,6 +225,13 @@ func (r *reqBodyService) UpdateReqBody(ctx context.Context, id, actionHttpID str
 	}
 
 	reqBody.ReqName = req.ReqName
+	if reqBody.Method != model.HttpMethodGet {
+		if req.DataType == "" {
+			log.Error(constant.ErrFieldEmpty)
+			return nil, constant.ErrFieldEmpty
+		}
+		reqBody.DataType = req.DataType
+	}
 	err = r.reqBodyRepository.Update(ctx, id, reqBody)
 	if err != nil {
 		log.Error(err)
