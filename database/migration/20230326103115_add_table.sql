@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS req_bodies (
   action_http_id VARCHAR(100) NOT NULL,
   req_name VARCHAR(150) NOT NULL,
   data_type ENUM('STRING', 'INT','FLOAT','DATE'),
-  method ENUM('POST','PUT'),
+  method ENUM('POST','PUT', 'GET'),
   created_at timestamp NOT NULL DEFAULT NOW(),
   updated_at timestamp NOT NULL DEFAULT NOW()
 );
