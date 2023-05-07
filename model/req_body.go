@@ -21,6 +21,7 @@ const (
 const (
 	HttpMethodPost HttpMethod = "POST"
 	HttpMethodPut  HttpMethod = "PUT"
+	HttpMethodGet  HttpMethod = "GET"
 )
 
 type CreateReqBodyActionRequest struct {
@@ -28,12 +29,21 @@ type CreateReqBodyActionRequest struct {
 	DataType ReqBodyDataType `json:"data_type" validate:"required"`
 }
 
+type ReqBodyActionRequest struct {
+	ReqName string `json:"req_name" validate:"required,min=3,max=60"`
+}
+
 func (c *CreateReqBodyActionRequest) Validate() error {
+	return validate.Struct(c)
+}
+
+func (c *ReqBodyActionRequest) Validate() error {
 	return validate.Struct(c)
 }
 
 type CreateReqBodyActionArrayRequest struct {
 	ActionHttpId string                        `json:"action_http_id" validate:"required"`
+	GetFields    []*ReqBodyActionRequest       `json:"get_fields" validate:"omitempty"`
 	PostFields   []*CreateReqBodyActionRequest `json:"post_fields" validate:"omitempty"`
 	PutFields    []*CreateReqBodyActionRequest `json:"put_fields" validate:"omitempty"`
 }
@@ -52,7 +62,8 @@ func (c *CreateReqBodyRequest) Validate() error {
 }
 
 type UpdateReqBodyRequest struct {
-	ReqName string `json:"req_name" validate:"required,min=3,max=60"`
+	ReqName  string          `json:"req_name" validate:"required,min=3,max=60"`
+	DataType ReqBodyDataType `json:"data_type" validate:"omitempty"`
 }
 
 func (c *UpdateReqBodyRequest) Validate() error {
