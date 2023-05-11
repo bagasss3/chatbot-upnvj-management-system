@@ -82,6 +82,7 @@ func (r *reqBodyRepository) Update(ctx context.Context, actionHttpID string, req
 
 	err := r.db.WithContext(ctx).Select(
 		"req_name",
+		"data_type",
 	).Updates(reqBody).Error
 	if err != nil {
 		log.Error(err)

@@ -83,6 +83,7 @@ func (r *ruleRepository) Update(ctx context.Context, id string, rule *model.Rule
 		"intent_id",
 		"data_id",
 		"rule_title",
+		"response_id",
 		"type",
 	).Updates(rule).Error
 	if err != nil {
