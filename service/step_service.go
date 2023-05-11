@@ -4,6 +4,7 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/helper"
 	"cbupnvj/model"
+	"cbupnvj/repository"
 	"context"
 
 	"github.com/sirupsen/logrus"
@@ -15,20 +16,22 @@ type stepService struct {
 	intentRepository     model.IntentRepository
 	utteranceRepository  model.UtteranceRepository
 	actionHttpRepository model.ActionHttpRepository
+	gormTransactioner    repository.GormTransactioner
 }
 
 func NewStepService(storyRepository model.StoryRepository, stepRepository model.StepRepository,
-	intentRepository model.IntentRepository, utteranceRepository model.UtteranceRepository, actionHttpRepository model.ActionHttpRepository) model.StepService {
+	intentRepository model.IntentRepository, utteranceRepository model.UtteranceRepository, actionHttpRepository model.ActionHttpRepository, gormTransactioner repository.GormTransactioner) model.StepService {
 	return &stepService{
 		storyRepository:      storyRepository,
 		stepRepository:       stepRepository,
 		intentRepository:     intentRepository,
 		utteranceRepository:  utteranceRepository,
 		actionHttpRepository: actionHttpRepository,
+		gormTransactioner:    gormTransactioner,
 	}
 }
 
-func (s *stepService) CreateStep(ctx context.Context, req model.CreateStepRequest) (*model.Step, error) {
+func (s *stepService) CreateStep(ctx context.Context, req model.CreateStepArrayRequest) ([]*model.Step, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":     ctx,
 		"request": req,
@@ -49,27 +52,47 @@ func (s *stepService) CreateStep(ctx context.Context, req model.CreateStepReques
 		log.Error("story not found")
 		return nil, constant.ErrNotFound
 	}
+	var steps []*model.Step
 
-	err = s.ValidateStep(ctx, req.ResponseId, req.Type)
-	if err != nil {
+	tx := s.gormTransactioner.Begin(ctx)
+	for i := range req.StepFields {
+		if err := req.StepFields[i].Validate(); err != nil {
+			log.Error(err)
+			s.gormTransactioner.Rollback(tx)
+			return nil, constant.HttpValidationOrInternalErr(err)
+		}
+
+		err = s.ValidateStep(ctx, req.StepFields[i].ResponseId, req.StepFields[i].Type)
+		if err != nil {
+			log.Error(err)
+			s.gormTransactioner.Rollback(tx)
+			return nil, err
+		}
+
+		step := &model.Step{
+			Id:         helper.GenerateID(),
+			StoryId:    req.StoryId,
+			ResponseId: req.StepFields[i].ResponseId,
+			Type:       req.StepFields[i].Type,
+		}
+
+		err = s.stepRepository.Create(ctx, tx, step)
+		if err != nil {
+			log.Error(err)
+			s.gormTransactioner.Rollback(tx)
+			return nil, err
+		}
+
+		steps = append(steps, step)
+	}
+
+	if err = s.gormTransactioner.Commit(tx); err != nil {
 		log.Error(err)
+		s.gormTransactioner.Rollback(tx)
 		return nil, err
 	}
 
-	step := &model.Step{
-		Id:         helper.GenerateID(),
-		StoryId:    req.StoryId,
-		ResponseId: req.ResponseId,
-		Type:       req.Type,
-	}
-
-	err = s.stepRepository.Create(ctx, step)
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
-
-	return step, nil
+	return steps, nil
 }
 
 func (s *stepService) FindAllStepByStoryID(ctx context.Context, storyId string) ([]*model.Step, error) {

@@ -76,7 +76,7 @@ func server(cmd *cobra.Command, args []string) {
 	entityService := service.NewEntityService(entityRepository, intentRepository)
 	ruleService := service.NewRuleService(ruleRepository, intentRepository, actionHttpRepository, utteranceRepository)
 	storyService := service.NewStoryService(storyRepository, stepRepository, gormTransationer)
-	stepService := service.NewStepService(storyRepository, stepRepository, intentRepository, utteranceRepository, actionHttpRepository)
+	stepService := service.NewStepService(storyRepository, stepRepository, intentRepository, utteranceRepository, actionHttpRepository, gormTransationer)
 	configurationService := service.NewConfigurationService(configurationRepository, utteranceRepository)
 	trainingHistoryService := service.NewTrainingHistoryService(trainingHistoryRepository, userRepository)
 	logIntentService := service.NewLogIntentService(logIntentRepository, intentRepository)

@@ -16,8 +16,16 @@ const (
 	StepAction    StepType = "ACTION_HTTP"
 )
 
+type CreateStepArrayRequest struct {
+	StoryId    string               `json:"story_id" validate:"required"`
+	StepFields []*CreateStepRequest `json:"step_fields" validate:"required"`
+}
+
+func (c *CreateStepArrayRequest) Validate() error {
+	return validate.Struct(c)
+}
+
 type CreateStepRequest struct {
-	StoryId    string   `json:"story_id" validate:"required"`
 	ResponseId string   `json:"response_id" validate:"required"`
 	Type       StepType `json:"type" validate:"required"`
 }
@@ -53,7 +61,7 @@ type StepController interface {
 }
 
 type StepService interface {
-	CreateStep(ctx context.Context, req CreateStepRequest) (*Step, error)
+	CreateStep(ctx context.Context, req CreateStepArrayRequest) ([]*Step, error)
 	FindAllStepByStoryID(ctx context.Context, storyId string) ([]*Step, error)
 	FindStepByID(ctx context.Context, id, storyId string) (*Step, error)
 	UpdateStep(ctx context.Context, id, storyId string, req UpdateStepRequest) (*Step, error)
@@ -61,7 +69,7 @@ type StepService interface {
 }
 
 type StepRepository interface {
-	Create(ctx context.Context, step *Step) error
+	Create(ctx context.Context, tx *gorm.DB, step *Step) error
 	FindAll(ctx context.Context, storyId string) ([]*Step, error)
 	FindByID(ctx context.Context, id, storyId string) (*Step, error)
 	Update(ctx context.Context, id string, step *Step) error
