@@ -18,13 +18,13 @@ func NewStepRepository(db *gorm.DB) model.StepRepository {
 	}
 }
 
-func (s *stepRepository) Create(ctx context.Context, step *model.Step) error {
+func (s *stepRepository) Create(ctx context.Context, tx *gorm.DB, step *model.Step) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx":  ctx,
 		"step": step,
 	})
 
-	err := s.db.WithContext(ctx).Create(step).Error
+	err := tx.WithContext(ctx).Create(step).Error
 	if err != nil {
 		log.Error(err)
 		return err

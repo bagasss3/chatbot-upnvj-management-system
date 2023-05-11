@@ -21,7 +21,7 @@ func NewStepController(stepService model.StepService) model.StepController {
 
 func (s *stepController) HandleCreateStep() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := model.CreateStepRequest{}
+		req := model.CreateStepArrayRequest{}
 		if err := c.Bind(&req); err != nil {
 			log.Error(err)
 			return constant.ErrInternal
