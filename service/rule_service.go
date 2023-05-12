@@ -59,12 +59,13 @@ func (r *ruleService) CreateRule(ctx context.Context, req model.CreateUpdateRule
 	return rule, nil
 }
 
-func (r *ruleService) FindAllRule(ctx context.Context) ([]*model.Rule, error) {
+func (r *ruleService) FindAllRule(ctx context.Context, name string) ([]*model.Rule, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
-	rules, err := r.ruleRepository.FindAll(ctx)
+	rules, err := r.ruleRepository.FindAll(ctx, name)
 	if err != nil {
 		log.Error(err)
 		return nil, err

@@ -41,7 +41,8 @@ func (i *intentController) HandleCreateIntent() echo.HandlerFunc {
 
 func (i *intentController) HandleFindAllIntent() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		intents, err := i.intentService.FindAllIntent(c.Request().Context())
+		name := c.QueryParam("name")
+		intents, err := i.intentService.FindAllIntent(c.Request().Context(), name)
 		if err != nil {
 			log.Error(err)
 			return err

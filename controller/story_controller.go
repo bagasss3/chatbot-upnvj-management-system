@@ -39,7 +39,8 @@ func (s *storyController) HandleCreateStory() echo.HandlerFunc {
 
 func (s *storyController) HandleFindAllStory() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		stories, err := s.storyService.FindAllStory(c.Request().Context())
+		name := c.QueryParam("name")
+		stories, err := s.storyService.FindAllStory(c.Request().Context(), name)
 		if err != nil {
 			log.Error(err)
 			return err

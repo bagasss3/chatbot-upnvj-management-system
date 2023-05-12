@@ -49,12 +49,13 @@ func (s *storyService) CreateStory(ctx context.Context, req model.CreateUpdateSt
 	return story, nil
 }
 
-func (s *storyService) FindAllStory(ctx context.Context) ([]*model.Story, error) {
+func (s *storyService) FindAllStory(ctx context.Context, name string) ([]*model.Story, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
-	stories, err := s.storyRepository.FindAll(ctx)
+	stories, err := s.storyRepository.FindAll(ctx, name)
 	if err != nil {
 		log.Error(err)
 		return nil, err

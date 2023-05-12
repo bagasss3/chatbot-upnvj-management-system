@@ -59,7 +59,8 @@ func (u *utteranceRepository) FindByID(ctx context.Context, id string) (*model.U
 
 func (u *utteranceRepository) FindAll(ctx context.Context, name string) ([]*model.Utterance, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
 	var utterances []*model.Utterance

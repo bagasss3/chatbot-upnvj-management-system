@@ -35,7 +35,7 @@ type IntentController interface {
 
 type IntentService interface {
 	CreateIntent(ctx context.Context, req CreateUpdateIntentRequest) (*Intent, error)
-	FindAllIntent(ctx context.Context) ([]*Intent, error)
+	FindAllIntent(ctx context.Context, name string) ([]*Intent, error)
 	FindIntentByID(ctx context.Context, id string) (*Intent, error)
 	UpdateIntent(ctx context.Context, id string, req CreateUpdateIntentRequest) (*Intent, error)
 	DeleteIntent(ctx context.Context, id string) (bool, error)
@@ -45,7 +45,7 @@ type IntentService interface {
 type IntentRepository interface {
 	Create(ctx context.Context, intent *Intent) error
 	FindByID(ctx context.Context, id string) (*Intent, error)
-	FindAll(ctx context.Context) ([]*Intent, error)
+	FindAll(ctx context.Context, name string) ([]*Intent, error)
 	Update(ctx context.Context, id string, intent *Intent) error
 	Delete(ctx context.Context, id string) error
 	CountAll(ctx context.Context) (int64, error)
