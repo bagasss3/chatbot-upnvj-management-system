@@ -33,13 +33,19 @@ func (r *ruleRepository) Create(ctx context.Context, rule *model.Rule) error {
 	return nil
 }
 
-func (r *ruleRepository) FindAll(ctx context.Context) ([]*model.Rule, error) {
+func (r *ruleRepository) FindAll(ctx context.Context, name string) ([]*model.Rule, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
 	var rules []*model.Rule
-	res := r.db.WithContext(ctx).Find(&rules)
+	var res *gorm.DB
+	if name == "" {
+		res = r.db.WithContext(ctx).Find(&rules)
+	} else {
+		res = r.db.WithContext(ctx).Where("rule_title LIKE ?", "%"+name+"%").Find(&rules)
+	}
 	if res.Error != nil {
 		log.Error(res.Error)
 		return nil, res.Error

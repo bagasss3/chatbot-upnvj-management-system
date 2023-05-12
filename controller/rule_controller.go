@@ -39,7 +39,8 @@ func (r *ruleController) HandleCreateRule() echo.HandlerFunc {
 
 func (r *ruleController) HandleFindAllRule() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		rules, err := r.ruleService.FindAllRule(c.Request().Context())
+		name := c.QueryParam("name")
+		rules, err := r.ruleService.FindAllRule(c.Request().Context(), name)
 		if err != nil {
 			log.Error(err)
 			return err

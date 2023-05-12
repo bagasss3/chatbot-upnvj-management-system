@@ -33,13 +33,19 @@ func (s *storyRepository) Create(ctx context.Context, story *model.Story) error 
 	return nil
 }
 
-func (s *storyRepository) FindAll(ctx context.Context) ([]*model.Story, error) {
+func (s *storyRepository) FindAll(ctx context.Context, name string) ([]*model.Story, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
 	var stories []*model.Story
-	res := s.db.WithContext(ctx).Find(&stories)
+	var res *gorm.DB
+	if name == "" {
+		res = s.db.WithContext(ctx).Find(&stories)
+	} else {
+		res = s.db.WithContext(ctx).Where("story_title LIKE ?", "%"+name+"%").Find(&stories)
+	}
 	if res.Error != nil {
 		log.Error(res.Error)
 		return nil, res.Error
