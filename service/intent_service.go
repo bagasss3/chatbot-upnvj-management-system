@@ -44,12 +44,13 @@ func (i *intentService) CreateIntent(ctx context.Context, req model.CreateUpdate
 	return intent, nil
 }
 
-func (i *intentService) FindAllIntent(ctx context.Context) ([]*model.Intent, error) {
+func (i *intentService) FindAllIntent(ctx context.Context, name string) ([]*model.Intent, error) {
 	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
+		"ctx":  ctx,
+		"name": name,
 	})
 
-	intents, err := i.intentRepository.FindAll(ctx)
+	intents, err := i.intentRepository.FindAll(ctx, name)
 	if err != nil {
 		log.Error(err)
 		return nil, err

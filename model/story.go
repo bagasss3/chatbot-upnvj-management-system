@@ -34,7 +34,7 @@ type StoryController interface {
 
 type StoryService interface {
 	CreateStory(ctx context.Context, req CreateUpdateStoryRequest) (*Story, error)
-	FindAllStory(ctx context.Context) ([]*Story, error)
+	FindAllStory(ctx context.Context, name string) ([]*Story, error)
 	FindStoryByID(ctx context.Context, id string) (*Story, error)
 	UpdateStory(ctx context.Context, id string, req CreateUpdateStoryRequest) (*Story, error)
 	DeleteStory(ctx context.Context, id string) (bool, error)
@@ -42,7 +42,7 @@ type StoryService interface {
 
 type StoryRepository interface {
 	Create(ctx context.Context, story *Story) error
-	FindAll(ctx context.Context) ([]*Story, error)
+	FindAll(ctx context.Context, name string) ([]*Story, error)
 	FindByID(ctx context.Context, id string) (*Story, error)
 	Update(ctx context.Context, id string, Story *Story) error
 	Delete(ctx context.Context, id string) error

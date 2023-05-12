@@ -47,7 +47,7 @@ type RuleController interface {
 
 type RuleService interface {
 	CreateRule(ctx context.Context, req CreateUpdateRuleRequest) (*Rule, error)
-	FindAllRule(ctx context.Context) ([]*Rule, error)
+	FindAllRule(ctx context.Context, name string) ([]*Rule, error)
 	FindRuleByID(ctx context.Context, id string) (*Rule, error)
 	UpdateRule(ctx context.Context, id string, req CreateUpdateRuleRequest) (*Rule, error)
 	DeleteRule(ctx context.Context, id string) (bool, error)
@@ -55,7 +55,7 @@ type RuleService interface {
 
 type RuleRepository interface {
 	Create(ctx context.Context, rule *Rule) error
-	FindAll(ctx context.Context) ([]*Rule, error)
+	FindAll(ctx context.Context, name string) ([]*Rule, error)
 	FindByID(ctx context.Context, id string) (*Rule, error)
 	Update(ctx context.Context, id string, rule *Rule) error
 	Delete(ctx context.Context, id string) error
