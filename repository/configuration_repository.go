@@ -33,6 +33,22 @@ func (c *configurationRepository) Create(ctx context.Context, configuration *mod
 	return nil
 }
 
+func (c *configurationRepository) FindAll(ctx context.Context) ([]*model.Configuration, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	var configs []*model.Configuration
+
+	res := c.db.WithContext(ctx).Find(&configs)
+	if res.Error != nil {
+		log.Error(res.Error)
+		return nil, res.Error
+	}
+
+	return configs, nil
+}
+
 func (c *configurationRepository) FindByID(ctx context.Context, id string) (*model.Configuration, error) {
 	if id == "" {
 		return nil, nil

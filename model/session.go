@@ -24,4 +24,5 @@ type SessionRepository interface {
 	FindByID(ctx context.Context, id string) (*Session, error)
 	FindByRefreshToken(ctx context.Context, refreshToken string) (*Session, error)
 	RefreshToken(ctx context.Context, session *Session) error
+	Delete(ctx context.Context, userId string) error
 }

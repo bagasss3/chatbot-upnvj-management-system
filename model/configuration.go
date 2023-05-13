@@ -34,18 +34,21 @@ type Configuration struct {
 
 type ConfigurationController interface {
 	HandleCreateConfiguration() echo.HandlerFunc
+	HandleFindAllConfiguration() echo.HandlerFunc
 	HandleFindConfiguration() echo.HandlerFunc
 	HandleUpdateConfiguration() echo.HandlerFunc
 }
 
 type ConfigurationService interface {
 	CreateConfiguration(ctx context.Context, req CreateUpdateConfigurationRequest) (*Configuration, error)
+	FindAllConfiguration(ctx context.Context) ([]*Configuration, error)
 	FindConfiguration(ctx context.Context, id string) (*Configuration, error)
 	UpdateConfiguration(ctx context.Context, id string, req CreateUpdateConfigurationRequest) (*Configuration, error)
 }
 
 type ConfigurationRepository interface {
 	Create(ctx context.Context, configuration *Configuration) error
+	FindAll(ctx context.Context) ([]*Configuration, error)
 	FindByID(ctx context.Context, id string) (*Configuration, error)
 	Update(ctx context.Context, id string, configuration *Configuration) error
 }

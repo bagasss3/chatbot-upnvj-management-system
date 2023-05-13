@@ -97,3 +97,18 @@ func (s *sessionRepository) RefreshToken(ctx context.Context, session *model.Ses
 
 	return nil
 }
+
+func (s *sessionRepository) Delete(ctx context.Context, userId string) error {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx":    ctx,
+		"userId": userId,
+	})
+
+	err := s.db.WithContext(ctx).Where("user_id = ?", userId).Delete(&model.Session{}).Error
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return nil
+}
