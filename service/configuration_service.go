@@ -62,6 +62,20 @@ func (c *configurationService) CreateConfiguration(ctx context.Context, req mode
 	return conf, nil
 }
 
+func (c *configurationService) FindAllConfiguration(ctx context.Context) ([]*model.Configuration, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	configs, err := c.configurationRepository.FindAll(ctx)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	return configs, nil
+}
+
 func (c *configurationService) FindConfiguration(ctx context.Context, id string) (*model.Configuration, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,

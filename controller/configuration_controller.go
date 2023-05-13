@@ -37,6 +37,18 @@ func (co *configurationController) HandleCreateConfiguration() echo.HandlerFunc 
 	}
 }
 
+func (co *configurationController) HandleFindAllConfiguration() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		configs, err := co.configurationService.FindAllConfiguration(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, configs)
+	}
+}
+
 func (co *configurationController) HandleFindConfiguration() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")

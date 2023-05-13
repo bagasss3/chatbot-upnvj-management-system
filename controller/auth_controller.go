@@ -80,3 +80,18 @@ func (a *authController) HandleForgotPassword() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, isSend)
 	}
 }
+
+func (a *authController) HandleLogout() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+
+		isDeleted, err := a.authService.Logout(c.Request().Context(), id)
+
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, isDeleted)
+	}
+}
