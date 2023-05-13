@@ -180,3 +180,28 @@ func (a *authService) ForgotPassword(ctx context.Context, req model.ForgotPasswo
 	sendMail(ctx, user.Email, "Forgot Password", fmt.Sprintf("Your new Password: %s", newPlainPassword))
 	return true, nil
 }
+
+func (a *authService) Logout(ctx context.Context, userId string) (bool, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx":    ctx,
+		"userId": userId,
+	})
+
+	user, err := a.userRepository.FindByID(ctx, userId)
+	if err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	if user == nil {
+		log.Error(err)
+		return false, constant.ErrNotFound
+	}
+
+	if err = a.sessionRepository.Delete(ctx, user.Id); err != nil {
+		log.Error(err)
+		return false, err
+	}
+
+	return true, nil
+}
