@@ -44,13 +44,14 @@ func (c *configurationService) CreateConfiguration(ctx context.Context, req mode
 	}
 
 	conf := &model.Configuration{
-		Id:                         helper.GenerateID(),
-		DietClassifierEpoch:        req.DietClassifierEpoch,
-		FallbackClassifierTreshold: req.FallbackClassifierTreshold,
-		ResponseSelectorEpoch:      req.ResponseSelectorEpoch,
-		TedPolicyEpoch:             req.TedPolicyEpoch,
-		FallbackUtteranceId:        req.FallbackUtteranceId,
-		FallbackTreshold:           req.FallbackTreshold,
+		Id:                          helper.GenerateID(),
+		DietClassifierEpoch:         req.DietClassifierEpoch,
+		FallbackClassifierTreshold:  req.FallbackClassifierTreshold,
+		ResponseSelectorEpoch:       req.ResponseSelectorEpoch,
+		TedPolicyEpoch:              req.TedPolicyEpoch,
+		FallbackUtteranceId:         req.FallbackUtteranceId,
+		FallbackTreshold:            req.FallbackTreshold,
+		UnexpecTEDIntentPolicyEpoch: req.UnexpecTEDIntentPolicyEpoch,
 	}
 
 	err = c.configurationRepository.Create(ctx, conf)
@@ -135,6 +136,7 @@ func (c *configurationService) UpdateConfiguration(ctx context.Context, id strin
 	conf.FallbackTreshold = req.FallbackTreshold
 	conf.ResponseSelectorEpoch = req.ResponseSelectorEpoch
 	conf.TedPolicyEpoch = req.TedPolicyEpoch
+	conf.UnexpecTEDIntentPolicyEpoch = req.UnexpecTEDIntentPolicyEpoch
 
 	err = c.configurationRepository.Update(ctx, conf.Id, conf)
 	if err != nil {

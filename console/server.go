@@ -80,6 +80,7 @@ func server(cmd *cobra.Command, args []string) {
 	configurationService := service.NewConfigurationService(configurationRepository, utteranceRepository)
 	trainingHistoryService := service.NewTrainingHistoryService(trainingHistoryRepository, userRepository)
 	logIntentService := service.NewLogIntentService(logIntentRepository, intentRepository)
+	workerService := service.NewWorkerService(trainingHistoryRepository, intentRepository, utteranceRepository, actionHttpRepository, entityRepository, exampleRepository, ruleRepository, storyRepository, stepRepository, configurationRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
@@ -96,6 +97,7 @@ func server(cmd *cobra.Command, args []string) {
 	configurationController := controller.NewConfigurationController(configurationService)
 	trainingHistoryController := controller.NewTrainingHistoryController(trainingHistoryService)
 	logIntentController := controller.NewLogIntentController(logIntentService)
+	workerController := controller.NewWorkerController(workerService)
 
 	router.NewRouter(httpServer.Group("/api"),
 		userController,
@@ -112,7 +114,8 @@ func server(cmd *cobra.Command, args []string) {
 		stepController,
 		configurationController,
 		trainingHistoryController,
-		logIntentController)
+		logIntentController,
+		workerController)
 
 	// Graceful Shutdown
 	// Catch Signal

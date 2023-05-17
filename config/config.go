@@ -99,3 +99,7 @@ func MailUsername() string {
 func MailPassword() string {
 	return viper.GetString("mail.password")
 }
+
+func GeneratedPath() string {
+	return viper.GetString("generated.path")
+}
