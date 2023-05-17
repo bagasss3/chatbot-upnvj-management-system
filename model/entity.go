@@ -42,6 +42,7 @@ type EntityService interface {
 type EntityRepository interface {
 	Create(ctx context.Context, entity *Entity) error
 	FindAll(ctx context.Context, intentId string) ([]*Entity, error)
+	FindAllWithNoIntentId(ctx context.Context) ([]*Entity, error)
 	FindByID(ctx context.Context, id string) (*Entity, error)
 	Delete(ctx context.Context, id string) error
 }

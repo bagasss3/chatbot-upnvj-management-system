@@ -49,6 +49,21 @@ func (e *entityRepository) FindAll(ctx context.Context, intentId string) ([]*mod
 	return entities, nil
 }
 
+func (e *entityRepository) FindAllWithNoIntentId(ctx context.Context) ([]*model.Entity, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	var entities []*model.Entity
+	res := e.db.WithContext(ctx).Find(&entities)
+	if res.Error != nil {
+		log.Error(res.Error)
+		return nil, res.Error
+	}
+
+	return entities, nil
+}
+
 func (e *entityRepository) FindByID(ctx context.Context, id string) (*model.Entity, error) {
 	if id == "" {
 		return nil, nil
