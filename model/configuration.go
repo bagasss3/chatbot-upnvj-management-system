@@ -8,12 +8,13 @@ import (
 )
 
 type CreateUpdateConfigurationRequest struct {
-	DietClassifierEpoch        int32   `json:"diet_classifier_epoch" validate:"required"`
-	FallbackClassifierTreshold float32 `json:"fallback_classifier_treshold" validate:"required"`
-	ResponseSelectorEpoch      int32   `json:"response_selector_epoch" validate:"required"`
-	TedPolicyEpoch             int32   `json:"ted_policy_epoch" validate:"required"`
-	FallbackUtteranceId        string  `json:"fallback_utterance_id" validate:"required"`
-	FallbackTreshold           float32 `json:"fallback_treshold" validate:"required"`
+	DietClassifierEpoch         int32   `json:"diet_classifier_epoch" validate:"required"`
+	FallbackClassifierTreshold  float32 `json:"fallback_classifier_treshold" validate:"required"`
+	ResponseSelectorEpoch       int32   `json:"response_selector_epoch" validate:"required"`
+	TedPolicyEpoch              int32   `json:"ted_policy_epoch" validate:"required"`
+	FallbackUtteranceId         string  `json:"fallback_utterance_id" validate:"required"`
+	FallbackTreshold            float32 `json:"fallback_treshold" validate:"required"`
+	UnexpecTEDIntentPolicyEpoch int32   `json:"unexpected_intent_policy_epoch" validate:"required"`
 }
 
 func (c *CreateUpdateConfigurationRequest) Validate() error {
@@ -21,15 +22,16 @@ func (c *CreateUpdateConfigurationRequest) Validate() error {
 }
 
 type Configuration struct {
-	Id                         string    `json:"id"`
-	DietClassifierEpoch        int32     `json:"diet_classifier_epoch"`
-	FallbackClassifierTreshold float32   `json:"fallback_classifier_treshold"`
-	ResponseSelectorEpoch      int32     `json:"response_selector_epoch"`
-	TedPolicyEpoch             int32     `json:"ted_policy_epoch"`
-	FallbackUtteranceId        string    `json:"fallback_utterance_id"`
-	FallbackTreshold           float32   `json:"fallback_treshold"`
-	CreatedAt                  time.Time `json:"created_at"`
-	UpdatedAt                  time.Time `json:"updated_at"`
+	Id                          string    `json:"id"`
+	DietClassifierEpoch         int32     `json:"diet_classifier_epoch"`
+	FallbackClassifierTreshold  float32   `json:"fallback_classifier_treshold"`
+	ResponseSelectorEpoch       int32     `json:"response_selector_epoch"`
+	TedPolicyEpoch              int32     `json:"ted_policy_epoch"`
+	FallbackUtteranceId         string    `json:"fallback_utterance_id"`
+	FallbackTreshold            float32   `json:"fallback_treshold"`
+	UnexpecTEDIntentPolicyEpoch int32     `json:"unexpected_intent_policy_epoch"`
+	CreatedAt                   time.Time `json:"created_at"`
+	UpdatedAt                   time.Time `json:"updated_at"`
 }
 
 type ConfigurationController interface {

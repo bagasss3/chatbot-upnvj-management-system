@@ -87,6 +87,7 @@ func (c *configurationRepository) Update(ctx context.Context, id string, configu
 		"ted_policy_epoch",
 		"fallback_utterance_id",
 		"fallback_treshold",
+		"unexpected_intent_policy_epoch",
 	).Updates(configuration).Error
 	if err != nil {
 		log.Error(err)
