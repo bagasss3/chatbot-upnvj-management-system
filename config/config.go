@@ -103,3 +103,23 @@ func MailPassword() string {
 func GeneratedPath() string {
 	return viper.GetString("generated.path")
 }
+
+func RasaTrainEndpoint() string {
+	return viper.GetString("rasa.endpoint_model_train")
+}
+
+func RasaChangeModelEndpoint() string {
+	return viper.GetString("rasa.update_model")
+}
+
+func RasaModelPath() string {
+	return viper.GetString("rasa.absolute_path")
+}
+
+func RasaVersion() string {
+	return viper.GetString("rasa.version")
+}
+
+func RasaDeleteOldModelsEndpoint() string {
+	return viper.GetString("rasa.delete_old_models")
+}

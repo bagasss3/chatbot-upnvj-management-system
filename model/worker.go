@@ -11,5 +11,5 @@ type WorkerController interface {
 }
 
 type WorkerService interface {
-	StartTrainingModel(ctx context.Context) (*TrainingHistory, error)
+	StartTrainingModel(ctx context.Context) (*RasaResponse, error)
 }
