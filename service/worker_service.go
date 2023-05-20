@@ -1,14 +1,18 @@
 package service
 
 import (
+	"bytes"
 	"cbupnvj/config"
 	"cbupnvj/constant"
 	"cbupnvj/helper"
 	"cbupnvj/middleware"
 	"cbupnvj/model"
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
@@ -54,7 +58,7 @@ func NewWorkerService(
 	}
 }
 
-func (w *workerService) StartTrainingModel(ctx context.Context) (*model.TrainingHistory, error) {
+func (w *workerService) StartTrainingModel(ctx context.Context) (*model.RasaResponse, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 	})
@@ -82,9 +86,11 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		log.Error(err)
 		return nil, err
 	}
+	// define rasa version
+	sb.WriteString(fmt.Sprintf("version: \"%s\"\n", config.RasaVersion()))
 
 	// write pipeline
-	sb.WriteString("pipeline:\n")
+	sb.WriteString("\npipeline:\n")
 	sb.WriteString("  - name: WhitespaceTokenizer\n")
 	sb.WriteString("  - name: RegexFeaturizer\n")
 	sb.WriteString("  - name: LexicalSyntacticFeaturizer\n")
@@ -312,6 +318,104 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		log.Fatal(err)
 	}
 
+	// read YAML file
+	yamlData, err := ioutil.ReadFile(fmt.Sprintf("%s/%s.yml", config.GeneratedPath(), id))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// create POST request with YAML payload
+	url := config.RasaTrainEndpoint()
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(yamlData))
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	// set headers
+	req.Header.Set("Content-Type", "application/yaml")
+
+	// send request
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Check if the response has the Content-Disposition header
+	filename := resp.Header.Get("Content-Disposition")
+	if filename != "" {
+		re := regexp.MustCompile(`filename="([^"]+)"`)
+		matches := re.FindStringSubmatch(filename)
+		if len(matches) > 1 {
+			filename = matches[1]
+		}
+
+		requestData := model.RasaChangeModelReq{
+			ModelFile: fmt.Sprintf("%s/%s", config.RasaModelPath(), filename),
+		}
+
+		jsonBody, err := json.Marshal(requestData)
+		if err != nil {
+			// handle error
+			log.Error(err)
+		}
+
+		putReq, err := http.NewRequest("PUT", config.RasaChangeModelEndpoint(), bytes.NewBuffer([]byte(jsonBody)))
+
+		if err != nil {
+			log.Error(err)
+		}
+
+		putReq.Header.Set("Content-Type", "application/json")
+
+		putResp, err := client.Do(putReq)
+		if err != nil {
+			log.Error(err)
+		}
+		defer putResp.Body.Close()
+
+		requestData = model.RasaChangeModelReq{
+			ModelFile: filename,
+		}
+
+		jsonBody, err = json.Marshal(requestData)
+		if err != nil {
+			// handle error
+			log.Error(err)
+		}
+
+		delReq, err := http.NewRequest("DELETE", config.RasaDeleteOldModelsEndpoint(), bytes.NewBuffer([]byte(jsonBody)))
+
+		if err != nil {
+			log.Error(err)
+		}
+
+		delReq.Header.Set("Content-Type", "application/json")
+
+		delResp, err := client.Do(delReq)
+		if err != nil {
+			log.Error(err)
+		}
+		defer delResp.Body.Close()
+	}
+
+	// read response
+	respData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Error(err)
+	}
+
+	var rasaResp *model.RasaResponse
+	if resp.StatusCode != http.StatusOK {
+		err = json.Unmarshal(respData, &rasaResp)
+		if err != nil {
+			log.Error(err)
+		}
+	}
+
 	// Calculate the elapsed time
 	elapsedTime := time.Since(startTime)
 	elapsedSeconds := int(elapsedTime.Seconds())
@@ -320,7 +424,16 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		Id:        id,
 		UserId:    ctxUser.UserID,
 		TotalTime: elapsedSeconds,
-		Status:    "DONE",
+	}
+
+	if rasaResp != nil {
+		if rasaResp.Status == "failure" || rasaResp.Status == "serverError" {
+			create.Status = model.StatusFailed
+		} else {
+			create.Status = model.StatusDone
+		}
+	} else {
+		create.Status = model.StatusDone
 	}
 
 	err = w.trainingHistoryRepository.Create(ctx, create)
@@ -329,5 +442,5 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		return nil, err
 	}
 
-	return create, nil
+	return rasaResp, nil
 }
