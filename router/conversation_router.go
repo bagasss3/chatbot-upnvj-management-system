@@ -22,4 +22,6 @@ func (r *router) conversationRouter() {
 	r.group.GET("/story/:storyId/step/:id", r.stepController.HandleFindStepByID(), middleware.MustAuthenticateAccessToken())
 	r.group.PUT("/story/:storyId/step/:id", r.stepController.HandleUpdateStep(), middleware.MustAuthenticateAccessToken())
 	r.group.DELETE("/story/:storyId/step/:id", r.stepController.HandleDeleteStep(), middleware.MustAuthenticateAccessToken())
+
+	r.group.GET("/conversation/count", r.conversationController.HandleCountAllConversation(), middleware.MustAuthenticateAccessToken())
 }

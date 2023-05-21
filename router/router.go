@@ -24,6 +24,8 @@ type router struct {
 	trainingHistoryController model.TrainingHistoryController
 	logIntentController       model.LogIntentController
 	workerController          model.WorkerController
+	fallbackChatLogController model.FallbackChatLogController
+	conversationController    model.ConversationController
 }
 
 func NewRouter(group *echo.Group, userController model.UserController,
@@ -41,7 +43,9 @@ func NewRouter(group *echo.Group, userController model.UserController,
 	configurationController model.ConfigurationController,
 	trainingHistoryController model.TrainingHistoryController,
 	logIntentController model.LogIntentController,
-	workerController model.WorkerController) {
+	workerController model.WorkerController,
+	fallbackChatLogController model.FallbackChatLogController,
+	conversationController model.ConversationController) {
 	rt := &router{
 		group:                     group,
 		userController:            userController,
@@ -60,6 +64,8 @@ func NewRouter(group *echo.Group, userController model.UserController,
 		trainingHistoryController: trainingHistoryController,
 		logIntentController:       logIntentController,
 		workerController:          workerController,
+		fallbackChatLogController: fallbackChatLogController,
+		conversationController:    conversationController,
 	}
 
 	rt.RouterInit()

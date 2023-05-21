@@ -103,15 +103,3 @@ func (u *utteranceController) HandleDeleteUtterance() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, isDeleted)
 	}
 }
-
-func (u *utteranceController) HandleCountAllUtterance() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		count, err := u.utteranceService.CountAllUtterance(c.Request().Context())
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-
-		return c.JSON(http.StatusOK, count)
-	}
-}

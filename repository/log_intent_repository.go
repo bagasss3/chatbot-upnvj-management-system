@@ -39,7 +39,7 @@ func (li *logIntentRepository) FindAll(ctx context.Context) ([]*model.LogIntent,
 	})
 
 	var logintents []*model.LogIntent
-	res := li.db.WithContext(ctx).Find(&logintents)
+	res := li.db.WithContext(ctx).Preload("Intent").Order("mention DESC").Limit(5).Find(&logintents)
 	if res.Error != nil {
 		log.Error(res.Error)
 		return nil, res.Error
@@ -59,7 +59,7 @@ func (li *logIntentRepository) FindByIntentID(ctx context.Context, intentId stri
 	})
 
 	logIntent := &model.LogIntent{}
-	err := li.db.WithContext(ctx).Where("intent_id = ?", intentId).Take(logIntent).Error
+	err := li.db.WithContext(ctx).Where("intent_id = ?", intentId).Preload("Intent").Take(logIntent).Error
 	switch err {
 	case nil:
 	case gorm.ErrRecordNotFound:

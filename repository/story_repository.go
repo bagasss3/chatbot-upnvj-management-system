@@ -125,3 +125,17 @@ func (s *storyRepository) DeleteWithContext(ctx context.Context, tx *gorm.DB, id
 
 	return nil
 }
+
+func (s *storyRepository) CountAll(ctx context.Context) (int64, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+	var count int64
+	err := s.db.WithContext(ctx).Model(&model.Story{}).Count(&count).Error
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	return count, nil
+}

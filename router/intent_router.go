@@ -21,4 +21,7 @@ func (r *router) intentRouter() {
 	r.group.GET("/dashboard/log/intent/:intentId", r.logIntentController.HandleFindLogIntentByIntentID(), middleware.MustAuthenticateAccessToken())
 
 	r.group.GET("/intent/count", r.intentController.HandleCountAllIntent(), middleware.MustAuthenticateAccessToken())
+
+	r.group.POST("/intent/fallback", r.fallbackChatLogController.HandleCreateFallbackChatLog(), middleware.MustAuthenticateAccessToken())
+	r.group.GET("/intent/fallback", r.fallbackChatLogController.HandleFindAllFallbackChatLog(), middleware.MustAuthenticateAccessToken())
 }

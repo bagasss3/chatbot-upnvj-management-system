@@ -18,6 +18,7 @@ func (c *CreateUpdateLogIntentRequest) Validate() error {
 type LogIntent struct {
 	Id        string    `json:"id"`
 	IntentId  string    `json:"intent_id"`
+	Intent    Intent    `json:"intent"`
 	Mention   int       `json:"mention"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
