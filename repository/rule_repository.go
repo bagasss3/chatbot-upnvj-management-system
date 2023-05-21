@@ -114,3 +114,17 @@ func (r *ruleRepository) Delete(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (r *ruleRepository) CountAll(ctx context.Context) (int64, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+	var count int64
+	err := r.db.WithContext(ctx).Model(&model.Rule{}).Count(&count).Error
+	if err != nil {
+		log.Error(err)
+		return 0, err
+	}
+
+	return count, nil
+}

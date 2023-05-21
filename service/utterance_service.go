@@ -132,17 +132,3 @@ func (u *utteranceService) DeleteUtterance(ctx context.Context, id string) (bool
 
 	return true, nil
 }
-
-func (u *utteranceService) CountAllUtterance(ctx context.Context) (int64, error) {
-	log := logrus.WithFields(logrus.Fields{
-		"ctx": ctx,
-	})
-
-	count, err := u.utteranceRepository.CountAll(ctx)
-	if err != nil {
-		log.Error(err)
-		return 0, err
-	}
-
-	return count, nil
-}
