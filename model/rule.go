@@ -59,4 +59,5 @@ type RuleRepository interface {
 	FindByID(ctx context.Context, id string) (*Rule, error)
 	Update(ctx context.Context, id string, rule *Rule) error
 	Delete(ctx context.Context, id string) error
+	CountAll(ctx context.Context) (int64, error)
 }

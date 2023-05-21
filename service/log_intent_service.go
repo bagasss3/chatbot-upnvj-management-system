@@ -56,13 +56,15 @@ func (li *logIntentService) CreateOrUpdateLogIntent(ctx context.Context, req mod
 			log.Error(err)
 			return nil, err
 		}
+		logIntent.Intent = *intent
 		return logIntent, nil
 	}
 
 	newLogIntent := &model.LogIntent{
 		Id:       helper.GenerateID(),
 		IntentId: req.IntentId,
-		Mention:  0,
+		Mention:  1,
+		Intent:   *intent,
 	}
 
 	err = li.logIntentRepository.Create(ctx, newLogIntent)
@@ -101,10 +103,6 @@ func (li *logIntentService) FindLogIntentByIntentID(ctx context.Context, intentI
 	if err != nil {
 		log.Error(err)
 		return nil, err
-	}
-
-	if logIntent == nil {
-		return nil, constant.ErrNotFound
 	}
 
 	return logIntent, nil

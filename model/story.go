@@ -47,4 +47,5 @@ type StoryRepository interface {
 	Update(ctx context.Context, id string, Story *Story) error
 	Delete(ctx context.Context, id string) error
 	DeleteWithContext(ctx context.Context, tx *gorm.DB, id string) error
+	CountAll(ctx context.Context) (int64, error)
 }

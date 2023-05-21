@@ -64,6 +64,7 @@ func server(cmd *cobra.Command, args []string) {
 	configurationRepository := repository.NewConfigurationRepository(MysqlDB)
 	trainingHistoryRepository := repository.NewTrainingHistoryRepository(MysqlDB)
 	logIntentRepository := repository.NewLogIntentRepository(MysqlDB)
+	fallbackChatLogRepository := repository.NewFallbackChatLogRepository(MysqlDB)
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
@@ -81,6 +82,8 @@ func server(cmd *cobra.Command, args []string) {
 	trainingHistoryService := service.NewTrainingHistoryService(trainingHistoryRepository, userRepository)
 	logIntentService := service.NewLogIntentService(logIntentRepository, intentRepository)
 	workerService := service.NewWorkerService(trainingHistoryRepository, intentRepository, utteranceRepository, actionHttpRepository, entityRepository, exampleRepository, ruleRepository, storyRepository, stepRepository, configurationRepository)
+	fallbackChatLogService := service.NewFallbackChatLogService(fallbackChatLogRepository)
+	conversationService := service.NewConversationService(ruleRepository, storyRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
@@ -98,6 +101,8 @@ func server(cmd *cobra.Command, args []string) {
 	trainingHistoryController := controller.NewTrainingHistoryController(trainingHistoryService)
 	logIntentController := controller.NewLogIntentController(logIntentService)
 	workerController := controller.NewWorkerController(workerService)
+	fallbackChatLogController := controller.NewFallbackChatLogController(fallbackChatLogService)
+	conversationController := controller.NewConversationController(conversationService)
 
 	router.NewRouter(httpServer.Group("/api"),
 		userController,
@@ -115,7 +120,9 @@ func server(cmd *cobra.Command, args []string) {
 		configurationController,
 		trainingHistoryController,
 		logIntentController,
-		workerController)
+		workerController,
+		fallbackChatLogController,
+		conversationController)
 
 	// Graceful Shutdown
 	// Catch Signal
