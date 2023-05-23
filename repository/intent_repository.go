@@ -57,6 +57,30 @@ func (i *intentRepository) FindByID(ctx context.Context, id string) (*model.Inte
 	return intent, nil
 }
 
+func (i *intentRepository) FindByName(ctx context.Context, name string) (*model.Intent, error) {
+	if name == "" {
+		return nil, nil
+	}
+
+	log := logrus.WithFields(logrus.Fields{
+		"ctx":  ctx,
+		"name": name,
+	})
+
+	intent := &model.Intent{}
+	err := i.db.WithContext(ctx).Take(intent, "name = ?", name).Error
+	switch err {
+	case nil:
+	case gorm.ErrRecordNotFound:
+		return nil, nil
+	default:
+		log.Error(err)
+		return nil, err
+	}
+
+	return intent, nil
+}
+
 func (i *intentRepository) FindAll(ctx context.Context, name string) ([]*model.Intent, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,

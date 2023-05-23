@@ -123,3 +123,7 @@ func RasaVersion() string {
 func RasaDeleteOldModelsEndpoint() string {
 	return viper.GetString("rasa.delete_old_models")
 }
+
+func APIKey() string {
+	return viper.GetString("API_KEY")
+}
