@@ -45,6 +45,7 @@ type IntentService interface {
 type IntentRepository interface {
 	Create(ctx context.Context, intent *Intent) error
 	FindByID(ctx context.Context, id string) (*Intent, error)
+	FindByName(ctx context.Context, id string) (*Intent, error)
 	FindAll(ctx context.Context, name string) ([]*Intent, error)
 	Update(ctx context.Context, id string, intent *Intent) error
 	Delete(ctx context.Context, id string) error

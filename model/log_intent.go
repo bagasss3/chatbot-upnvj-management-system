@@ -8,7 +8,7 @@ import (
 )
 
 type CreateUpdateLogIntentRequest struct {
-	IntentId string `json:"intent_id" validate:"required"`
+	Name string `json:"name" validate:"required"`
 }
 
 func (c *CreateUpdateLogIntentRequest) Validate() error {
