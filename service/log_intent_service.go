@@ -32,7 +32,7 @@ func (li *logIntentService) CreateOrUpdateLogIntent(ctx context.Context, req mod
 		return nil, constant.HttpValidationOrInternalErr(err)
 	}
 
-	intent, err := li.intentRepository.FindByID(ctx, req.IntentId)
+	intent, err := li.intentRepository.FindByName(ctx, req.Name)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -62,7 +62,7 @@ func (li *logIntentService) CreateOrUpdateLogIntent(ctx context.Context, req mod
 
 	newLogIntent := &model.LogIntent{
 		Id:       helper.GenerateID(),
-		IntentId: req.IntentId,
+		IntentId: intent.Id,
 		Mention:  1,
 		Intent:   *intent,
 	}

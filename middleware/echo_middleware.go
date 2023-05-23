@@ -76,3 +76,16 @@ func MustSuperAdminOnly() echo.MiddlewareFunc {
 		}
 	}
 }
+
+func MustHaveAPIKey() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			authHeader := c.Request().Header.Get("API_KEY")
+			if authHeader != config.APIKey() {
+				return c.JSON(http.StatusUnauthorized, echo.Map{"error": "invalid API KEY"})
+			}
+
+			return next(c)
+		}
+	}
+}
