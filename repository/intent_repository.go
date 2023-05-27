@@ -119,13 +119,13 @@ func (i *intentRepository) Update(ctx context.Context, id string, intent *model.
 	return nil
 }
 
-func (i *intentRepository) Delete(ctx context.Context, id string) error {
+func (i *intentRepository) DeleteWithTx(ctx context.Context, id string, tx *gorm.DB) error {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 		"id":  id,
 	})
 
-	err := i.db.WithContext(ctx).Where("id = ?", id).Delete(&model.Intent{}).Error
+	err := tx.WithContext(ctx).Where("id = ?", id).Delete(&model.Intent{}).Error
 	if err != nil {
 		log.Error(err)
 		return err

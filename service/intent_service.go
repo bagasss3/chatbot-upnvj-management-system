@@ -4,18 +4,25 @@ import (
 	"cbupnvj/constant"
 	"cbupnvj/helper"
 	"cbupnvj/model"
+	"cbupnvj/repository"
 	"context"
 
 	"github.com/sirupsen/logrus"
 )
 
 type intentService struct {
-	intentRepository model.IntentRepository
+	intentRepository    model.IntentRepository
+	logIntentRepository model.LogIntentRepository
+	exampleRepository   model.ExampleRepository
+	gormTransactioner   repository.GormTransactioner
 }
 
-func NewIntentService(intentRepository model.IntentRepository) model.IntentService {
+func NewIntentService(intentRepository model.IntentRepository, gormTransactioner repository.GormTransactioner, logIntentRepository model.LogIntentRepository, exampleRepository model.ExampleRepository) model.IntentService {
 	return &intentService{
-		intentRepository: intentRepository,
+		intentRepository:    intentRepository,
+		gormTransactioner:   gormTransactioner,
+		logIntentRepository: logIntentRepository,
+		exampleRepository:   exampleRepository,
 	}
 }
 
@@ -122,9 +129,31 @@ func (i *intentService) DeleteIntent(ctx context.Context, id string) (bool, erro
 		return false, err
 	}
 
-	err = i.intentRepository.Delete(ctx, id)
+	tx := i.gormTransactioner.Begin(ctx)
+	err = i.intentRepository.DeleteWithTx(ctx, id, tx)
 	if err != nil {
 		log.Error(err)
+		i.gormTransactioner.Rollback(tx)
+		return false, err
+	}
+
+	err = i.exampleRepository.DeleteAllByIntentIDWithTx(ctx, id, tx)
+	if err != nil {
+		log.Error(err)
+		i.gormTransactioner.Rollback(tx)
+		return false, err
+	}
+
+	err = i.logIntentRepository.DeleteByIntentIDWithTx(ctx, id, tx)
+	if err != nil {
+		log.Error(err)
+		i.gormTransactioner.Rollback(tx)
+		return false, err
+	}
+
+	if err = i.gormTransactioner.Commit(tx); err != nil {
+		log.Error(err)
+		i.gormTransactioner.Rollback(tx)
 		return false, err
 	}
 

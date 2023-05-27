@@ -68,7 +68,7 @@ func server(cmd *cobra.Command, args []string) {
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
-	intentService := service.NewIntentService(intentRepository)
+	intentService := service.NewIntentService(intentRepository, gormTransationer, logIntentRepository, exampleRepository)
 	utteranceService := service.NewUtteranceService(utteranceRepository)
 	exampleService := service.NewExampleService(exampleRepository, intentRepository)
 	actionHttpService := service.NewActionHttpService(actionHttpRepository, reqBodyRepository)

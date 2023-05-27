@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type CreateExampleRequest struct {
@@ -54,4 +55,5 @@ type ExampleRepository interface {
 	FindByID(ctx context.Context, intentId, exampleId string) (*Example, error)
 	Update(ctx context.Context, id string, example *Example) error
 	Delete(ctx context.Context, id string) error
+	DeleteAllByIntentIDWithTx(ctx context.Context, intentId string, tx *gorm.DB) error
 }

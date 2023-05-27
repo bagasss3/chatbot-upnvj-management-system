@@ -89,3 +89,26 @@ func (li *logIntentRepository) Update(ctx context.Context, intentId string, logI
 
 	return nil
 }
+
+func (li *logIntentRepository) DeleteByIntentIDWithTx(ctx context.Context, intentId string, tx *gorm.DB) error {
+	if intentId == "" {
+		return nil
+	}
+
+	log := logrus.WithFields(logrus.Fields{
+		"ctx":      ctx,
+		"intentId": intentId,
+	})
+
+	err := tx.WithContext(ctx).Where("intent_id = ?", intentId).Delete(&model.LogIntent{}).Error
+	switch err {
+	case nil:
+	case gorm.ErrRecordNotFound:
+		return nil
+	default:
+		log.Error(err)
+		return err
+	}
+
+	return nil
+}
