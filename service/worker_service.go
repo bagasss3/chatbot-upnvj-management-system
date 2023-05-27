@@ -119,7 +119,7 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.RasaResp
 	sb.WriteString("    constrain_similarities: true\n")
 	sb.WriteString("  - name: UnexpecTEDIntentPolicy\n")
 	sb.WriteString("    max_history: 5\n")
-	sb.WriteString(fmt.Sprintf("    epochs: %d\n", configModel[0].UnexpecTEDIntentPolicyEpoch))
+	sb.WriteString(fmt.Sprintf("    epochs: %d\n", configModel[0].UnexpectedIntentPolicyEpoch))
 	sb.WriteString("  - name: RulePolicy\n")
 	sb.WriteString(fmt.Sprintf("    core_fallback_threshold: %0.1f\n", configModel[0].FallbackTreshold))
 	sb.WriteString(fmt.Sprintf("    core_fallback_action_name: %s\n", findUtteranceConfig.Name))
@@ -196,7 +196,12 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.RasaResp
 	sb.WriteString("\nresponses:\n")
 	for i := range utterances {
 		sb.WriteString(fmt.Sprintf("  %s:\n", utterances[i].Name))
-		sb.WriteString(fmt.Sprintf("  - text: \"%s\"\n\n", utterances[i].Response))
+		responseLines := strings.Split(utterances[i].Response, "\n")
+		sb.WriteString(fmt.Sprintf("  - text: |-\n"))
+		for _, line := range responseLines {
+			sb.WriteString(fmt.Sprintf("      %s\n", line))
+		}
+		sb.WriteString("\n")
 	}
 
 	// write session

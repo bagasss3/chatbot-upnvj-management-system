@@ -106,3 +106,18 @@ func (e *exampleRepository) Delete(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (e *exampleRepository) DeleteAllByIntentIDWithTx(ctx context.Context, intentId string, tx *gorm.DB) error {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx":      ctx,
+		"intentId": intentId,
+	})
+
+	err := tx.WithContext(ctx).Where("intent_id = ?", intentId).Delete(&model.Example{}).Error
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return nil
+}

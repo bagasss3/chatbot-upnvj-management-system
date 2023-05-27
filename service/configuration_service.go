@@ -5,6 +5,7 @@ import (
 	"cbupnvj/helper"
 	"cbupnvj/model"
 	"context"
+	"fmt"
 
 	"github.com/sirupsen/logrus"
 )
@@ -51,7 +52,7 @@ func (c *configurationService) CreateConfiguration(ctx context.Context, req mode
 		TedPolicyEpoch:              req.TedPolicyEpoch,
 		FallbackUtteranceId:         req.FallbackUtteranceId,
 		FallbackTreshold:            req.FallbackTreshold,
-		UnexpecTEDIntentPolicyEpoch: req.UnexpecTEDIntentPolicyEpoch,
+		UnexpectedIntentPolicyEpoch: req.UnexpectedIntentPolicyEpoch,
 	}
 
 	err = c.configurationRepository.Create(ctx, conf)
@@ -129,14 +130,14 @@ func (c *configurationService) UpdateConfiguration(ctx context.Context, id strin
 		log.Error(constant.ErrNotFound)
 		return nil, constant.ErrNotFound
 	}
-
+	fmt.Println("test:", req.UnexpectedIntentPolicyEpoch)
 	conf.FallbackUtteranceId = req.FallbackUtteranceId
 	conf.DietClassifierEpoch = req.DietClassifierEpoch
 	conf.FallbackClassifierTreshold = req.FallbackClassifierTreshold
 	conf.FallbackTreshold = req.FallbackTreshold
 	conf.ResponseSelectorEpoch = req.ResponseSelectorEpoch
 	conf.TedPolicyEpoch = req.TedPolicyEpoch
-	conf.UnexpecTEDIntentPolicyEpoch = req.UnexpecTEDIntentPolicyEpoch
+	conf.UnexpectedIntentPolicyEpoch = req.UnexpectedIntentPolicyEpoch
 
 	err = c.configurationRepository.Update(ctx, conf.Id, conf)
 	if err != nil {

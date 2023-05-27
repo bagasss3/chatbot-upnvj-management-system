@@ -9,7 +9,7 @@ import (
 )
 
 type CreateUpdateStoryRequest struct {
-	StoryTitle string `json:"story_title" validate:"required,min=3,max=60"`
+	StoryTitle string `json:"story_title" validate:"required,min=3,max=120"`
 }
 
 func (c *CreateUpdateStoryRequest) Validate() error {
