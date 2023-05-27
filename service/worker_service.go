@@ -58,7 +58,7 @@ func NewWorkerService(
 	}
 }
 
-func (w *workerService) StartTrainingModel(ctx context.Context) (*model.RasaResponse, error) {
+func (w *workerService) StartTrainingModel(ctx context.Context) (*model.TrainingHistory, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
 	})
@@ -197,9 +197,13 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.RasaResp
 	for i := range utterances {
 		sb.WriteString(fmt.Sprintf("  %s:\n", utterances[i].Name))
 		responseLines := strings.Split(utterances[i].Response, "\n")
-		sb.WriteString(fmt.Sprintf("  - text: |-\n"))
-		for _, line := range responseLines {
-			sb.WriteString(fmt.Sprintf("      %s\n", line))
+		if len(responseLines) > 0 {
+			sb.WriteString("  - text: |-\n")
+			for _, line := range responseLines {
+				sb.WriteString(fmt.Sprintf("      %s\n", line))
+			}
+		} else {
+			sb.WriteString(fmt.Sprintf("  - text: %s-\n", responseLines[0]))
 		}
 		sb.WriteString("\n")
 	}
@@ -447,5 +451,5 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.RasaResp
 		return nil, err
 	}
 
-	return rasaResp, nil
+	return create, nil
 }
