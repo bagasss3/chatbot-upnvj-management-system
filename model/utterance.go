@@ -10,7 +10,7 @@ import (
 
 type CreateUpdateUtteranceRequest struct {
 	Name     string `json:"name" validate:"required,min=3,max=60"`
-	Response string `json:"response" validate:"required,min=3,max=200"`
+	Response string `json:"response" validate:"required,min=3,max=1000"`
 }
 
 func (c *CreateUpdateUtteranceRequest) Validate() error {

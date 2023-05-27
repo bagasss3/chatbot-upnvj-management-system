@@ -48,6 +48,6 @@ type IntentRepository interface {
 	FindByName(ctx context.Context, id string) (*Intent, error)
 	FindAll(ctx context.Context, name string) ([]*Intent, error)
 	Update(ctx context.Context, id string, intent *Intent) error
-	Delete(ctx context.Context, id string) error
+	DeleteWithTx(ctx context.Context, id string, tx *gorm.DB) error
 	CountAll(ctx context.Context) (int64, error)
 }

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type CreateUpdateLogIntentRequest struct {
@@ -41,4 +42,5 @@ type LogIntentRepository interface {
 	FindByIntentID(ctx context.Context, intentId string) (*LogIntent, error)
 	FindAll(ctx context.Context) ([]*LogIntent, error)
 	Update(ctx context.Context, intentId string, li *LogIntent) error
+	DeleteByIntentIDWithTx(ctx context.Context, intentId string, tx *gorm.DB) error
 }

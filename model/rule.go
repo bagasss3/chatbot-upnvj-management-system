@@ -18,7 +18,7 @@ const (
 type CreateUpdateRuleRequest struct {
 	IntentId   string   `json:"intent_id" validate:"required"`
 	ResponseId string   `json:"response_id" validate:"required"`
-	RuleTitle  string   `json:"rule_title" validate:"required,min=3,max=60"`
+	RuleTitle  string   `json:"rule_title" validate:"required,min=3,max=120"`
 	Type       RuleType `json:"type" validate:"required"`
 }
 

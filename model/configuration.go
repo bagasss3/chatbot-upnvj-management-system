@@ -14,7 +14,7 @@ type CreateUpdateConfigurationRequest struct {
 	TedPolicyEpoch              int32   `json:"ted_policy_epoch" validate:"required"`
 	FallbackUtteranceId         string  `json:"fallback_utterance_id" validate:"required"`
 	FallbackTreshold            float32 `json:"fallback_treshold" validate:"required"`
-	UnexpecTEDIntentPolicyEpoch int32   `json:"unexpected_intent_policy_epoch" validate:"required"`
+	UnexpectedIntentPolicyEpoch int32   `json:"unexpected_intent_policy_epoch" validate:"required"`
 }
 
 func (c *CreateUpdateConfigurationRequest) Validate() error {
@@ -29,7 +29,7 @@ type Configuration struct {
 	TedPolicyEpoch              int32     `json:"ted_policy_epoch"`
 	FallbackUtteranceId         string    `json:"fallback_utterance_id"`
 	FallbackTreshold            float32   `json:"fallback_treshold"`
-	UnexpecTEDIntentPolicyEpoch int32     `json:"unexpected_intent_policy_epoch"`
+	UnexpectedIntentPolicyEpoch int32     `json:"unexpected_intent_policy_epoch"`
 	CreatedAt                   time.Time `json:"created_at"`
 	UpdatedAt                   time.Time `json:"updated_at"`
 }
