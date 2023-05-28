@@ -81,11 +81,11 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		return nil, err
 	}
 
-	findUtteranceConfig, err := w.utteranceRepository.FindByID(ctx, configModel[0].FallbackUtteranceId)
-	if err != nil {
-		log.Error(err)
-		return nil, err
-	}
+	// findUtteranceConfig, err := w.utteranceRepository.FindByID(ctx, configModel[0].FallbackUtteranceId)
+	// if err != nil {
+	// 	log.Error(err)
+	// 	return nil, err
+	// }
 	// define rasa version
 	sb.WriteString(fmt.Sprintf("version: \"%s\"\n", config.RasaVersion()))
 
@@ -113,6 +113,9 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 	// write policy
 	sb.WriteString("\npolicy:\n")
 	sb.WriteString("  - name: MemoizationPolicy\n")
+	sb.WriteString("  - name: RulePolicy\n")
+	// sb.WriteString(fmt.Sprintf("    core_fallback_threshold: %0.1f\n", configModel[0].FallbackTreshold))
+	// sb.WriteString(fmt.Sprintf("    core_fallback_action_name: %s\n", findUtteranceConfig.Name))
 	sb.WriteString("  - name: TEDPolicy\n")
 	sb.WriteString("    max_history: 5\n")
 	sb.WriteString(fmt.Sprintf("    epochs: %d\n", configModel[0].TedPolicyEpoch))
@@ -120,9 +123,6 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 	sb.WriteString("  - name: UnexpecTEDIntentPolicy\n")
 	sb.WriteString("    max_history: 5\n")
 	sb.WriteString(fmt.Sprintf("    epochs: %d\n", configModel[0].UnexpectedIntentPolicyEpoch))
-	sb.WriteString("  - name: RulePolicy\n")
-	sb.WriteString(fmt.Sprintf("    core_fallback_threshold: %0.1f\n", configModel[0].FallbackTreshold))
-	sb.WriteString(fmt.Sprintf("    core_fallback_action_name: %s\n", findUtteranceConfig.Name))
 
 	// write intents
 	intents, err := w.intentRepository.FindAll(ctx, "")
@@ -197,13 +197,13 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 	for i := range utterances {
 		sb.WriteString(fmt.Sprintf("  %s:\n", utterances[i].Name))
 		responseLines := strings.Split(utterances[i].Response, "\n")
-		if len(responseLines) > 0 {
+		if len(responseLines) > 1 {
 			sb.WriteString("  - text: |-\n")
 			for _, line := range responseLines {
 				sb.WriteString(fmt.Sprintf("      %s\n", line))
 			}
 		} else {
-			sb.WriteString(fmt.Sprintf("  - text: %s-\n", responseLines[0]))
+			sb.WriteString(fmt.Sprintf("  - text: \"%s\"\n", responseLines[0]))
 		}
 		sb.WriteString("\n")
 	}
