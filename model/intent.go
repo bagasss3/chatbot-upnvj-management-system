@@ -22,6 +22,7 @@ type Intent struct {
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+	Examples  []*Example     `json:"examples" gorm:"foreignKey:IntentId"`
 }
 
 type IntentController interface {
@@ -31,6 +32,7 @@ type IntentController interface {
 	HandleUpdateIntent() echo.HandlerFunc
 	HandleDeleteIntent() echo.HandlerFunc
 	HandleCountAllIntent() echo.HandlerFunc
+	HandleFindAllWithExamples() echo.HandlerFunc
 }
 
 type IntentService interface {
@@ -40,6 +42,7 @@ type IntentService interface {
 	UpdateIntent(ctx context.Context, id string, req CreateUpdateIntentRequest) (*Intent, error)
 	DeleteIntent(ctx context.Context, id string) (bool, error)
 	CountAllIntent(ctx context.Context) (int64, error)
+	FindAllWithExamples(ctx context.Context) ([]*Intent, error)
 }
 
 type IntentRepository interface {
@@ -50,4 +53,5 @@ type IntentRepository interface {
 	Update(ctx context.Context, id string, intent *Intent) error
 	DeleteWithTx(ctx context.Context, id string, tx *gorm.DB) error
 	CountAll(ctx context.Context) (int64, error)
+	FindAllWithExamples(ctx context.Context) ([]*Intent, error)
 }

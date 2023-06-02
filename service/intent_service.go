@@ -66,6 +66,20 @@ func (i *intentService) FindAllIntent(ctx context.Context, name string) ([]*mode
 	return intents, nil
 }
 
+func (i *intentService) FindAllWithExamples(ctx context.Context) ([]*model.Intent, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	intents, err := i.intentRepository.FindAllWithExamples(ctx)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	return intents, nil
+}
+
 func (i *intentService) FindIntentByID(ctx context.Context, id string) (*model.Intent, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,

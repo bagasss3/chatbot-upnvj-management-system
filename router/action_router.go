@@ -7,6 +7,7 @@ import (
 func (r *router) actionRouter() {
 	r.group.POST("/action/http", r.actionHttpController.HandleCreateActionHttp(), middleware.MustAuthenticateAccessToken())
 	r.group.GET("/action/http", r.actionHttpController.HandleFindAllActionHttp(), middleware.MustAuthenticateAccessToken())
+	r.group.GET("/action/req", r.actionHttpController.HandleFindAllActionHttpWithReqBodies())
 	r.group.GET("/action/http/:id", r.actionHttpController.HandleFindActionHttpByID(), middleware.MustAuthenticateAccessToken())
 	r.group.PUT("/action/http/:id", r.actionHttpController.HandleUpdateActionHttp(), middleware.MustAuthenticateAccessToken())
 	r.group.DELETE("/action/http/:id", r.actionHttpController.HandleDeleteActionHttp(), middleware.MustAuthenticateAccessToken())

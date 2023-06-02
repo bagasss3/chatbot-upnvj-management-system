@@ -129,3 +129,19 @@ func (a *actionHttpRepository) CountAll(ctx context.Context) (int64, error) {
 
 	return count, nil
 }
+
+func (a *actionHttpRepository) FindAllWithReqBodies(ctx context.Context) ([]*model.ActionHttp, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	var actionHttps []*model.ActionHttp
+	res := a.db.WithContext(ctx).Preload("ReqBodies").Find(&actionHttps)
+
+	if res.Error != nil {
+		log.Error(res.Error)
+		return nil, res.Error
+	}
+
+	return actionHttps, nil
+}

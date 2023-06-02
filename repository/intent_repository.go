@@ -147,3 +147,19 @@ func (i *intentRepository) CountAll(ctx context.Context) (int64, error) {
 
 	return count, nil
 }
+
+func (i *intentRepository) FindAllWithExamples(ctx context.Context) ([]*model.Intent, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	var intents []*model.Intent
+	res := i.db.WithContext(ctx).Preload("Examples").Where("name <> ?", "nlu_fallback").Find(&intents)
+
+	if res.Error != nil {
+		log.Error(res.Error)
+		return intents, res.Error
+	}
+
+	return intents, nil
+}
