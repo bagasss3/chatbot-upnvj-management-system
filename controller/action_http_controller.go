@@ -51,6 +51,19 @@ func (a *actionHttpController) HandleFindAllActionHttp() echo.HandlerFunc {
 	}
 }
 
+func (a *actionHttpController) HandleFindAllActionHttpWithReqBodies() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		actionHttps, err := a.actionHttpService.FindAllWithReqBodies(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, actionHttps)
+	}
+}
+
 func (a *actionHttpController) HandleFindActionHttpByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")

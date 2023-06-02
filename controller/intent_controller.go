@@ -52,6 +52,18 @@ func (i *intentController) HandleFindAllIntent() echo.HandlerFunc {
 	}
 }
 
+func (i *intentController) HandleFindAllWithExamples() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		intents, err := i.intentService.FindAllWithExamples(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, intents)
+	}
+}
+
 func (i *intentController) HandleFindIntentByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
