@@ -127,3 +127,7 @@ func RasaDeleteOldModelsEndpoint() string {
 func APIKey() string {
 	return viper.GetString("API_KEY")
 }
+
+func RasaGenerateActions() string {
+	return viper.GetString("rasa.generate_actions")
+}

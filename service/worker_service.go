@@ -81,11 +81,11 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		return nil, err
 	}
 
-	// findUtteranceConfig, err := w.utteranceRepository.FindByID(ctx, configModel[0].FallbackUtteranceId)
-	// if err != nil {
-	// 	log.Error(err)
-	// 	return nil, err
-	// }
+	findUtteranceConfig, err := w.utteranceRepository.FindByID(ctx, configModel[0].FallbackUtteranceId)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
 	// define rasa version
 	sb.WriteString(fmt.Sprintf("version: \"%s\"\n", config.RasaVersion()))
 
@@ -114,8 +114,8 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 	sb.WriteString("\npolicy:\n")
 	sb.WriteString("  - name: MemoizationPolicy\n")
 	sb.WriteString("  - name: RulePolicy\n")
-	// sb.WriteString(fmt.Sprintf("    core_fallback_threshold: %0.1f\n", configModel[0].FallbackTreshold))
-	// sb.WriteString(fmt.Sprintf("    core_fallback_action_name: %s\n", findUtteranceConfig.Name))
+	sb.WriteString(fmt.Sprintf("    core_fallback_threshold: %0.1f\n", configModel[0].FallbackTreshold))
+	sb.WriteString(fmt.Sprintf("    core_fallback_action_name: %s\n", findUtteranceConfig.Name))
 	sb.WriteString("  - name: TEDPolicy\n")
 	sb.WriteString("    max_history: 5\n")
 	sb.WriteString(fmt.Sprintf("    epochs: %d\n", configModel[0].TedPolicyEpoch))
@@ -158,8 +158,14 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		sb.WriteString("\nentities: []\n")
 	}
 
+	// sb.WriteString("\nslots:\n")
+	// sb.WriteString("  action_response:\n")
+	// sb.WriteString("    type: rasa.shared.core.slots.TextSlot\n")
+	// sb.WriteString("    initial_value: null\n")
+	// sb.WriteString("    auto_fill: true\n")
+
 	// write action
-	actionHttp, err := w.actionHttpRepository.FindAll(ctx, "")
+	actionHttp, err := w.actionHttpRepository.FindAllWithReqBodies(ctx)
 	if err != nil {
 		log.Error(err)
 		return nil, err

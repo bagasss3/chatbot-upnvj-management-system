@@ -1,0 +1,1130 @@
+version: "3.1"
+
+pipeline:
+  - name: WhitespaceTokenizer
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+  - name: DIETClassifier
+    epochs: 100
+    constrain_similarities: true
+  - name: EntitySynonymMapper
+  - name: ResponseSelector
+    epochs: 100
+    constrain_similarities: true
+  - name: FallbackClassifier
+    threshold: 0.5
+    ambiguity_threshold: 0.1
+
+policy:
+  - name: MemoizationPolicy
+  - name: RulePolicy
+    core_fallback_threshold: 0.5
+    core_fallback_action_name: utter_fallback
+  - name: TEDPolicy
+    max_history: 5
+    epochs: 100
+    constrain_similarities: true
+  - name: UnexpecTEDIntentPolicy
+    max_history: 5
+    epochs: 100
+
+intents:
+  - nlu_fallback
+  - syarat_tugas_akhir
+  - form_permohonan
+  - jangka_waktu_tugas_akhir
+  - perpanjangan_waktu_tugas_akhir
+  - format_penulisan_tugas_akhir
+  - cara_daftar_wisuda
+  - syarat_wisuda
+  - dress_code_wisuda
+  - waktu_tempat_wisuda
+  - prosedur_daftar_wisuda
+  - biaya_wisuda
+  - ketentuan_yudisium
+  - prosedur_daftar_yudisium
+  - syarat_ambil_ijazah
+  - prosedur_sktl
+  - prosedur_pembayaran_ukt
+  - cetak_bukti_pembayaran_ukt
+  - kualifikasi_dosen_upnvj
+  - kewajiban_dosen_pembimbing
+  - kriteria_dosen_pembimbing_tugas_akhir
+  - tugas_dosen_pembimbing_tugas_akhir
+  - mekanisme_penetapan_dosen_pembimbing
+  - sarana_akademik_perkuliahan
+  - ruang_upnvj
+  - prosedur_menggunakan_ruangan
+  - jalur_mahasiswa_baru_upnvj
+  - prosedur_pendaftaran_mahasiswa_baru
+  - prosedur_legalisir_ijazah_transkrip_nilai
+  - option_intent
+  - detil_form_permohonan
+
+entities:
+  - form_name
+
+actions:
+  - action_provide_intent_options
+  - action_form_permohonan
+  - action_detil_form_permohonan
+
+responses:
+  utter_fallback:
+  - text: "Saya tidak mengerti maksud perkataan anda. Coba parafrase kalimat anda"
+
+  utter_form_permohonan:
+  - text: |-
+      Daftar surat permohonan:
+      a.	Form Permohonan Surat Keterangan Mahasiswa
+      b.	Form Permohonan Rekomendasi Beasiswa
+      c.	Form Pengajuan Beasiswa
+      d.	Form Permohonan Surat Riset Dan Kerja Praktek
+      e.	Form Permohonan Surat Rekomendasi Magang Kampus Merdeka (MBKM)
+      f.	Form Permohonan Keringanan UKT
+      g.	Form Pengajuan Cicilan UKT
+      h.	Form Izin Kegiatan Mahasiswa
+      i.	Form Kebutuhan Alumni
+      j.	Form Cuti Akademik
+      k.	Form Aktif Kembali
+      l.	Form Pengunduran Diri
+      m.	Form Pengajuan Pembimbing Kerja Praktek
+      n.	Form Pengajuan Penilaian Kerja Praktek
+      o.	Form Pendaftaran Sidang Proposal
+      p.	Form Pendaftaran Pembimbing Proposal
+      q.	Form Pendaftaran Sidang Skripsi
+      r.	Form Pendaftaran Pembimbing TA/Skripsi 
+
+  utter_syarat_tugas_akhir:
+  - text: |-
+      Syarat yang harus dipenuhi untuk mengambil Tugas Akhir:
+      1.	Jumlah SKS yang telah diselesaikan mahasiswa adalah minimal 95 Sks untuk Diploma Tiga dan 120 SKS untuk Sarjana atau Diploma Empat.
+      2.	Mahasiswa telah menyelesaikan mata kuliah Metode Penelitian dan mata kuliah wajib yang menjadi ciri utama program studi
+      3.	Mahasiswa telah memilih topik tugas akhir
+
+  utter_jangka_waktu_tugas_akhir:
+  - text: "Jangka waktu penyelesaian Tugas Akhir berlaku satu semester (sejak pendaftaran sampai dengan perbaikan terakhir sesudah diujikan)"
+
+  utter_perpanjangan_waktu_tugas_akhir:
+  - text: |-
+      Batas waktu penyelesaian Tugas Akhir hanya dapat diperpanjang dengan alasan atau pertimbangan khusus dari dosen pembimbing dan disetujui oleh ketua program studi.
+      
+      Perpanjangan waktu penyelesaian Tugas Akhir berlaku pada satu semester berikutnya (Menjadi dua semester). Apabila selama dua semester mahasiswa tidak dapat menyelesaikannya, maka mahasiswa yang bersangkutan dianggap tidak mampu dan harus mengajukan proposal baru.
+      
+
+  utter_format_penulisan_tugas_akhir:
+  - text: "[Link dokumen format tugas akhir]"
+
+  utter_cara_daftar_wisuda:
+  - text: "Pendaftaran wisuda dilaksanakan secara online melalui website www.wisuda.upnvj.ac.id"
+
+  utter_syarat_wisuda:
+  - text: |-
+      Mahasiswa dapat mengikuti wisuda apabila yang bersangkutan memenuhi persyaratan berikut:
+      1.	Telah lulus dari ujian tugas akhir/skripsi/tesis dibuktikan dengan nilai yang tertera pada transkrip sementara
+      2.	Berstatus aktif pada semester berjalan
+      3.	IPK minimal 2.75 untuk jenjang Diploma/Strata-1 dan 3.00 untuk jenjang Magister
+      4.	Memenuhi persyaratan administrasi dan keuangan yang berkenaan dengan kegiatan pada program studi yang diikuti
+
+  utter_dress_code_wisuda:
+  - text: |-
+      Pakaian yang dikenakan peserta wisuda adalah sebagai berikut:
+      1.	Mahasiswa peserta upacara wisuda mengenakan pakaian wisuda berupa toga, topi wisuda, atribut atau kelengkapan lainnya yang ditetapkan
+      2.	Anggota senat UPN Veteran Jakarta mengenakan toga senat dan atribut atau kelengkapan lainnya yang ditetapkan
+      3.	Panitia pelaksana wisuda mengenakan pakaian yang telah ditetapkan 
+      4.	Undangan mengenakan pakaian sipil lengkap / nasional / menyesuaikan
+
+  utter_waktu_tempat_wisuda:
+  - text: |-
+      1.	Wisuda dilaksanakan pada waktu yang telah ditetapkan sesuai calendar akademik UPN Veteran Jakarta
+      2.	Tempat pelaksanaan wisuda ditentukan berdasarkan hasil rapat pimpinan
+      3.	Peserta wisuda menempati tempat duduk yang telah ditentukan oleh panitia wisuda
+      
+
+  utter_prosedur_daftar_wisuda:
+  - text: "Mahasiswa yang akan mengikuti wisuda wajib melakukan pendaftaran dengan cara mendaftarkan diri secara online dan menyerahkan berkas pendaftaran ke Biro Akademik Kemahasiswaan Perencanaan dan Kerjasama (AKPK)"
+
+  utter_biaya_wisuda:
+  - text: "Mahasiswa yang telah membayar UKT tidak perlu lagi membayar biaya wisuda"
+
+  utter_ketentuan_yudisium:
+  - text: |-
+      Mahasiswa yang sudah menyelesaikan proses pembelajarannya akan diyudisium dengan ketentuan sebagai berikut:
+      1.	Yudisium dilakukan oleh Dekan Bersama dengan Ketua Program Studi
+      2.	Mahasiswa yang dinyatakan lulus, jika telah dinyatakan lulus ujian Tugas Akhir/Skripsi/Tesis, telah menyelesaikan administrasi keuangan, administrasi perpustakaan, mengisi SKPI, dan menyerahkan sertifikat TOEIC/TOEFL sesuai dengan peraturan yang berlaku
+      3.	Mahasiswa yang belum menyelesaikan proses administrasi tidak dapat diyudisium
+      4.	Yudisium Mahasiswa dinyatakan dalam bentuk keputusan Rektor dan menjadi dasar penetapan wisudawan.
+      
+
+  utter_prosedur_daftar_yudisium:
+  - text: |-
+      Yang dibutuhkan:
+      1.	KTM
+      2.	KHS
+      3.	Fotokopi Ijazah terakhir yang telah dilegalisir
+      4.	Fotokopi KRS terakhir
+      5.	Lembar pengesahan studi
+      6.	Bukti upload tugas akhir
+      7.	Lembar biodata
+      8.	Foto mahasiswa
+      Prosedur pendaftaran:
+      1.	Melakukan pendaftaran di subbag Akademik Fakultas
+      2.	Memperoleh Daftar Hasil Studi Sementara (DHSS) dan Biodata
+      3.	Pengesahan DHSS oleh Dosen PA dan Ketua Jurusan
+      4.	Menyerahkan berkas DHSS ke subbag Akademik Fakultas
+      5.	Mengambil SK Yudisium
+      
+
+  utter_syarat_ambil_ijazah:
+  - text: |-
+      Persyaratan pengambilan ijazah:
+      1.	Ijazah harus diambil oleh lulusan yang bersangkutan, jika pengambilan ijazah diwakilkan, maka pihak yang mewakilkan diwajibkan membawa surat kuasa asli bermaterai 6000 dan melampirkan fotokopi Kartu Tanda Penduduk (KTP) pemberi dan penerima kuasa
+      2.	Memperlihatkan bukti bebas keuangan, telah menyerahkan seluruh tugas akhir/skripsi/tesis, bebas perpustakaan dan telah mengisi kuesioner yang diwajibkan
+      3.	Ijazah yang tidak diambil dalam kurun waktu lebih dari 1 tahun setelah pelaksanaan wisuda, pihak universitas tidak bertanggung jawab atas kerusakan dari kehilangan ijazah tersebut
+      
+
+  utter_prosedur_legalisir_ijazah_transkrip_nilai:
+  - text: |-
+      1.	Mendatangi Unit Layanan Terpadu
+      2.	Menunjukkan dokumen asli (Ijazah, transkrip nilai dan sertifikat profesi) dan menyerahkan fotokopi dokumen.
+      3.	Mengisi buku register
+      4.	Membayar biaya legalisir
+      5.	Mengambil bukti pembayaran dan bukti penyerahan dokumen
+      6.	Mengambil dokumen yang ditanda tangan, distempel dan diberi nomor register
+
+  utter_prosedur_sktl:
+  - text: |-
+      1.	Mahasiswa mengajukan permohonan SKTL ke Subbag Akademik
+      2.	Mahasiswa mengambil blanko SKTL di Subbag Akademik
+      3.	Mahasiswa mengisi blanko SKTL
+      4.	Mahasiswa menyerahkan blanko SKTL ke Subbag Akademik
+      5.	Mahasiswa menerima SKTL.
+
+  utter_prosedur_pembayaran_ukt:
+  - text: |-
+      Informasi mengenai tata cara pembayaran UKT dapat diakses melalui link berikut:
+      https://penmaru.upnvj.ac.id/cara-pembayaran.html
+
+  utter_cetak_bukti_pembayaran_ukt:
+  - text: "Untuk melakukan konfirmasi atau cetak bukti pembayaran, mahasiswa/i dapat mendatangi Unit Layanan Terpadu yang terletak di Gedung Rektorat Lantai 1 UPN “Veteran” Jakarta Pondok Labu."
+
+  utter_kualifikasi_dosen_upnvj:
+  - text: |-
+      1.	Kualifikasi dosen yang mengajar di UPN Veteran Jakarta sekurang-kurangnya memenuhi Standar Kompetensi Minimal Pengampu Mata Kuliah (SKM-PMK)
+      2.	SKM-PMK tertuang dalam Keputusan Rektor
+      3.	SKM-PMK menjadi pedoman dalam penetapan dosen pengampu mata kuliah pada setiap semester berjalan
+      4.	SKM-PMK menjadi acuan Program Studi untuk melakukan pemetaan Dosen pengampu mata kuliah pada tiap semester.
+
+  utter_kewajiban_dosen_pembimbing:
+  - text: |-
+      Dosen Pembimbing Akademik (PA) berkewajiban untuk:
+      1.	Memberikan bimbingan kepada mahasiswa selama masa Pendidikan
+      2.	Menumbuhkan kreativitas  dan kebiasaan cara belajar yang efektif
+      3.	Membantu mahasiswa dalam Menyusun rencana studi untuk menunjang keberhasilan studinya
+      4.	Memastikan prestasi akademik mahasiswa memenuhi target yang telah ditetapkan
+      5.	Membantu menyelesaikan persoalan yang dihadapi mahasiswa yang mempengaruhi prestasi akademik
+
+  utter_kriteria_dosen_pembimbing_tugas_akhir:
+  - text: |-
+      Standar kompetensi dosen pembimbing 1/Utama tugas akhir sebagai berikut:
+      1.	Linieritas Pendidikan pada dua jenjang yakni jenjang sarjana – magister, sarjana – doktor atau jenjang magister – doktor
+      2.	Memiliki jabatan akademik sekurang-kurangnya Asisten Ahli
+      3.	Memiliki publikasi ilmiah sebagai penulis utama pada jurnal nasional / internasional bereputasi atau mendapatkan hibah penelitian
+      4.	Menguasai metode-metode penelitian yang digunakan dalam disiplin ilmu terkait
+      5.	Memiliki peta jalan penelitian sesuai bidang keahlian telah disetujui dekan
+      Standar kompetensi dosen pembimbing 2/Pendamping meliputi:
+      1.	Memiliki salah satu jenjang Pendidikan yang relevan dengan topik penelitian
+      2.	Memiliki jabatan akademik sekurang-kurangnya asisten ahli
+      3.	Memahami pedoman penulisan skripsi, PUEBI, pengoperasian cek plagiarism
+      4.	Memiliki wawasan umum tentang metode dan topik penelitian
+
+  utter_tugas_dosen_pembimbing_tugas_akhir:
+  - text: |-
+      Tugas pokok dosen pembimbing 1 / Utama adalah membimbing penulisan tugas akhir dari aspek substansi meliputi pemilihan topik, perumusan masalah/pertanyaan penelitian, kerangka berpikir, metode penelitian, interpretasi data, hingga kesimpulan hasil penelitian.
+      Tugas pokok dosen pembimbing 2/Pendamping adalah membimbing tata cara penulisan tugas akhir sesuai buku pedoman, Pedoman Umum Ejaan Bahasa Indonesia (PUEBI), keaslian data, dan cek plagiarism
+
+  utter_mekanisme_penetapan_dosen_pembimbing:
+  - text: |-
+      Penetapan pembimbing tugas akhir/skripsi/tesis di lingkungan UPN Veteran Jakarta menggunakan mekanisme sebagai berikut:
+      1.	Pembimbing tugas akhir diusulkan oleh Ketua/Koordinator Program Studi dengan melampirkan persyaratan yang ditetapkan
+      2.	Pembimbingan tugas akhir yang diusulkan selanjutnya diperiksa kelayakannya oleh Wakil Dekan Bidang Akademik untuk mendapatkan persetujuan Dekan
+      3.	Fakultas menyampaikan usulan pembimbing tugas akhir dengan melampirkan surat pengantar dekan dan daftar usulan pembimbing tugass akhir kepada Rektor untuk mendapatkan penetapan
+      4.	Pengusulan Kembali pembimbing tugas akhir wajib memperhatikan kinerja pembimbingan pada semester sebelumnya yang dibuktikan dengan hasil uji petik tugas akhir hasil pembimbingan
+      5.	Pembagian jumlah mahasiswa bimbingan diatur secara berjenjang dengan mengutamakan pemenuhan kuota pembimbing berkualifikasi Doktor dan/atau Guru Besar/Lektor Kepala
+
+  utter_sarana_akademik_perkuliahan:
+  - text: |-
+      1.	Fasilitas perkuliahan berupa: papan tulis, bangku kuliah, penghapus, spidol white board, dan jam dinding tersedia pada ruang kuliah, yang penyediaannya menjadi tanggung jawab Bagian UHT & BMN
+      2.	Fasilitas perkuliahan yang berupa: LCD Proyektor, Mikrofon dan perlengkapan lain yang bersifat insidentil penyediaannya menjadi tanggung jawab bagian UHT & BMN
+      3.	Penyediaan fasilitas praktikum menjadi tanggung jawab masing-masing kepala Laboratorium di Program Studi
+
+  utter_ruang_upnvj:
+  - text: |-
+      Ruang rapat, seminar, pertemuan yang terdapat di UPN Veteran Jakarta meliputi:
+      1.	Ruang Auditorium Tanah Airku Fakultas Teknik
+      2.	Ruang Auditorium Bhinneka Tunggal Ika, Gedung Rektorat
+      3.	Ruang Auditorium FK
+      4.	Ruang Auditorium Garuda, Fakultas Hukum
+      5.	Ruang BEJ Fakultas Ekonomi dan Bisnis
+      6.	Ruang Rapat Nusantara 1 A
+      7.	Ruang Rapat Nusantara 1 B
+      8.	Ruang Rapat Nusantara 2
+      9.	Ruang Rapat Nusantara 3
+      10.	Ruang Rapat Nusantara 4
+
+  utter_prosedur_menggunakan_ruangan:
+  - text: "Penggunaan ruang rapat, pertemuan, seminar bersifat common use, agar tidak terjadi jadwal penggunaan bersamaan, maka unit yang akan memakai dapat mengajukan permohonan ijin pada Biro Umum dan Keuangan."
+
+  utter_jalur_mahasiswa_baru_upnvj:
+  - text: "UPN Veteran Jakarta menerima mahasiswa melalui tiga jalur yaitu Seleksi Nasional Berdasarkan Prestasi (SNBP), UTBK-Seleksi Nasional Berbasis Test (SNBT) dan Seleksi Mandiri (SEMA) UPN Veteran Jakarta"
+
+  utter_prosedur_pendaftaran_mahasiswa_baru:
+  - text: |-
+      Masing-masing jalur memiliki prosedurnya masing-masing, pada SNBP:
+      1. Registrasi Akun SNPMB-BPPP bagi sekolah
+      2. Registrasi Akun SNPMB-BPPP bagi siswa
+      3. Sekolah akan menentukan calon peserta yang eligible
+      4. Pengisian PDSS (Pangkalan Data Sekolah dan Siswa) oleh sekolah
+      5. Pendaftaran SNBP oleh siswa 
+      6. Siswa memilih PTN dan program studi maksimal 2 pilihan
+      7. Mengunggah portofolio
+      8. Seleksi jalur SNBP oleh masing-masing PTN
+      9. Pengumuman hasil SNBP pada 28 Maret 2023 pukul 15.00
+      10. Calon mahasiswa melakukan daftar ulang pada PTN yang menerimanya.
+      
+      Pada jalur UTBK-SNBT:
+      1.Pendaftaran UTBK-SNBT pada tanggal 23-Maret s/d 14 April 2023.
+      2. Pelaksanaan UTBK gelombang 1 pada tanggal 8 – 14 Mei 2023.
+      3. Pelaksanaan UTBK gelombang 2 pada tanggal 22-28 Mei 2023.
+      4. Pengumuman hasil pada tanggal 22 Juni 2023.
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+
+nlu:
+- intent: nlu_fallback
+  examples: []
+
+- intent: syarat_tugas_akhir
+  examples: |
+    - Untuk ngambil tugas akhir, matkul apa saja yang harus udh selesai
+    - Kan begini, saya ingin mengambil TA, apa saja ya syaratnya?
+    - Kira-kira apa saja syarat agar bisa mengambil mata kuliah Tugas Akhir? 
+    - Untuk dapat mengambil matkul Tugas Akhir, syarat apa saja yang harus saya penuhi? 
+    - Syarat TA
+    - Syaratnya itu apa saja ya Pak agar bisa mengambil mata kuliah tugas akhir?
+    - Permisi Pak/Bu, untuk mengambil mata kuliah tugas akhir atau sempro/skripsi. Apakah ada syarat untuk mengambil matkul tersebut ya ?
+    - Apa yang harus disiapkan sebelum mengambil skripsi?
+    - kalau mau ngambil matkul tugas akhir syaratnya apa aja ya?
+    - Syarat sebelum tugas akhir apa aja ya?
+    - Maaf bapak/ibu, jika boleh tau syarat-syarat apa saja yang perlu dipenuhi agar dapat mengambil mata kuliah tugas akhir? Terima kasih
+    - Apa persyaratan yang dapat diperlukan agar mahasiswa/i dapat mengambil mata kuliah tugas akhir?
+    - Apa saja syarat yang harus dipenuhi agar dapat mengambil mata kuliah tugas akhir
+    - apa saja syarat untuk mengikuti tugas akhir?
+    - Persyaratan sebelum mengambil mata kukiah tugas akhir?
+    - Boleh tau persyaratan apa saja yang dibutuhkan untuk mengambil mata kuliah tugas akhir ?
+    - Syarat yang harus saya penuhin sebelum saya mengambil mata kuliah tugas akhir apa aja ya?
+    - Apa saja syarat skripsi
+    - Apakah saya boleh tau syarat-syarat yang harus dilakukan sebelum saya mengambil mata kuliah Tugas Akhir? 
+    - Syarat apa saja yang dibutuhkan untuk mengambil matkul tugas akhir?
+
+- intent: form_permohonan
+  examples: |
+    - Maaf, apakah boleh lihat list form permohonan
+    - Saya mohon berikan form permohonan yang ada di kampus ini
+    - Apa saja form permohonan yang tersedia di UPN "Veteran" Jakarta? 
+    - UPN Veteran Jakarta menyediakan form permohonan apa saja? 
+    - Form permohonan upn
+    - Form permohonan apa saja yang UPNVJ sediakan ya?
+    - Permisi Bu/Pak, untuk melakukan pengajuan apakah ada list pengajuan yang terkait. Formnya ada di mana ya ?
+    - Ada formulir apa saja yang disediakan?
+    - ada form permohonan apa aja ya?
+    - Saya ingin mengetahui daftar form permohonan yang tersedia
+    - Maaf bapak/ibu, saya ingin bertanya mengenai form permohonan. Untuk form permohonan yang disediakan di UPN "Veteran" Jakarta ada form apa saja ya bu/pak? Terima kasih. 
+    - Apa saja daftar form permohonan yang tersedia di UPN "Veteran" Jakarta?
+    - Izin bertanya List permohonan ada di menu apa ya dan ada apa saja
+    - berikan list form permohonan UPNVJ
+    - Untuk meminta form permohonan bisa didapatkan dimana ya?
+    - Permisi kira kira untuk form permohonan ada apa aja ya ?
+    - Kalau saya mau form permohonan apa saja yang disediakan UPN itu dimana ya?
+    - Ingin mengajukan permohonan, tersedia form apa saja?
+    - Apakah saya boleh meminta list form surat permohonan dan ada apa saja tipe list surat permohonan? 
+    - Form permohonan apa saja yang ada di upnvj?
+
+- intent: jangka_waktu_tugas_akhir
+  examples: |
+    - Untuk ngambil tugas akhir, matkul apa saja yang harus udh selesai
+    - Timeline dari pengerjaan tugas akhir seperti apa yah
+    - Seberapa lama waktu yang diberikan untuk mengerjakan TA
+    - Berapa lama waktu yang dibutuhkan untuk mengerjakan Tugas Akhir? 
+    - Dalam pengerjaan tugas akhir, berapa lama jangka waktu pengerjaannya ya? 
+    - Kapan TA dikerjakan
+    - Kira - kira untuk tugas akhir, diberikan waktu pengerjaan berapa lama ya?
+    - Permisi Pak/Bu, kira-kira waktu untuk pengerjaan atau deadline tugas akhir berapa lama ya ?
+    - Berapa lama yang diperlukan untuk menyelesaikan skripsi?
+    - kalau tugas akhir biasanya ngerjainnya berapa lama ya?
+    - Apakah ada batas durasi waktu pengerjaan tugas akhir?
+    - Maaf bapak/ibu, sebelumnya saya ingin bertanya kira-kira berapa lama ya jangka waktu untuk pengerjaan tugas akhir? Terima kasih
+    - Kapan tenggat waktu yang diberikan dalam pengerjaan tugas akhir?
+    - Berapakah waktu yang diberikan untuk mengerjakan tugas akhir?
+    - berapa waktu pengerjaan tugas akhir?
+    - Kira kira rentang waktu pengerjaan tugas akhir berapa lama ya?
+    - Kira kira durasi pengerjaan tugas akhir itu berapa lama ya ?
+    - Waktu pengerjaan tugas akhir dari kapan sampai kapan ya?
+    - Batas waktu pengerjaan tugas akhir
+    - Apakah saya boleh tau berapa lama jangka waktu untuk melakukan pengernaan Tugas Akhir? 
+
+- intent: perpanjangan_waktu_tugas_akhir
+  examples: |
+    - Maaf apakah waktu pengerjaan tugas akhir dapat diperpaniang
+    - Izin tutor nambah durasi pengerjaan TA dong 🙏
+    - Bagaimana cara untuk memperpanjang waktu pengerjaan Tugas Akhir? 
+    - Waktu pengerjaan tugas akhir apakah dapat diperpanjang? Bagaimana caranya? 
+    - Perpanjangan deadline TA
+    - Apakah waktu pengerjaan tugas akhir dapat diperpanjang?
+    - Permisi Pak/Bu, apakah waktu pengerjaan tugas akhir dapat diperpanjang ? Jika iya, caranya bagaimana ya ?
+    - Kalau tugas akhir tidak selesai di satu semester, apakah bisa di ulang di semester berikutnya?
+    - gimana cara perpanjang waktu pengerjaan tugas akhir?
+    - Apakah pengerjaan tugas akhir dapat diperpanjang?
+    - Maaf bapak/ibu, sebelumnya saya ingin bertanya apakag ada perpanjangan waktu untuk pengerjaan tugas akhir? Terima kasih
+    - Apakah terdapat perpanjangan waktu dalam pengerjaan tugas akhir?
+    - Apa yang harus dilakukan untuk perpanjang waktu pengerjaan tugas akhir?
+    - apakah saya dapat memperpanjang pengerjaan tugas akhir?
+    - Gimana cara untuk memperpanjang waktu penyelesaian tugas akhir?
+    - Apakah terdapat perpanjangan waktu untuk pengerjaan tugas akhir ?
+    - Apakah pengerjaan tugas akhir waktunya dapat diperpanjang?
+    - Apakah waktu pengerjaan tugas akhir dapat diperpanjang
+    - Apakah saya dapat memperpanjang waktu pengerjaan Tugas akhir dan Bagaimana caranya untuk saya dapat memperpanjang waktu pengerjaan Tugas Akhir? 
+    - Apakah ada waktu tambahan untuk pengerjaan TA?
+
+- intent: format_penulisan_tugas_akhir
+  examples: |
+    - Untuk format dokumen tugas akhir kayak gimana yah
+    - Format seperti apa yang digunakan untuk mengerjakan tugas akhir?
+    - Kira-kira format penulisan Tugas Akhir untuk UPN "Veteran" Jakarta seperti apa? 
+    - Seperti apa format penulisan tugas akhir yang berlaku di UPN Veteran Jakarta? 
+    - Format TA
+    - Apakah ada format untuk penulisan tugas akhir dari UPNVJ?
+    - Permisi Pak/Bu, format penulisan tugas akhir di UPNVJ seperti apa ya ? Jika ada, bisa tolong berikan link atau templatenya ?
+    - Apa pedoman penulisan tugas akhir di upn?
+    - di UPN ada format tertentu gak buat ngerjain tugas akhir?
+    - Bisa minta format penulisan tugas akhir?
+    - Maaf bapak/ibu, saya ingin bertanya mengenai format penulisan tugas akhir yang ada di UPN Veteran Jakarta seperti apa ya? Terima kasih
+    - Bagaimana format penulisan tugas akhir di UPN "Veteran" Jakarta?
+    - Izin bertanya format penulisan tugas akhir seperti apa?
+    - bagaimana format penulisan tugas akhir di UPNVJ?
+    - Format untuk penulisan tugas akhir yang sesuai dengan tahun ini pada UPN Veteran Jakarta?
+    - Untuk penulisan tugas akhir, format apa yang digunakan ya ?
+    - Format penulisan tugas akhirnya seperti apa ya?
+    - berikan saya format penulisan tugas akhir
+    - Apakah ada Format dalam penulisan Tugas Akhir? Jika ada, Apakah saya boleh meminta format penulisan Tugas Akhir? 
+    - Bagaimana format penulisan tugas akhir di upn?
+
+- intent: cara_daftar_wisuda
+  examples: |
+    - Maaf untuk mendaftarkan diri untuk wisuda alurnya gimana
+    - Bagaimana jika saya ingin mendaftar wisuda?
+    - Bagaimana cara mendaftarkan diri sebagau peserta wisuda di UPN "Veteran" Jakarta? 
+    - Cara daftar wisuda bagaimana ya? 
+    - Daftar wisuda gimana
+    - Link pendaftaran untuk wisuda ada dimana ya?
+    - Permisi Pak/Bu, kalo mau daftar wisuda dimana dan bagaimana ya ? Karena skripsi saya sudah lulus, jadi saya ingin wisuda
+    - Di bagian apa tempat daftar wisuda?
+    - gimana cara daftar wisuda di UPN?
+    - Bagaimana cara mendaftar wisuda?
+    - Maaf bapak/ibu, sebelumnya saya ingin bertanya bagaimana cara daftar wisuda dan daftarnya dimana ya? Terima kasih
+    - Bagaimana cara mendaftar wisuda di UPN "Veteran" Jakarta?
+    - Bagaimana cara untuk mendaftar wisuda?
+    - bagaimana cara mendaftar wisuda?
+    - Jadwal pendaftaran wisuda kapan ya?
+    - Bagaimana prosedur pendaftaran wisuda ya ?
+    - Cara daftar wisuda gimana ya?
+    - bagaimana cara daftar wisuda?
+    - Bagaimana cara untuk saya melakukan pendaftaran Wisuda? 
+    - Bagaimana cara untuk daftar wisuda?
+
+- intent: syarat_wisuda
+  examples: |
+    - Syarat syarat apa aja yang harus dipenuhi agar bisa ikut wisuda
+    - Izin mengetahui syarat untuk bisa wisuda
+    - Apa saja persyaratan agar mahasiswa dapat mengikuti wisuda? 
+    - Apa saja persyaratan agar mahasiswa bisa mengikuti wisuda? 
+    - Syarat wisuda
+    - Syarat untuk mengikuti wisuda itu apa saja ya?
+    - Permisi Pak/Bu, persyaratan untuk mengikuti wisuda apa saja ya ?
+    - Apa yang harus dipersiapkan agar bisa ikut wisuda?
+    - kalau mau ikut wisuda harus lengkapin persyaratan apa aja ya?
+    - Prasyarat wisuda apa aja?
+    - Maaf bapak/ibu, saya ingin bertanya persyaratan apa saja yang harus dipenuhi agar mahasiswa bisa ikut wisuda? Terima kasih
+    - Apa persyaratan yang diperlukan agar mahasiswa/i dapat mengikuti kegiatan wisuda?
+    - Apa saja persyaratan yang harus dipenuhi agar dapat mengikuti wisuda?
+    - apa saja syarat untuk mengikuti wisuda?
+    - Hal apa saja yang perlu untuk mendaftar wisuda?
+    - Apa saja persyaratan untuk mengikuti wisuda ?
+    - Syarat yang harus saya penuhi sebelum ikut wisuda apa aja ya?
+    - Syarat yang harus dipenuhi untuk ikut wisuda apa saja?
+    - Apakah saya boleh meminta syarat-syarat untuk mahasiswa bisa mengikuti Wisuda? 
+    - Apa syarat untuk bisa ikut wisuda?
+
+- intent: dress_code_wisuda
+  examples: |
+    - Untuk pakaian saat wisuda, dress codenya seperti apa
+    - Wisuda nanti pakai dresscode apa ya?
+    - Pakaian seperti apa yang boleh digunakan untuk peserta wisuda? 
+    - Dress code atau pakaian seperti apa yang harus saya gunakan untuk wisuda? 
+    - Dress code wisuda
+    - Apakah terdapat dress code untuk pakaian wisuda?
+    - Permisi Pak/Bu, untuk wisuda nanti apakah ada dress code atau seragam saat wisuda nanti ?
+    - Apa yang harus digunakan untuk mengikuti wisuda?
+    - dresscode buat wisudanya apa ya?
+    - Dresscode wisuda apa ya?
+    - Maaf bapak/ibu, saya ingin bertanya mengenai pakaian wisuda yang dipakai peserta wisuda seperti apa ya? Terima kasih
+    - Pakaian seperti apa yang dikenakan peserta wisuda?
+    - Bagaiamana ketentuan berpakaian untuk Wisuda?
+    - pakaian apa yang digunakan untuk wisuda?
+    - Dresscode apa yang dikenakan pada saat wisuda?
+    - Untuk acara wisuda nanti pakaian yang digunakan seperti apa ya ?
+    - Apakah untuk wisuda ada dress code atau pakaian khusus?
+    - bolehkah memakai kemeja untuk wisuda?
+    - Pakaian seperti apa yang dapat saya pakai untuk mengikuti Wisuda? 
+    - Apa dresscode untuk wisuda?
+
+- intent: waktu_tempat_wisuda
+  examples: |
+    - Wisuda nanti akan dilaksanakan di tanggal berapa dan dimana yah
+    - Kapan akan diadakan wisuda dan dimana lokasinya?
+    - Kapan dan di mana wisuda akan dilaksanakan? 
+    - Pelaksanaan wisuda dilaksanakan kapan dan dimana ya? 
+    - Waktu wisuda
+    - Kapan dan dimana wisuda tersebut berlangsung ya?
+    - Permisi Pak/Bu, untuk wisuda nanti jadwal dan lokasinya di mana ya?
+    - Dimana wisuda akan dilaksanakan?
+    - wisudanya kapan dan dimana yaa?
+    - Wisuda nanti kapan dan dimana ya?
+    - Maaf bapak/ibu, saya ingin bertanya mengenai waktu dan tempat pelaksanan wisuda itu kapan dan dimana ya? Terima kasih
+    - Dimana dan kapan pelaksanan wisuda akan diadakan?
+    - Dimana dan kapan wisuda akan diselenggarakan?
+    - kapan dan dimana pelaksanaan wisuda?
+    - Lokasi dan tanggal pelaksanaan wisuda kapan ya?
+    - Boleh tau kapan serta dimana diselenggarakannya wisuda nanti ?
+    - Wisuda diadakan dimana dan kapan ya?
+    - Wisuda kapan digelar?
+    - Apakah saya boleh tau waktu dan tempat pelaksanaan Wisuda? 
+    - Di mana dan kapan untuk dilaksanakannya wisuda nanti?
+
+- intent: prosedur_daftar_wisuda
+  examples: |
+    - Apa saja prosedur untuk mendaftarkan diri untuk wisuda
+    - Apa saja tahap-tahap untuk daftar wisuda?
+    - Apa saja prosedur yang harus dipenuhi untuk mendaftar wisuda? 
+    - Bagaimana prosedur dalam pendaftaran wisuda? 
+    - Alur daftar wisuda
+    - Bagaimana prosedur untuk mendaftar wisuda?
+    - Permisi Pak/Bu, prosedur untuk mendaftar sidang bagaimana dan apa saja ya ?
+    - Bagaimana tahapan untuk mendaftar wisuda?
+    - prosedur pendaftaran wisudanya apa aja ya?
+    - Bagaimana prosedur untuk mendaftar wisuda?
+    - Maaf bapak/ibu, saya ingin bertanya untuk prosedur pendaftaran wisuda seperti apa ya? Terima kasih
+    - Bagaimana cara mendaftar wisuda?
+    - Apa saja prosedur dalam mendaftar wisuda?
+    - apa saja tahapan untuk mendaftar wisuda?
+    - Bagaimana prosedur untuk mendaftar wisuda?
+    - Bagaimana prosedur untuk pendaftaran wisuda ya ?
+    - Prosedur untuk daftar wisuda apa aja ya?
+    - Bagaimana tahapan pendaftaran wisuda?
+    - Apakah saya boleh tau prosedur untuk melakukan pendaftaran Wisuda? 
+    - Apa langkah - langkah untuk mendaftar wisuda?
+
+- intent: biaya_wisuda
+  examples: |
+    - Kira kira biaya yang akan dikeluarkan untuk wisuda berapa
+    - Berapa biaya yang harus dibayarkan untuk wisuda?
+    - Berapakah biaya yang dikeluarkan untuk mengikuti wisuda? 
+    - Apakah terdapat biaya yang harus dikeluarkan untuk ikut wisuda? 
+    - Biaya wisuda
+    - Apakah ada biaya tambahan untuk wisuda?
+    - Permisi Pak/Bu, untuk wisuda nanti mahasiswa harus bayar atau sudah diakomodasi dari kampus ya ? Jika mahasiwa bayar sendiri, berapa biayanya ya ?
+    - Berapa biaya untuk mengikuti wisuda?
+    - biasanya kalau wisuda ada biayanya lagi atau engga?
+    - Berapa biaya yang harus dikeluarkan untuk mengikuti wisuda?
+    - Maaf bapak/ibu, saya ingin bertanya untuk wisuda apakah dikenakan biaya lagi untuk ikut wisuda? Terima kasih
+    - Berapa biaya yang harus dikeluarkan mahasiswa untuk mengikuti kegiatan wisuda?
+    - Berapakah biaya yang harus dikeluarkan untuk mengikuti wisuda?
+    - berapa biaya yang digunakan untuk ikut wisuda?
+    - Berapa biaya untuk mengikuti kegiatan wisuda?
+    - Berapa biaya yang diperlukan untuk ikut wisuda nanti ?
+    - Biaya untuk ikut wisuda berapa ya?
+    - Berapa biaya wisuda?
+    - Apakah saya boleh tau jumlah biaya yang dibutuhkan untuk mengikuti Wisuda? 
+    - Berapa biaya untuk wisuda?
+
+- intent: ketentuan_yudisium
+  examples: |
+    - Untuk ikut yudisium, syaratnya apa aja
+    - Saya ingin diyudisium, apa ketentuannya?
+    - Apa saja ketentuan agar mahasiswa dapat mengikuti yudisium? 
+    - Apa saja ketentuan agar mahasiswa bisa mengikuti yudisium? 
+    - Syarat yudisium
+    - Apakah untuk ikut yudisium memiliki ketentuan?
+    - Permisi Pak/Bu, untuk melakukan yudisium, ketentuan bagi mahasiswa apa ya ?
+    - Apa ketentuan agara bida di yudisium?
+    - syarat buat bisa ikut yudisium apa aja ya?
+    - Apa saja syarat mahasiswa agar bisa ikut yudisium?
+    - Maaf bapak/ibu, saya ingin bertanya apakah ada ketentuan mahasiswa agar bisa ikut yudisium? Terima kasih
+    - Ketentuan apa saja untuk mahasiswa/i agar dapat mengikuti yudisium?
+    - Apa saja yang harus dipenuhi untuk mengikuti Yudisium?
+    - apa saja syarat untuk mengikuti yudisium?
+    - Ketentuan apa yang diperlukan agar mahasiswa dapat diyudisium?
+    - Persyaratan apa saja yang dibutuhkan untuk bisa diyudisium  ?
+    - Ketentuan untuk saya bisa ikut yudisium apa aja ya?
+    - apa saja syarat mahasiswa ikut yudisium?
+    - Apakah mahasiswa memiliki kenentuan tertentu untuk mengikuti Yudisium? 
+    - Apa syarat mahasiswa untuk bisa yudisium?
+
+- intent: prosedur_daftar_yudisium
+  examples: |
+    - Bagaimana kita dapat mengikuti yudisium
+    - Bagaimana supaya seorang mahasiswa bisa diyudisiumkan?
+    - Bagaimana cara untuk mendaftar yudisium?
+    - Bagaimana prosedur dalam pendaftaran Yudisium? 
+    - Cara daftar yudisium
+    - Bagaimana prosedur untuk mendaftar yudisium?
+    - Permisi Pak/Bu, untuk melakukan pendaftaran yudisium prosedurnya bagaimana ya ?
+    - Cara mendaftar yudisium seperti apa?
+    - gimana cara daftar biar bisa ikut yudisium?
+    - Bagaimana prosedur pendaftaran yudisium?
+    - Maaf bapak/ibu, saya ingin bertanya bagaimana cara daftar untuk yudisium? Terima kasih
+    - Bagaimana cara mendaftar yudisium?
+    - Bagaiaman tata cara pendaftaran Yudisium?
+    - apakah ada tata cara untuk mendaftar yudisium?
+    - Cara mendaftar yudisium bagaimana ya?
+    - Bagaimana prosedur untuk mendaftar yudisium ?
+    - Prosedur untuk daftar yudisium apa aja ya?
+    - Bagaimana tahapan pendaftaran yudisium?
+    - Apakah saya boleh tau prosedur dari pendaftaran Yudisium? 
+    - Bagaimana proses pendaftaran yudisium?
+
+- intent: syarat_ambil_ijazah
+  examples: |
+    - Kalo mau ambil ijazah, syaratnya apa aja
+    - Saya ingin mengambil ijazah, apa ada syarat yang harus saya penuhi?
+    - Apa saja syarat-syarat yang harus dipenuhi agar bisa mengambil ijazah? 
+    - Apa saja persyaratan untuk mengambil ijazah? 
+    - Syarat ambil ijazah
+    - Apa saja persyaratannya untuk mengambil ijazah?
+    - Permisi Pak/Bu, syarat untuk mengambil ijazah kuliah apa ya ?
+    - Apa yang harus diperlukan untuk bisa mengambil ijazah?
+    - kalau mau ambil ijazah biasanya syaratnya apa aja ya?
+    - Apa saja syarat untuk mengambil ijazah?
+    - Maaf bapak/ibu, saya ingin bertanya untuk pengambilan ijazah apakah ada syarat-syarat tertentu untuk mengambil ijazah? Terima kasih
+    - Apa saja persyaratan dalam pengambilan ijazah?
+    - Apa saja persyaratan yang barus dipenuhi saat pengambilan Ijazah?
+    - apa saja syarat untuk mengambil ijazah?
+    - Persyaratan untuk mengambil ijazah kelulusan apa saja ya?
+    - Apa saja syarat untuk mengambil ijazah ?
+    - Persyaratan untuk mengambil ijazah apa aja ya?
+    - Apa saja yang harus dipersiapkan untuk mengambil ijazah?
+    - Apakah saya boleh tau persyaratan apa saja yang perlu dilakukan untuk mengambil Ijazah? 
+    - Apa syarat untuk mengambil ijazah?
+
+- intent: prosedur_sktl
+  examples: |
+    - Cara dapet SKTL gimana
+    - Bagaimana supaya saya dapat memperoleh Surat keterangan lulus?
+    - Bagaimana cara untuk mendapatkan SKTL?
+    - Bagaimana prosedur untuk mendapatkan SKTL?
+    - Cara buat SKTL
+    - Apakah ada prosedur untuk penerbitan SKTL?
+    - Permisi Pak/Bu, prosedur untuk mendapatkan SKTL bagaimana ya ?
+    - Apa prosedur untuk menerbitkan sktl?
+    - cara buat dapet SKTL gimana?
+    - Bagaimana prosedur penerbitan SKTL?
+    - Maaf bapak/ibu, saya ingin bertanya bagaimana cara untuk mendapatkan SKTL? terima kasih
+    - Siapa yang dapat dihubungi untuk meminta SKTL?
+    - Kapan SKTL terbit dan bagaiamana cara pengambilannya?
+    - bagaimana cara mendapatkan SKTL?
+    - Bagaimana prosedur untuk mengambil SKTL?
+    - Bagaimana prosedur untuk penerbitan SKTL ?
+    - Prosedur untuk penerbitan SKTL gimana ya?
+    - Kapan SKTL saya terbit?
+    - Bagaimana cara saya untuk mengetahui prosedur untuk penerbitan SKTL
+    - Cara untuk mendapatkan SKTL.
+
+- intent: prosedur_pembayaran_ukt
+  examples: |
+    - UKT apakah hanya bisa dibayar melalui BNI atau bisa lewat nasabah lain
+    - Woi gimana cara bayar ukt si?
+    - Bagaimana cara membayar UKT menggunakan Bank BNI? 
+    - Bagaimana cara membayar UKT? 
+    - Cara bayar UKT bni mobile
+    - Apakah ada prosedur untuk membayar Ukt?
+    - Permisi Pak/Bu, bagaimana cara melakukan pembayaran UKT ya ?
+    - Cara bayar ukt dari teller seperti apa?
+    - bayar UKT bisa pake mbaking gak? cara buat bayar pake mbaking gimana ya?
+    - Bagaimana prosedur pembayaran UKT?
+    - Maaf bapak/ibu, saya ingin bertanya bagaimana ya prosedur pembayara UKT jika menggunakan kartu BNI? Terima kasih
+    - Bagaimana cara membayar UKT melalui Bank BNI?
+    - Apakah pembayaran UKT dapat dilakukan di Bank lain?
+    - bagaimana cara melakukan pembayaran UKT?
+    - Cara bayar UKT UPN Veteran Jakarta dengan BNI?
+    - Bagaimana cara membayar ukt ?
+    - Prosedur untuk membayar ukt gimana ya?
+    - Bagaimana cara membayar UKT?
+    - Apakah saya boleh tau cara pembayaran UKT? 
+    - Bagaimana prosedur untuk membayar UKT?
+
+- intent: cetak_bukti_pembayaran_ukt
+  examples: |
+    - Kalo ingin cetak bukti bayar UKT gimana
+    - Tolong beritahu saya bagaimana cara mencetak bukti kalau saya sudah membayar uang kuliah tunggal
+    - Bagaimana cara mencetak bukti pembayaran UKT? 
+    - Bagaimana cara konfirmasi dan cetak bukti pembayaran? 
+    - Konfirmasi bayar UKT
+    - Apakah ada bukti dari pembayaran Ukt Tersebut?
+    - Permisi Pak/Bu, untuk mencetak bukti pembayaran prosedurnya bagaimana ya ?
+    - Cara cetak bukti transaksi UKT?
+    - saya mau cetak bukti pembayaran UKT
+    - Bagaimana cara mencetak bukti pembayaran UKT?
+    - Maaf bapak/ibu, saya ingin bertanya bagaimana cara cetak bukti pembayaran ukt? Terima kasih
+    - Bagaimana cara mencetak bukti pembayaran UKT? 
+    - Bagaimana cara mencetak bukti pembayaran?
+    - bagaimana cara melakukan konfirmasi dan cetak bukti pembayaran UKT?
+    - Cara cetak bukti bayar pembayaran UKT?
+    - Bagaimana cara untuk mencetak bukti pembayaran ukt ?
+    - Kalau saya mau konfirmasi dan cetak bukti pembayaran ukt caranya gimana ya?
+    - Apakah pembayaran UKT saya sudah masuk? bagaimana mencetaknya?
+    - Apakah ada cara untuk mengkonfirmasi dan melakukan pencetakan dari bukti pembayaran UKT? 
+    - Cara untuk melihat bukti pembayaran UKT bagaimana?
+
+- intent: kualifikasi_dosen_upnvj
+  examples: |
+    - Kualifikasi yang dimiliki oleh dosen UPN Veteran Jakarta apa saja?
+    - kualifikasi apa saja yang harus di miliki oleh dosen di upn veteran jakarta?
+    - Apa aja kualifikasi dosen di UPN “Veteran” Jakarta?
+    - Kualifikasi menjadi dosen di upn veteran Jakarta apa aja sih
+    - Sebutkan kualifikasi menjadi dosen di upnvj
+    - Kualifikasi-kualifikasi menjadi dosen upnvj itu apa
+    - Mau tanya, kira-kira kualifikasi untuk menjadi dosen di upn veteran Jakarta itu apa saja ya?
+    - Permisi, kualifikasi apa saja yang dibutuhkan untuk menjadi dosen upn veteran Jakarta?
+    - Selamat siang, untuk menjadi dosen di upn veteran Jakarta kualifikasinya apa saja?
+    - Halo pak/bu, kualifikasi yang dibutuhin upn veteran Jakarta untuk menjadi dosen kira-kira apa?
+    - Kualifikasi menjadi dosen di upn veteran Jakarta itu apa ya
+
+- intent: kewajiban_dosen_pembimbing
+  examples: |
+    - Kewajiban apa saja yang dimiliki oleh dosen pembimbing akademik?
+    - Apa saja kwajiban dari dosen pembimbing akademik?
+    - Kewajiban-kewajiban apa saja yang dimiliki oleh dosen pembimbing akademik
+    - Halo, sebagai dospem akademik kira-kira kewajiban apa  aja yang dimiliki?
+    - Tolong beritahu saya kewajiban apa saja yang dimiliki dospem akademik
+    - Kewajiban-kewajiban yang harus dimiliki oleh dospem akademik?
+    - Selamat siang, bisa tolong beritahu saya mengenai kewajiban-kewajiban apa saja yang harus dimiliki dosen pembimbing akademik?
+    - Selamat siang, dapatkah anda memberitahu saya kewajiban apa yang harus dimiliki oleh dosen pembimbing akademik?
+    - Apa kewajiban-kewajiban dospem akademik?
+    - Kewajiban yang dimiliki oleh seorang dosen pembimbing akademik apa saja?
+    - Bisa tolong sebutkan kewajiban sebagai dosen pembimbing akademik?
+
+- intent: kriteria_dosen_pembimbing_tugas_akhir
+  examples: |
+    - Kriteria-kriteria dosen pembimbing tugas akhir itu apa saja
+    - kira-kira seperti apa kriteria dari dosen pembimbing tugas akhir?
+    - Apa saja kriteria untuk menjadi dosen pembimbing tugas akhir?
+    - Bisa tolong sebutkan kriteria dari dosen pembimbing tugas akhir?
+    - Kriteria yang dimiliki oleh dospem tugas akhir itu apa?
+    - Selamat sore, bisa tolong sebutkan kriteria yang dimiliki oleh dospem tugas akhir
+    - Halo, kira-kira kriteria yang dimiliki oleh dosen pembimbing tugas akhir itu apa saja ya?
+    - Jika ingin menjadi dosen pembimbing tugas akhir, kira-kira kriteria apa aja yang dibutuhin ya?
+    - Selamat pagi, jika saya ingin menjadi dosen pembimbing tugas akhir, kriteria apa saja yang dibutuhin ya?
+    - Untuk menjadi dosen pembimbing tugas akhir, kriterianya apa saja?
+    - Kriteria-kriteria menjadi dosen pembiming tugas akhir itu apa saja?
+
+- intent: tugas_dosen_pembimbing_tugas_akhir
+  examples: |
+    - dosen TA itu tugas-tugasnya apa saja sih
+    - apa saja tugas dari dosen pembimbing tugas akhir?
+    - Apa aja sih tugas yang dimiliki dospem tugas akhir?
+    - Sebutkan dong apa aja yang menjadi tugas dari  dosen pembimbing tugas akhir di upnvj?
+    - Apa saja tugas-tugas yang harus dilaksanakan oleh dosen pembimbing tugas akhir?
+    - Tolong jelaskan kepada saya apa saja tugas-tugas yang dimiliki oleh dosen pembimbing tugas akhir
+    - Tugas-tugas yang harus dipenuhi oleh dosen pembimbing tugas akhir apa saja ya?
+    - Bisa tolong sebutkan tugas-tugas si dosen pembimbing tugas akhir?
+    - Sebagai dosen pembimbing tugas akhir, tugas-tugas yang saya miliki apa saja
+    - Dospem TA itu memiliki tugas-tugas apa aja memang?
+    - Jika saya menjadi dospem TA, kira-kira tugas apa saja yang saya miliki?
+    - Bisa tolong berikan kepada saya tugas-tugas yang harus dikerjakan oleh dospem TA?
+    - Selamat sore, boleh tolong berikan ke saya tugas-tugas yang diemban oleh dospem TA?
+
+- intent: mekanisme_penetapan_dosen_pembimbing
+  examples: |
+    - apa saja mekanisme untuk penetapan dospem TA?
+    - bagaimana mekanisme penetapan dosen pembimbing tugas akhir?
+    - Bagaimana mekanisme dari penetapan dosen menjadi dospem TA?
+    - Alur mekanisme menjadi dospem TA itu apa
+    - Tolong berikan dan jelaskan kepada saya mekanisme dari penetapan dosen pembimbing tugas akhir
+    - Berikan mekanisme penetapan dospem ta 
+    - Mekanisme dari penetapan menjadi dosen pembimbing tugas akhir itu apa saja ya?
+    - Jika ingin menjadi dosen pembimbing tugas akhir, mekanismenya apa saja
+    - Bisa tolong jelaskan kepada saya mekanisme dari penetapan dospem tugas akhir?
+    - Apa aja ya mekanisme untuk penetapan menjadi dosen pembimbing tugas akhir
+    - Selamat sore, bisa tolong berikan ke saya mekanisme menjadi dosen pembimbing tugas akhir?
+
+- intent: sarana_akademik_perkuliahan
+  examples: |
+    - Apa aja sih yang diperlukan saat perkuliahan?
+    - Apakah fasilitas yang disediakan sudah memadai untuk mendukung perkuliahan?
+    - Fasilitas dan sarana akademik yang diperlukan saat kuliah berlangsung apa
+    - Halo, kira-kira sarana akademik yang dibutuhkan saat perkuliahan berlangsung itu apa
+    - Untuk memenuhi kebutuhan perkuliahan, sarana dan fasilitas akademik yang dibutuhkan ada apa saja
+    - Selamat sore, fasilitas akademik yang dibutuhkan untuk perkuliahan apa saja kira-kira
+    - Dalam perkuliahan, apa saja yang dibutuhkan baik sarana dan fasilitas akademik
+    - Untuk memenuhi sarana dan fasilitas akademik dalam perkuliahan, apa saja yang dibutuhkan?
+    - Izin bertanya untuk fasilitas yang diperlukan saat perkuliahan berlangsung itu apa saja?
+    - Selamat pagi, mau tanya perihal kebutuhan saat perkuliahan berlangsung itu apa saja?
+    - Selamat siang, sarana yang perlu disiapkan untuk kelangsungan perkuliahan itu apa?
+
+- intent: ruang_upnvj
+  examples: |
+    - Berapa banyak jumlah ruangan yg tersedia untuk rapat?
+    - Di upnvj ada ruang rapat apa saja sih?
+    - Ruangan rapat yang ada di upnvj itu dimana saja
+    - Selamat sore, ingin bertanya mengenai ruangan rapat itu bisa dilihat dimana ya
+    - Mau tanya perihal ruangan rapat yang bisa dipake itu dimana saja ya
+    - Jika ingin rapat, ruangan apa saja yang bisa dipakai?
+    - Kalau ingin melakukan rapat dan butuh ruangan, ruangan apa saja yang bisa kita gunakan?
+    - Ruangan-ruangan apa saja yang tersedia sebagai ruangan untuk rapat?
+    - Bisa tolong sebutkan ruangan yang dapat digunakan sebagai ruangan rapat?
+    - Berikan daftar ruangan di upnvj yang merupakan ruangan rapat
+    - Sebutkan ruangan di upnvj yang berfungsi sebagai ruangan rapat.
+
+- intent: prosedur_menggunakan_ruangan
+  examples: |
+    - Untuk penggunaan ruang rapat apakah ada prosedur khusus?
+    - Apa yang harus dilakukan untuk menggunakan ruang rapat?
+    - Adakah tata cara atau prosedur dalam menggunakan ruang rapat?
+    - Bisa tolong sebutkan prosedur dalam menggunakan ruang rapat?
+    - Apa yang harus dilakukan dalam menggunakan ruangan rapat?
+    - Prosedur-prosedur yang harus dilakukan dalam menggunakan ruang rapat di upnvj apa saja
+    - Selamat siang, untuk menggunakan ruang rapat itu bagaimana ya? apakah ada prosedur yang harus dilakukan?
+    - Halo, saya ingin menggunakan ruang rapat, prosedur yang harus dilakukan apa saja
+    - Jika saya ingin menggunakan ruangan rapat, hal-hal apa yang harus saya lakukan? Adakah prosedur yang harus di laksanakan terlebih dahulu?
+    - Untuk menggunakan ruang rapat di upnvj, prosedur apa yang harus dilakukan?
+    - Bisa tolong jelaskan kepada saya hal-hal yang harus dilakukan untuk meminjam ruang rapat?
+
+- intent: jalur_mahasiswa_baru_upnvj
+  examples: |
+    - Apa saja jalur masuk untuk mahasiswa baru
+    - Halo, bisa tolong berikan kepada saya informasi jalur masuk calon mahasiswa baru yang disediakan oleh UPNVJ?
+    - Di UPN Veteran Jakarta ada jalur masuk mahasiswa baru apa saja?
+    - UPNVJ menyediakan jalur masuk apa saja untuk calon maba?
+    - Selamat pagi, bisa tolong berikan ke saya jalur apa saja yang tersedia untuk calon mahasiswa baru?
+    - Jalur masuk apa saja yang dapat dipilih calon mahasiswa baru?
+    - UPNVJ nyediain jalur apa aja sih?
+    - Kalo mau daftar di UPNVJ bisa masuk lewat jalur mana aja?
+    - Sebutkan jalur-jalur yang dapat dipilih calon mahasiswa baru pada UPN Veteran Jakarta
+    - Permisi, kalo mau daftar di UPN “Veteran” Jakarta, bisa lewat jalur apa aja ya?
+    - UPNVJ punya jalur masuk apa aja untuk calon-calon mahasiswa baru?
+
+- intent: prosedur_pendaftaran_mahasiswa_baru
+  examples: |
+    - apa prosedur atau tahapan dalam pendaftaran mahasiswa baru
+    - Tolong berikan informasi tahapan-tahapan dalam pendaftaran mahasiswa baru
+    - Kalo mau daftar sebagai mahasiswa baru di UPN Veteran jakarta prosedurnya bagaimana
+    - Jelaskan dong tahapan pendaftaran untuk calon maba
+    - Selamat pagi, tolong jelaskan kepada saya tahapan yang harus dilakukan ketika pendaftaran calon mahasiswa baru di UPN Veteran Jakarta
+    - Halo, bisa tolong berikan prosedur dalam pendaftaran mahasiswa baru di upnvj
+    - Bagaimana tahapan-tahapan yang harus dilakukan untuk daftar di upnvj?
+    - Prosedur-prosedur daftar di upnvj untuk calon mahasiswa baru
+    - Saya ingin daftar jadi mahasiswa baru di upnvj, apa yang harus saya lakukan?
+    - Selamat siang, bisa berikan kepada saya mengenai prosedur-prosedur pendaftaran calon mahasiswa baru
+    - Tahapan daftar jadi mahasiswa baru di kampus UPN Veteran Jakarta
+
+- intent: prosedur_legalisir_ijazah_transkrip_nilai
+  examples: |
+    - Maaf tapi saya ingin melegalisir ijazah, caranya gimana?
+    - Bagaimana cara melegalisir ijazah dan transkrip nilai?
+    -  Bagaimana cara melegalisir ijazah? 
+    - Bagaimana prosedur untuk legalisir ijazah dan transkrip nilai? 
+    - Cara legalisir ijazah
+    - Apaakah ada prosedur untuk legalisir ijazah?
+    - Permisi Pak/Bu, untuk melakukan legalisir ijazah dan transkrip nilai bagaimana ya ?
+    - Apa prosedur untuk legalisir ijazah?
+    - Ijazah langsung dilegalisir pas diambil atau ada syarat lain buat legalisirnya?
+    - Bagaimana prosedur legalisir ijazah dan transkrip nilai?
+    - Maaf bapak/ibu, saya ingin bertanya bagaimana ya prosedur untuk legalisir ijazah serta legalisir transkrip nilai? Terima kasih
+    - Siapa yang dapat dihubungi jika ingin melegalisir ijazah?
+    - Kalau ingin melagilisir ijazah bagaimana caranya?
+    - bagaimana prosedur untuk legalisir ijazah dan transkrip nilai??
+    - Bagaimana proses untuk melakukan legalisir ijazah?
+    - Untuk prosedur legalisir ijazah serta transkrip nilai nanti bagaimana ya ?
+    - Prosedur untuk legalisir ijazah dan transkrip nilai saya gimana ya?
+    - bagaimana cara legalizir ijazah?
+    - Apakah saya boleh mengetahui prosedur dari Legalisisr Ijazah dan Transkrip Nilai? 
+    - Bagaimana prosedur dari legalisir ijazah dan transkrip nilai?
+
+- intent: option_intent
+  examples: |
+    - informasi apa saja yang bisa kamu berikan?
+    - ada info apa aja kamu?
+    - bagi informasi dong
+    - berikan list informasi yang anda miliki
+    - list info-info yang anda tahu
+    - kamu tahu apa aja?
+    - coba berikan daftar informasi kamu
+    - apa yang kamu tahu dari upnvj?
+    - informasi-informasi apa aja yang kamu tahu?
+    - sebutkan daftar informasi pengetahuan kamu
+    - informasi upnvj
+    - daftar seluruh informasi mengenai upnvj yang diketahui
+
+- intent: detil_form_permohonan
+  examples: |
+    - lihat [form pengajuan beasiswa](form_name) dong
+    - apakah terdapat link untuk [form izin kegiatan akademik](form_name) ?
+    - tolong kirimkan link [form cuti akademik](form_name)
+    - [form beasiswa](form_name)
+    - coba kirim link [form persyaratan yudisium](form_name) dong, pengen ngisi
+    - ada link form untuk [form permohonan magang](form_name) tidak?
+    - Bisa minta link untuk [form pendaftaran sidang](form_name) tidak
+    - Izin minta form untuk yang [izin mengajukan cicilan UKT](form_name) terimakasih
+    - Share link [form surat rekomendasi magang kampus merdeka](form_name) dong
+    - Bolehkah saya meminta link [form pendaftaran sidang](form_name) ?
+    - [Form sidang skripsi](form_name)
+    - Apakah saya boleh minta link [form pengajuan beasiswa](form_name) ?
+    - Permisi Bu/Pak, untuk mengajukan [Permohonan Surat Riset Dan Kerja Praktek](form_name), link form yang bersangkutan ada di mana ya ?
+    - Minta link [permohonan pengajuan surat riset](form_name)
+    - ada link [form pendaftaran sidang skripsi](form_name) ga?
+    - Bisa minta link [form permohonan surat rekomendasi mbkm](form_name) ?
+    - Maaf bapak/ibu, apakah saya boleh minta link [form pendaftaran sidang skripsi](form_name)? Terima kasih
+    - Bagaimana cara mendapat link [form permohonan rekomendasi beasiswa](form_name)?
+    - Izin meminta [form daftar sidang skripsi](form_name) pak
+    - minta link [form permohonan surat keterangan mahasiswa](form_name)
+    - untuk [form pengajuan pendaftaran sidang proposal](form_name) bisa didapatkan dimana ya?
+    - Boleh minta link untuk mengisi [form permohonan beasiswa](form_name)?
+    - Link untuk [form pendaftaran sidang skripsi](form_name) apa ya?
+    - berikan saya link [form surat keterangan mahasiswa](form_name)
+    - Apakah saya boleh meminta link [Form Surat Keterangan Mahasiswa](form_name)? Saya ingin mengisi Form tersebut.
+    - tolong tampilkan link untuk [form izin kegiatan mahasiswa](form_name)
+
+rules:
+
+- rule: Ask the user to rephrase whenever they send a message with low NLU confidence
+  steps:
+  - intent: nlu_fallback
+  - action: utter_fallback
+
+- rule: Memberikan List Syarat mengambil mata kuliah Tugas Akhir
+  steps:
+  - intent: syarat_tugas_akhir
+  - action: utter_syarat_tugas_akhir
+
+- rule: Memberikan list form-form permohonan yang tersedia
+  steps:
+  - intent: form_permohonan
+  - action: action_form_permohonan
+
+- rule: Menjelaskan jangka waktu pengerjaan Tugas Akhir
+  steps:
+  - intent: jangka_waktu_tugas_akhir
+  - action: utter_jangka_waktu_tugas_akhir
+
+- rule: Menjelaskan perpanjangan waktu pengerjaan Tugas Akhir
+  steps:
+  - intent: perpanjangan_waktu_tugas_akhir
+  - action: utter_perpanjangan_waktu_tugas_akhir
+
+- rule: Memberikan format penulisan untuk Tugas Akhir
+  steps:
+  - intent: format_penulisan_tugas_akhir
+  - action: utter_format_penulisan_tugas_akhir
+
+- rule: Menjelaskan cara untuk daftar wisuda
+  steps:
+  - intent: cara_daftar_wisuda
+  - action: utter_cara_daftar_wisuda
+
+- rule: Menjelaskan syarat-syarat dapat ikut wisuda
+  steps:
+  - intent: syarat_wisuda
+  - action: utter_syarat_wisuda
+
+- rule: Memberikan informasi dress code untuk wisuda
+  steps:
+  - intent: dress_code_wisuda
+  - action: utter_dress_code_wisuda
+
+- rule: Menjelaskan waktu dan tempat pelaksanaan wisuda
+  steps:
+  - intent: waktu_tempat_wisuda
+  - action: utter_waktu_tempat_wisuda
+
+- rule: Menjelaskan prosedur daftar wisuda
+  steps:
+  - intent: prosedur_daftar_wisuda
+  - action: utter_prosedur_daftar_wisuda
+
+- rule: Menjelaskan biaya untuk mengikuti wisuda
+  steps:
+  - intent: biaya_wisuda
+  - action: utter_biaya_wisuda
+
+- rule: Memberikan informasi ketentuan untuk yudisium
+  steps:
+  - intent: ketentuan_yudisium
+  - action: utter_ketentuan_yudisium
+
+- rule: Menjelaskan prosedur pendaftaran yudisium
+  steps:
+  - intent: prosedur_daftar_yudisium
+  - action: utter_prosedur_daftar_yudisium
+
+- rule: Menjelaskan syarat yang diperlukan untuk ambil ijazah
+  steps:
+  - intent: syarat_ambil_ijazah
+  - action: utter_syarat_ambil_ijazah
+
+- rule: Menjelaskan prosedur mendapatkan SKTL
+  steps:
+  - intent: prosedur_sktl
+  - action: utter_prosedur_sktl
+
+- rule: Menjelaskan prosedur dalam pembayaran UKT
+  steps:
+  - intent: prosedur_pembayaran_ukt
+  - action: utter_prosedur_pembayaran_ukt
+
+- rule: Memberikan cara cetak bukti pembayaran UKT
+  steps:
+  - intent: cetak_bukti_pembayaran_ukt
+  - action: utter_cetak_bukti_pembayaran_ukt
+
+- rule: Menjelaskan kualifikasi dosen di UPNVJ
+  steps:
+  - intent: kualifikasi_dosen_upnvj
+  - action: utter_kualifikasi_dosen_upnvj
+
+- rule: Menjelaskan kewajiban dari dosen pembimbing akademik
+  steps:
+  - intent: kewajiban_dosen_pembimbing
+  - action: utter_kewajiban_dosen_pembimbing
+
+- rule: Menjelaskan kriteria dari dosen pembimbing Tugas Akhir
+  steps:
+  - intent: kriteria_dosen_pembimbing_tugas_akhir
+  - action: utter_kriteria_dosen_pembimbing_tugas_akhir
+
+- rule: Menjelaskan tugas dari dosen pembimbing tugas akhir
+  steps:
+  - intent: tugas_dosen_pembimbing_tugas_akhir
+  - action: utter_tugas_dosen_pembimbing_tugas_akhir
+
+- rule: Menjelaskan mekanisme pada penetapan dosen pembimbing
+  steps:
+  - intent: mekanisme_penetapan_dosen_pembimbing
+  - action: utter_mekanisme_penetapan_dosen_pembimbing
+
+- rule: Menjelaskan sarana pada kegiatan akademik perkuliahan
+  steps:
+  - intent: sarana_akademik_perkuliahan
+  - action: utter_sarana_akademik_perkuliahan
+
+- rule: Memberikan daftar ruangan rapat yang ada pada UPNVJ
+  steps:
+  - intent: ruang_upnvj
+  - action: utter_ruang_upnvj
+
+- rule: Menjelaskan prosedur untuk menggunakan ruangan rapat di UPNVJ
+  steps:
+  - intent: prosedur_menggunakan_ruangan
+  - action: utter_prosedur_menggunakan_ruangan
+
+- rule: Memberikan daftar jalur-jalur mahasiswa baru
+  steps:
+  - intent: jalur_mahasiswa_baru_upnvj
+  - action: utter_jalur_mahasiswa_baru_upnvj
+
+- rule: Menjelaskan prosedur dari pendaftaran mahasiswa baru
+  steps:
+  - intent: prosedur_pendaftaran_mahasiswa_baru
+  - action: utter_prosedur_pendaftaran_mahasiswa_baru
+
+- rule: Menjelaskan prosedur untuk legalisir ijazah dan transkrip nilai
+  steps:
+  - intent: prosedur_legalisir_ijazah_transkrip_nilai
+  - action: utter_prosedur_legalisir_ijazah_transkrip_nilai
+
+- rule: berikan_opsi_intent
+  steps:
+  - intent: option_intent
+  - action: action_provide_intent_options
+
+- rule: Memberikan list form dalam satuan
+  steps:
+  - intent: detil_form_permohonan
+  - action: action_detil_form_permohonan
+
+stories:
+
+- story: Tugas Akhir
+  steps:
+  - intent: syarat_tugas_akhir
+  - action: utter_syarat_tugas_akhir
+  - intent: jangka_waktu_tugas_akhir
+  - action: utter_jangka_waktu_tugas_akhir
+  - intent: perpanjangan_waktu_tugas_akhir
+  - action: utter_perpanjangan_waktu_tugas_akhir
+
+- story: Wisuda
+  steps:
+  - intent: prosedur_daftar_wisuda
+  - action: utter_prosedur_daftar_wisuda
+  - intent: cara_daftar_wisuda
+  - action: utter_cara_daftar_wisuda
+  - intent: syarat_wisuda
+  - action: utter_syarat_wisuda
+  - intent: dress_code_wisuda
+  - action: utter_dress_code_wisuda
+  - intent: waktu_tempat_wisuda
+  - action: utter_waktu_tempat_wisuda
+  - intent: biaya_wisuda
+  - action: utter_biaya_wisuda
+
+- story: Yudisium
+  steps:
+  - intent: ketentuan_yudisium
+  - action: utter_ketentuan_yudisium
+  - intent: prosedur_daftar_yudisium
+  - action: utter_prosedur_daftar_yudisium
+
+- story: Dosen Pembimbing Tugas Akhir
+  steps:
+  - intent: kriteria_dosen_pembimbing_tugas_akhir
+  - action: utter_kriteria_dosen_pembimbing_tugas_akhir
+  - intent: tugas_dosen_pembimbing_tugas_akhir
+  - action: utter_tugas_dosen_pembimbing_tugas_akhir
+
+- story: Ruang Rapat UPNVJ
+  steps:
+  - intent: ruang_upnvj
+  - action: utter_ruang_upnvj
+  - intent: prosedur_menggunakan_ruangan
+  - action: utter_prosedur_menggunakan_ruangan
+
+- story: Mahasiswa Baru
+  steps:
+  - intent: jalur_mahasiswa_baru_upnvj
+  - action: utter_jalur_mahasiswa_baru_upnvj
+  - intent: prosedur_pendaftaran_mahasiswa_baru
+  - action: utter_prosedur_pendaftaran_mahasiswa_baru
+
+- story: Form UPNVJ
+  steps:
+  - intent: form_permohonan
+  - action: action_form_permohonan
+  - intent: detil_form_permohonan
+  - action: action_detil_form_permohonan

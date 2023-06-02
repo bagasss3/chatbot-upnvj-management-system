@@ -22,6 +22,20 @@ func (c *CreateUpdateActionHttpRequest) Validate() error {
 	return validate.Struct(c)
 }
 
+// type ActionHttp struct {
+// 	Id           string         `json:"id"`
+// 	Name         string         `json:"name"`
+// 	GetHttpReq   string         `json:"get_http_req"`
+// 	PostHttpReq  string         `json:"post_http_req"`
+// 	PutHttpReq   string         `json:"put_http_req"`
+// 	DelHttpReq   string         `json:"del_http_req"`
+// 	ApiKey       string         `json:"api_key"`
+// 	TextResponse string         `json:"text_response"`
+// 	CreatedAt    time.Time      `json:"created_at"`
+// 	UpdatedAt    time.Time      `json:"updated_at"`
+// 	DeletedAt    gorm.DeletedAt `json:"deleted_at"`
+// }
+
 type ActionHttp struct {
 	Id           string         `json:"id"`
 	Name         string         `json:"name"`
@@ -34,6 +48,7 @@ type ActionHttp struct {
 	CreatedAt    time.Time      `json:"created_at"`
 	UpdatedAt    time.Time      `json:"updated_at"`
 	DeletedAt    gorm.DeletedAt `json:"deleted_at"`
+	ReqBodies    []*ReqBody     `json:"req_bodies" gorm:"foreignKey:ActionHttpId"`
 }
 
 type ActionHttpController interface {
@@ -43,6 +58,7 @@ type ActionHttpController interface {
 	HandleUpdateActionHttp() echo.HandlerFunc
 	HandleDeleteActionHttp() echo.HandlerFunc
 	HandleCountAllActionHttp() echo.HandlerFunc
+	HandleFindAllActionHttpWithReqBodies() echo.HandlerFunc
 }
 
 type ActionHttpService interface {
@@ -52,6 +68,7 @@ type ActionHttpService interface {
 	UpdateActionHttp(ctx context.Context, id string, req CreateUpdateActionHttpRequest) (*ActionHttp, error)
 	DeleteActionHttp(ctx context.Context, id string) (bool, error)
 	CountAllActionHttp(ctx context.Context) (int64, error)
+	FindAllWithReqBodies(ctx context.Context) ([]*ActionHttp, error)
 }
 
 type ActionHttpRepository interface {
@@ -61,4 +78,5 @@ type ActionHttpRepository interface {
 	Update(ctx context.Context, actionHttp *ActionHttp) error
 	Delete(ctx context.Context, id string) error
 	CountAll(ctx context.Context) (int64, error)
+	FindAllWithReqBodies(ctx context.Context) ([]*ActionHttp, error)
 }

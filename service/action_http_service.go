@@ -67,6 +67,20 @@ func (a *actionHttpService) FindAllActionHttp(ctx context.Context, name string) 
 	return actionHttps, nil
 }
 
+func (a *actionHttpService) FindAllWithReqBodies(ctx context.Context) ([]*model.ActionHttp, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	actionHttps, err := a.actionHttpRepository.FindAllWithReqBodies(ctx)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	return actionHttps, nil
+}
+
 func (a *actionHttpService) FindActionHttpByID(ctx context.Context, id string) (*model.ActionHttp, error) {
 	log := logrus.WithFields(logrus.Fields{
 		"ctx": ctx,
