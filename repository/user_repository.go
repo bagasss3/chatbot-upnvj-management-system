@@ -44,7 +44,7 @@ func (u *userRepository) FindByID(ctx context.Context, id string) (*model.User, 
 	})
 
 	user := &model.User{}
-	err := u.db.WithContext(ctx).Take(user, "id = ?", id).Error
+	err := u.db.WithContext(ctx).Preload("Major").Take(user, "id = ?", id).Error
 	switch err {
 	case nil:
 	case gorm.ErrRecordNotFound:
@@ -99,7 +99,7 @@ func (u *userRepository) FindAll(ctx context.Context) ([]*model.User, error) {
 	})
 
 	var users []*model.User
-	res := u.db.WithContext(ctx).Where("type = ?", "ADMIN").Find(&users)
+	res := u.db.WithContext(ctx).Preload("Major").Where("type = ?", "ADMIN").Find(&users)
 	if res.Error != nil {
 		log.Error(res.Error)
 		return users, res.Error

@@ -65,6 +65,8 @@ func server(cmd *cobra.Command, args []string) {
 	trainingHistoryRepository := repository.NewTrainingHistoryRepository(MysqlDB)
 	logIntentRepository := repository.NewLogIntentRepository(MysqlDB)
 	fallbackChatLogRepository := repository.NewFallbackChatLogRepository(MysqlDB)
+	majorRepository := repository.NewMajorRepository(MysqlDB)
+	facultyRepository := repository.NewFacultyRepository(MysqlDB)
 
 	userService := service.NewUserService(userRepository)
 	authService := service.NewAuthService(userRepository, sessionRepository)
@@ -84,6 +86,8 @@ func server(cmd *cobra.Command, args []string) {
 	workerService := service.NewWorkerService(trainingHistoryRepository, intentRepository, utteranceRepository, actionHttpRepository, entityRepository, exampleRepository, ruleRepository, storyRepository, stepRepository, configurationRepository)
 	fallbackChatLogService := service.NewFallbackChatLogService(fallbackChatLogRepository)
 	conversationService := service.NewConversationService(ruleRepository, storyRepository)
+	majorService := service.NewMajorService(majorRepository)
+	facultyService := service.NewFacultyService(facultyRepository)
 
 	userController := controller.NewUserController(userService)
 	authController := controller.NewAuthController(authService)
@@ -103,6 +107,8 @@ func server(cmd *cobra.Command, args []string) {
 	workerController := controller.NewWorkerController(workerService)
 	fallbackChatLogController := controller.NewFallbackChatLogController(fallbackChatLogService)
 	conversationController := controller.NewConversationController(conversationService)
+	majorController := controller.NewMajorController(majorService)
+	facultyController := controller.NewFacultyController(facultyService)
 
 	router.NewRouter(httpServer.Group("/api"),
 		userController,
@@ -122,7 +128,9 @@ func server(cmd *cobra.Command, args []string) {
 		logIntentController,
 		workerController,
 		fallbackChatLogController,
-		conversationController)
+		conversationController,
+		majorController,
+		facultyController)
 
 	// Graceful Shutdown
 	// Catch Signal
