@@ -40,7 +40,7 @@ func (e *entityRepository) FindAll(ctx context.Context, intentId string) ([]*mod
 	})
 
 	var entities []*model.Entity
-	res := e.db.WithContext(ctx).Where("intent_id = ?", intentId).Find(&entities)
+	res := e.db.WithContext(ctx).Where("intent_id = ?", intentId).Order("created_at DESC").Find(&entities)
 	if res.Error != nil {
 		log.Error(res.Error)
 		return nil, res.Error

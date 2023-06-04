@@ -65,7 +65,7 @@ func (e *exampleRepository) FindAllByIntentID(ctx context.Context, intentId stri
 	})
 
 	var examples []*model.Example
-	res := e.db.WithContext(ctx).Where("intent_id = ?", intentId).Find(&examples)
+	res := e.db.WithContext(ctx).Where("intent_id = ?", intentId).Order("created_at DESC").Find(&examples)
 	if res.Error != nil {
 		log.Error(res.Error)
 		return examples, res.Error

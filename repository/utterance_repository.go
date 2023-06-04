@@ -66,9 +66,9 @@ func (u *utteranceRepository) FindAll(ctx context.Context, name string) ([]*mode
 	var utterances []*model.Utterance
 	var res *gorm.DB
 	if name == "" {
-		res = u.db.WithContext(ctx).Find(&utterances)
+		res = u.db.WithContext(ctx).Order("created_at DESC").Find(&utterances)
 	} else {
-		res = u.db.WithContext(ctx).Where("name LIKE ?", "%"+name+"%").Find(&utterances)
+		res = u.db.WithContext(ctx).Where("name LIKE ?", "%"+name+"%").Order("created_at DESC").Find(&utterances)
 	}
 	if res.Error != nil {
 		log.Error(res.Error)
