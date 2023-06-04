@@ -53,6 +53,7 @@ func (th *trainingHistoryService) CreateTrainingHistory(ctx context.Context, req
 		UserId:    req.UserId,
 		TotalTime: req.TotalTime,
 		Status:    req.Status,
+		User:      user,
 	}
 
 	err = th.trainingHistoryRepository.Create(ctx, trainingHistory)

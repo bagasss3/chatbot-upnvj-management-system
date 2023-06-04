@@ -39,7 +39,7 @@ func (th *trainingHistoryRepository) FindAll(ctx context.Context) ([]*model.Trai
 	})
 
 	var trainingHistories []*model.TrainingHistory
-	res := th.db.WithContext(ctx).Find(&trainingHistories)
+	res := th.db.WithContext(ctx).Preload("User").Order("created_at DESC").Find(&trainingHistories)
 	if res.Error != nil {
 		log.Error(res.Error)
 		return nil, res.Error

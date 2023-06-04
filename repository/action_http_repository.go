@@ -42,9 +42,9 @@ func (a *actionHttpRepository) FindAll(ctx context.Context, name string) ([]*mod
 	var actionHttps []*model.ActionHttp
 	var res *gorm.DB
 	if name == "" {
-		res = a.db.WithContext(ctx).Find(&actionHttps)
+		res = a.db.WithContext(ctx).Order("created_at DESC").Find(&actionHttps)
 	} else {
-		res = a.db.WithContext(ctx).Where("name LIKE ?", "%"+name+"%").Find(&actionHttps)
+		res = a.db.WithContext(ctx).Where("name LIKE ?", "%"+name+"%").Order("created_at DESC").Find(&actionHttps)
 	}
 	if res.Error != nil {
 		log.Error(res.Error)

@@ -43,9 +43,9 @@ func (fcl *fallbackChatLogRepository) FindAll(ctx context.Context, page string) 
 	var res *gorm.DB
 
 	if page == string(model.FallbackPageDashboard) {
-		res = fcl.db.WithContext(ctx).Limit(5).Find(&fallbackChatLog)
+		res = fcl.db.WithContext(ctx).Order("created_at DESC").Limit(5).Find(&fallbackChatLog)
 	} else {
-		res = fcl.db.WithContext(ctx).Find(&fallbackChatLog)
+		res = fcl.db.WithContext(ctx).Order("created_at DESC").Find(&fallbackChatLog)
 	}
 
 	if res.Error != nil {

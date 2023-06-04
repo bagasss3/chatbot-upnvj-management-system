@@ -99,7 +99,7 @@ func (u *userRepository) FindAll(ctx context.Context) ([]*model.User, error) {
 	})
 
 	var users []*model.User
-	res := u.db.WithContext(ctx).Preload("Major").Where("type = ?", "ADMIN").Find(&users)
+	res := u.db.WithContext(ctx).Preload("Major").Where("type = ?", "ADMIN").Order("created_at DESC").Find(&users)
 	if res.Error != nil {
 		log.Error(res.Error)
 		return users, res.Error
