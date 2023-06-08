@@ -42,9 +42,9 @@ func (s *storyRepository) FindAll(ctx context.Context, name string) ([]*model.St
 	var stories []*model.Story
 	var res *gorm.DB
 	if name == "" {
-		res = s.db.WithContext(ctx).Find(&stories)
+		res = s.db.WithContext(ctx).Order("created_at DESC").Find(&stories)
 	} else {
-		res = s.db.WithContext(ctx).Where("story_title LIKE ?", "%"+name+"%").Find(&stories)
+		res = s.db.WithContext(ctx).Where("story_title LIKE ?", "%"+name+"%").Order("created_at DESC").Find(&stories)
 	}
 	if res.Error != nil {
 		log.Error(res.Error)

@@ -83,7 +83,7 @@ func server(cmd *cobra.Command, args []string) {
 	configurationService := service.NewConfigurationService(configurationRepository, utteranceRepository)
 	trainingHistoryService := service.NewTrainingHistoryService(trainingHistoryRepository, userRepository)
 	logIntentService := service.NewLogIntentService(logIntentRepository, intentRepository)
-	workerService := service.NewWorkerService(trainingHistoryRepository, intentRepository, utteranceRepository, actionHttpRepository, entityRepository, exampleRepository, ruleRepository, storyRepository, stepRepository, configurationRepository)
+	workerService := service.NewWorkerService(trainingHistoryRepository, intentRepository, utteranceRepository, actionHttpRepository, entityRepository, exampleRepository, ruleRepository, storyRepository, stepRepository, configurationRepository, userRepository)
 	fallbackChatLogService := service.NewFallbackChatLogService(fallbackChatLogRepository)
 	conversationService := service.NewConversationService(ruleRepository, storyRepository)
 	majorService := service.NewMajorService(majorRepository)

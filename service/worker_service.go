@@ -30,6 +30,7 @@ type workerService struct {
 	storyRepository           model.StoryRepository
 	stepRepository            model.StepRepository
 	configurationRepository   model.ConfigurationRepository
+	userRepository            model.UserRepository
 }
 
 func NewWorkerService(
@@ -43,6 +44,7 @@ func NewWorkerService(
 	storyRepository model.StoryRepository,
 	stepRepository model.StepRepository,
 	configurationRepository model.ConfigurationRepository,
+	userRepository model.UserRepository,
 ) model.WorkerService {
 	return &workerService{
 		trainingHistoryRepository: trainingHistoryRepository,
@@ -55,6 +57,7 @@ func NewWorkerService(
 		storyRepository:           storyRepository,
 		stepRepository:            stepRepository,
 		configurationRepository:   configurationRepository,
+		userRepository:            userRepository,
 	}
 }
 
@@ -431,6 +434,15 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		}
 	}
 
+	user, err := w.userRepository.FindByID(ctx, ctxUser.UserID)
+	if err != nil {
+		log.Error(err)
+	}
+
+	if user == nil {
+		log.Error(constant.ErrNotFound)
+	}
+
 	// Calculate the elapsed time
 	elapsedTime := time.Since(startTime)
 	elapsedSeconds := int(elapsedTime.Seconds())
@@ -439,6 +451,7 @@ func (w *workerService) StartTrainingModel(ctx context.Context) (*model.Training
 		Id:        id,
 		UserId:    ctxUser.UserID,
 		TotalTime: elapsedSeconds,
+		User:      user,
 	}
 
 	if rasaResp != nil {

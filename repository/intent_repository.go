@@ -68,7 +68,7 @@ func (i *intentRepository) FindByName(ctx context.Context, name string) (*model.
 	})
 
 	intent := &model.Intent{}
-	err := i.db.WithContext(ctx).Take(intent, "name = ?", name).Error
+	err := i.db.WithContext(ctx).Order("created_at DESC").Take(intent, "name = ?", name).Error
 	switch err {
 	case nil:
 	case gorm.ErrRecordNotFound:
@@ -89,9 +89,9 @@ func (i *intentRepository) FindAll(ctx context.Context, name string) ([]*model.I
 	var intents []*model.Intent
 	var res *gorm.DB
 	if name == "" {
-		res = i.db.WithContext(ctx).Find(&intents)
+		res = i.db.WithContext(ctx).Order("created_at DESC").Find(&intents)
 	} else {
-		res = i.db.WithContext(ctx).Where("name LIKE ?", "%"+name+"%").Find(&intents)
+		res = i.db.WithContext(ctx).Where("name LIKE ?", "%"+name+"%").Order("created_at DESC").Find(&intents)
 	}
 	if res.Error != nil {
 		log.Error(res.Error)

@@ -27,6 +27,7 @@ func (c *CreateTrainingHistoryRequest) Validate() error {
 type TrainingHistory struct {
 	Id        string    `json:"id"`
 	UserId    string    `json:"user_id"`
+	User      *User     `json:"user" gorm:"foreignKey:UserId"`
 	TotalTime int       `json:"total_time"`
 	Status    Status    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`

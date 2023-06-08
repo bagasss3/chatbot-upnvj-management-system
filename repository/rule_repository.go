@@ -42,9 +42,9 @@ func (r *ruleRepository) FindAll(ctx context.Context, name string) ([]*model.Rul
 	var rules []*model.Rule
 	var res *gorm.DB
 	if name == "" {
-		res = r.db.WithContext(ctx).Find(&rules)
+		res = r.db.WithContext(ctx).Order("created_at DESC").Find(&rules)
 	} else {
-		res = r.db.WithContext(ctx).Where("rule_title LIKE ?", "%"+name+"%").Find(&rules)
+		res = r.db.WithContext(ctx).Where("rule_title LIKE ?", "%"+name+"%").Order("created_at DESC").Find(&rules)
 	}
 	if res.Error != nil {
 		log.Error(res.Error)
