@@ -131,3 +131,7 @@ func APIKey() string {
 func RasaGenerateActions() string {
 	return viper.GetString("rasa.generate_actions")
 }
+
+func GroupFallbackLog() string {
+	return viper.GetString("rasa.group_fallback")
+}
