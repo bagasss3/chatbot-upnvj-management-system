@@ -25,4 +25,7 @@ func (r *router) intentRouter() {
 
 	r.group.POST("/intent/fallback", r.fallbackChatLogController.HandleCreateFallbackChatLog(), middleware.MustHaveAPIKey())
 	r.group.GET("/intent/fallback", r.fallbackChatLogController.HandleFindAllFallbackChatLog(), middleware.MustAuthenticateAccessToken())
+	r.group.GET("/intent/log/fallback", r.fallbackChatLogController.HandleFindAllFallbackChatLogGroupCluster(), middleware.MustAuthenticateAccessToken())
+	r.group.GET("/intent/all/fallback", r.fallbackChatLogController.HandleFindAllFallbackChatLogOldAndNew(), middleware.MustHaveAPIKey())
+	r.group.GET("/intent/fallback/update", r.fallbackChatLogController.HandleUpdateGroupCluster(), middleware.MustAuthenticateAccessToken())
 }

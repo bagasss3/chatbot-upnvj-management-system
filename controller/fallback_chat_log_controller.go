@@ -49,3 +49,39 @@ func (fcl *fallbackChatLogController) HandleFindAllFallbackChatLog() echo.Handle
 		return c.JSON(http.StatusOK, fallbacks)
 	}
 }
+
+func (fcl *fallbackChatLogController) HandleFindAllFallbackChatLogGroupCluster() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		fallbacks, err := fcl.fallbackChatLogService.FindAllFallbackChatLogGroupCluster(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, fallbacks)
+	}
+}
+
+func (fcl *fallbackChatLogController) HandleFindAllFallbackChatLogOldAndNew() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		fallbacks, err := fcl.fallbackChatLogService.FindAllFallbackChatLogOldAndNew(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, fallbacks)
+	}
+}
+
+func (fcl *fallbackChatLogController) HandleUpdateGroupCluster() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		fallbacks, err := fcl.fallbackChatLogService.UpdateGroupCluster(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, fallbacks)
+	}
+}
