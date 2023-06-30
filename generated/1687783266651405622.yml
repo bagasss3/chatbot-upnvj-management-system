@@ -74,6 +74,7 @@ entities:
   - form_name
   - fakultas
   - jurusan
+  - test
 
 actions:
   - action_provide_intent_options
@@ -317,7 +318,10 @@ responses:
       r.	Form Pendaftaran Pembimbing TA/Skripsi 
 
   utter_fallback:
-  - text: "Saya tidak mengerti maksud perkataan anda. Coba parafrase kalimat anda"
+  - text: |-
+      Saya tidak mengerti maksud perkataan anda. Coba parafrase kalimat anda.
+      Jika jawaban saya tidak sesuai silahkan hubungi petugas kami:
+      - Bagas Prabaswara (081296814536)
 
 session_config:
   session_expiration_time: 60
@@ -762,7 +766,7 @@ nlu:
     - Bagaimana prosedur untuk mendaftar wisuda?
     - apa saja tahapan untuk mendaftar wisuda?
     - Apa saja prosedur dalam mendaftar wisuda?
-    - Bagaimana cara mendaftar wisuda?
+    - Bagaimana prosedur mendaftar wisuda?
     - Maaf bapak/ibu, saya ingin bertanya untuk prosedur pendaftaran wisuda seperti apa ya? Terima kasih
     - Bagaimana prosedur untuk mendaftar wisuda?
     - prosedur pendaftaran wisudanya apa aja ya?
@@ -850,7 +854,7 @@ nlu:
     - Bagaimana cara untuk saya melakukan pendaftaran Wisuda? 
     - bagaimana cara daftar wisuda?
     - Cara daftar wisuda gimana ya?
-    - Bagaimana prosedur pendaftaran wisuda ya ?
+    - Bagaimana cara pendaftaran wisuda ya ?
     - Jadwal pendaftaran wisuda kapan ya?
     - bagaimana cara mendaftar wisuda?
     - Bagaimana cara untuk mendaftar wisuda?
@@ -934,7 +938,7 @@ nlu:
     - Berapa lama waktu yang dibutuhkan untuk mengerjakan Tugas Akhir? 
     - Seberapa lama waktu yang diberikan untuk mengerjakan TA
     - Timeline dari pengerjaan tugas akhir seperti apa yah
-    - Untuk ngambil tugas akhir, matkul apa saja yang harus udh selesai
+    - Berapa lama waktu untuk pengerjaan TA?
 
 - intent: form_permohonan
   examples: |
