@@ -63,7 +63,7 @@ func (fcl *fallbackChatLogRepository) FindAllGroupCluster(ctx context.Context) (
 
 	var result []*model.ClusterData
 	fcl.db.WithContext(ctx).Table("fallback_chat_logs").
-		Select("cluster, id, chat, created_at, deleted_at").
+		Select("cluster").
 		Group("cluster").
 		Scan(&result)
 
