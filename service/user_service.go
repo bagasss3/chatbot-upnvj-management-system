@@ -191,7 +191,7 @@ func (u *userService) UpdateProfile(ctx context.Context, id string, req model.Up
 		return false, constant.ErrUnauthorized
 	}
 
-	newPlainPassword := helper.GeneratePassword()
+	newPlainPassword := req.Password
 	newHashedPassword, err := helper.HashString(newPlainPassword)
 	if err != nil {
 		log.Error(err)
