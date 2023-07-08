@@ -8,6 +8,7 @@ func (r *router) intentRouter() {
 	r.group.POST("/intent", r.intentController.HandleCreateIntent(), middleware.MustAuthenticateAccessToken())
 	r.group.GET("/intent", r.intentController.HandleFindAllIntent())
 	r.group.GET("/intent/example", r.intentController.HandleFindAllWithExamples())
+	r.group.GET("/intent/academics", r.intentController.HandleFindAllInformationAcademics())
 	r.group.GET("/intent/:id", r.intentController.HandleFindIntentByID(), middleware.MustAuthenticateAccessToken())
 	r.group.PUT("/intent/:id", r.intentController.HandleUpdateIntent(), middleware.MustAuthenticateAccessToken())
 	r.group.DELETE("/intent/:id", r.intentController.HandleDeleteIntent(), middleware.MustAuthenticateAccessToken())

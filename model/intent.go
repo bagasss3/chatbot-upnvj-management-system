@@ -9,7 +9,8 @@ import (
 )
 
 type CreateUpdateIntentRequest struct {
-	Name string `json:"name" validate:"required,min=3,max=60"`
+	Name                  string `json:"name" validate:"required,min=3,max=60"`
+	IsInformationAcademic bool   `json:"is_information_academic" validate:"required"`
 }
 
 func (c *CreateUpdateIntentRequest) Validate() error {
@@ -17,12 +18,13 @@ func (c *CreateUpdateIntentRequest) Validate() error {
 }
 
 type Intent struct {
-	Id        string         `json:"id"`
-	Name      string         `json:"name"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at"`
-	Examples  []*Example     `json:"examples" gorm:"foreignKey:IntentId"`
+	Id                    string         `json:"id"`
+	Name                  string         `json:"name"`
+	IsInformationAcademic bool           `json:"is_information_academic"`
+	CreatedAt             time.Time      `json:"created_at"`
+	UpdatedAt             time.Time      `json:"updated_at"`
+	DeletedAt             gorm.DeletedAt `json:"deleted_at"`
+	Examples              []*Example     `json:"examples" gorm:"foreignKey:IntentId"`
 }
 
 type IntentController interface {
@@ -33,6 +35,7 @@ type IntentController interface {
 	HandleDeleteIntent() echo.HandlerFunc
 	HandleCountAllIntent() echo.HandlerFunc
 	HandleFindAllWithExamples() echo.HandlerFunc
+	HandleFindAllInformationAcademics() echo.HandlerFunc
 }
 
 type IntentService interface {
@@ -43,6 +46,7 @@ type IntentService interface {
 	DeleteIntent(ctx context.Context, id string) (bool, error)
 	CountAllIntent(ctx context.Context) (int64, error)
 	FindAllWithExamples(ctx context.Context) ([]*Intent, error)
+	FindAllInformationAcademics(ctx context.Context) ([]*Intent, error)
 }
 
 type IntentRepository interface {
@@ -54,4 +58,5 @@ type IntentRepository interface {
 	DeleteWithTx(ctx context.Context, id string, tx *gorm.DB) error
 	CountAll(ctx context.Context) (int64, error)
 	FindAllWithExamples(ctx context.Context) ([]*Intent, error)
+	FindAllInformationAcademics(ctx context.Context) ([]*Intent, error)
 }
