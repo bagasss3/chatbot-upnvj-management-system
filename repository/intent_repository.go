@@ -110,6 +110,7 @@ func (i *intentRepository) Update(ctx context.Context, id string, intent *model.
 
 	err := i.db.WithContext(ctx).Select(
 		"name",
+		"is_information_academic",
 	).Updates(intent).Error
 	if err != nil {
 		log.Error(err)
@@ -155,6 +156,22 @@ func (i *intentRepository) FindAllWithExamples(ctx context.Context) ([]*model.In
 
 	var intents []*model.Intent
 	res := i.db.WithContext(ctx).Preload("Examples").Where("name <> ?", "nlu_fallback").Find(&intents)
+
+	if res.Error != nil {
+		log.Error(res.Error)
+		return intents, res.Error
+	}
+
+	return intents, nil
+}
+
+func (i *intentRepository) FindAllInformationAcademics(ctx context.Context) ([]*model.Intent, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	var intents []*model.Intent
+	res := i.db.WithContext(ctx).Where("is_information_academic = ?", true).Find(&intents)
 
 	if res.Error != nil {
 		log.Error(res.Error)

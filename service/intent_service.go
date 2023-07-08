@@ -38,8 +38,9 @@ func (i *intentService) CreateIntent(ctx context.Context, req model.CreateUpdate
 	}
 
 	intent := &model.Intent{
-		Id:   helper.GenerateID(),
-		Name: req.Name,
+		Id:                    helper.GenerateID(),
+		Name:                  req.Name,
+		IsInformationAcademic: req.IsInformationAcademic,
 	}
 
 	err := i.intentRepository.Create(ctx, intent)
@@ -72,6 +73,20 @@ func (i *intentService) FindAllWithExamples(ctx context.Context) ([]*model.Inten
 	})
 
 	intents, err := i.intentRepository.FindAllWithExamples(ctx)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	return intents, nil
+}
+
+func (i *intentService) FindAllInformationAcademics(ctx context.Context) ([]*model.Intent, error) {
+	log := logrus.WithFields(logrus.Fields{
+		"ctx": ctx,
+	})
+
+	intents, err := i.intentRepository.FindAllInformationAcademics(ctx)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -122,6 +137,7 @@ func (i *intentService) UpdateIntent(ctx context.Context, id string, req model.C
 	}
 
 	intent.Name = req.Name
+	intent.IsInformationAcademic = req.IsInformationAcademic
 	err = i.intentRepository.Update(ctx, intent.Id, intent)
 	if err != nil {
 		log.Error(err)

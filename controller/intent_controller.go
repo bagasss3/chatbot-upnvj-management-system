@@ -28,7 +28,8 @@ func (i *intentController) HandleCreateIntent() echo.HandlerFunc {
 		}
 
 		create, err := i.intentService.CreateIntent(c.Request().Context(), model.CreateUpdateIntentRequest{
-			Name: req.Name,
+			Name:                  req.Name,
+			IsInformationAcademic: req.IsInformationAcademic,
 		})
 		if err != nil {
 			log.Error(err)
@@ -64,6 +65,18 @@ func (i *intentController) HandleFindAllWithExamples() echo.HandlerFunc {
 	}
 }
 
+func (i *intentController) HandleFindAllInformationAcademics() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		intents, err := i.intentService.FindAllInformationAcademics(c.Request().Context())
+		if err != nil {
+			log.Error(err)
+			return err
+		}
+
+		return c.JSON(http.StatusOK, intents)
+	}
+}
+
 func (i *intentController) HandleFindIntentByID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
@@ -89,7 +102,8 @@ func (i *intentController) HandleUpdateIntent() echo.HandlerFunc {
 		id := c.Param("id")
 
 		update, err := i.intentService.UpdateIntent(c.Request().Context(), id, model.CreateUpdateIntentRequest{
-			Name: req.Name,
+			Name:                  req.Name,
+			IsInformationAcademic: req.IsInformationAcademic,
 		})
 		if err != nil {
 			log.Error(err)
