@@ -10,7 +10,7 @@ import (
 
 type CreateUpdateIntentRequest struct {
 	Name                  string `json:"name" validate:"required,min=3,max=60"`
-	IsInformationAcademic bool   `json:"is_information_academic" validate:"required"`
+	IsInformationAcademic bool   `json:"is_information_academic"`
 }
 
 func (c *CreateUpdateIntentRequest) Validate() error {
