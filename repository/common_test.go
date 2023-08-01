@@ -24,6 +24,9 @@ func initializeRepoTestKit(t *testing.T) (kit *repoTestKit, close func()) {
 	if err != nil {
 		logrus.Fatal(err)
 	}
+
+	dbmock.ExpectQuery("^SELECT VERSION()").WillReturnRows(sqlmock.NewRows([]string{"VERSION()"}).AddRow("8.0.0"))
+
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{Conn: dbconn}), &gorm.Config{})
 	if err != nil {
 		logrus.Fatal(err)

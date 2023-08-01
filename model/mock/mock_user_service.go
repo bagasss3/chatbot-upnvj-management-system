@@ -51,7 +51,7 @@ func (mr *MockUserServiceMockRecorder) CreateAdmin(arg0, arg1 interface{}) *gomo
 }
 
 // DeleteAdminByID mocks base method.
-func (m *MockUserService) DeleteAdminByID(arg0 context.Context, arg1 int64) (bool, error) {
+func (m *MockUserService) DeleteAdminByID(arg0 context.Context, arg1 string) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteAdminByID", arg0, arg1)
 	ret0, _ := ret[0].(bool)
@@ -66,7 +66,7 @@ func (mr *MockUserServiceMockRecorder) DeleteAdminByID(arg0, arg1 interface{}) *
 }
 
 // FindAdminByID mocks base method.
-func (m *MockUserService) FindAdminByID(arg0 context.Context, arg1 int64) (*model.User, error) {
+func (m *MockUserService) FindAdminByID(arg0 context.Context, arg1 string) (*model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindAdminByID", arg0, arg1)
 	ret0, _ := ret[0].(*model.User)
@@ -96,7 +96,7 @@ func (mr *MockUserServiceMockRecorder) FindAllAdmin(arg0 interface{}) *gomock.Ca
 }
 
 // UpdateAdmin mocks base method.
-func (m *MockUserService) UpdateAdmin(arg0 context.Context, arg1 int64, arg2 model.UpdateAdminRequest) (*model.User, error) {
+func (m *MockUserService) UpdateAdmin(arg0 context.Context, arg1 string, arg2 model.UpdateAdminRequest) (*model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateAdmin", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*model.User)
@@ -108,4 +108,19 @@ func (m *MockUserService) UpdateAdmin(arg0 context.Context, arg1 int64, arg2 mod
 func (mr *MockUserServiceMockRecorder) UpdateAdmin(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateAdmin", reflect.TypeOf((*MockUserService)(nil).UpdateAdmin), arg0, arg1, arg2)
+}
+
+// UpdateProfile mocks base method.
+func (m *MockUserService) UpdateProfile(arg0 context.Context, arg1 string, arg2 model.UpdateUserPasswordRequest) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateProfile", arg0, arg1, arg2)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateProfile indicates an expected call of UpdateProfile.
+func (mr *MockUserServiceMockRecorder) UpdateProfile(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProfile", reflect.TypeOf((*MockUserService)(nil).UpdateProfile), arg0, arg1, arg2)
 }

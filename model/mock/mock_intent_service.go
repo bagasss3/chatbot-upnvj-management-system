@@ -35,6 +35,21 @@ func (m *MockIntentService) EXPECT() *MockIntentServiceMockRecorder {
 	return m.recorder
 }
 
+// CountAllIntent mocks base method.
+func (m *MockIntentService) CountAllIntent(arg0 context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountAllIntent", arg0)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountAllIntent indicates an expected call of CountAllIntent.
+func (mr *MockIntentServiceMockRecorder) CountAllIntent(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountAllIntent", reflect.TypeOf((*MockIntentService)(nil).CountAllIntent), arg0)
+}
+
 // CreateIntent mocks base method.
 func (m *MockIntentService) CreateIntent(arg0 context.Context, arg1 model.CreateUpdateIntentRequest) (*model.Intent, error) {
 	m.ctrl.T.Helper()
@@ -51,7 +66,7 @@ func (mr *MockIntentServiceMockRecorder) CreateIntent(arg0, arg1 interface{}) *g
 }
 
 // DeleteIntent mocks base method.
-func (m *MockIntentService) DeleteIntent(arg0 context.Context, arg1 int64) (bool, error) {
+func (m *MockIntentService) DeleteIntent(arg0 context.Context, arg1 string) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteIntent", arg0, arg1)
 	ret0, _ := ret[0].(bool)
@@ -65,23 +80,53 @@ func (mr *MockIntentServiceMockRecorder) DeleteIntent(arg0, arg1 interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteIntent", reflect.TypeOf((*MockIntentService)(nil).DeleteIntent), arg0, arg1)
 }
 
-// FindAllIntent mocks base method.
-func (m *MockIntentService) FindAllIntent(arg0 context.Context) ([]*model.Intent, error) {
+// FindAllInformationAcademics mocks base method.
+func (m *MockIntentService) FindAllInformationAcademics(arg0 context.Context) ([]*model.Intent, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindAllIntent", arg0)
+	ret := m.ctrl.Call(m, "FindAllInformationAcademics", arg0)
+	ret0, _ := ret[0].([]*model.Intent)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindAllInformationAcademics indicates an expected call of FindAllInformationAcademics.
+func (mr *MockIntentServiceMockRecorder) FindAllInformationAcademics(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAllInformationAcademics", reflect.TypeOf((*MockIntentService)(nil).FindAllInformationAcademics), arg0)
+}
+
+// FindAllIntent mocks base method.
+func (m *MockIntentService) FindAllIntent(arg0 context.Context, arg1 string) ([]*model.Intent, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindAllIntent", arg0, arg1)
 	ret0, _ := ret[0].([]*model.Intent)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindAllIntent indicates an expected call of FindAllIntent.
-func (mr *MockIntentServiceMockRecorder) FindAllIntent(arg0 interface{}) *gomock.Call {
+func (mr *MockIntentServiceMockRecorder) FindAllIntent(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAllIntent", reflect.TypeOf((*MockIntentService)(nil).FindAllIntent), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAllIntent", reflect.TypeOf((*MockIntentService)(nil).FindAllIntent), arg0, arg1)
+}
+
+// FindAllWithExamples mocks base method.
+func (m *MockIntentService) FindAllWithExamples(arg0 context.Context) ([]*model.Intent, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindAllWithExamples", arg0)
+	ret0, _ := ret[0].([]*model.Intent)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindAllWithExamples indicates an expected call of FindAllWithExamples.
+func (mr *MockIntentServiceMockRecorder) FindAllWithExamples(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAllWithExamples", reflect.TypeOf((*MockIntentService)(nil).FindAllWithExamples), arg0)
 }
 
 // FindIntentByID mocks base method.
-func (m *MockIntentService) FindIntentByID(arg0 context.Context, arg1 int64) (*model.Intent, error) {
+func (m *MockIntentService) FindIntentByID(arg0 context.Context, arg1 string) (*model.Intent, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindIntentByID", arg0, arg1)
 	ret0, _ := ret[0].(*model.Intent)
@@ -96,7 +141,7 @@ func (mr *MockIntentServiceMockRecorder) FindIntentByID(arg0, arg1 interface{}) 
 }
 
 // UpdateIntent mocks base method.
-func (m *MockIntentService) UpdateIntent(arg0 context.Context, arg1 int64, arg2 model.CreateUpdateIntentRequest) (*model.Intent, error) {
+func (m *MockIntentService) UpdateIntent(arg0 context.Context, arg1 string, arg2 model.CreateUpdateIntentRequest) (*model.Intent, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateIntent", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*model.Intent)
