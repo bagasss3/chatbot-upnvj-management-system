@@ -50,7 +50,7 @@ func (mr *MockUserRepositoryMockRecorder) Create(arg0, arg1 interface{}) *gomock
 }
 
 // Delete mocks base method.
-func (m *MockUserRepository) Delete(arg0 context.Context, arg1 int64) error {
+func (m *MockUserRepository) Delete(arg0 context.Context, arg1 string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -94,7 +94,7 @@ func (mr *MockUserRepositoryMockRecorder) FindByEmail(arg0, arg1 interface{}) *g
 }
 
 // FindByID mocks base method.
-func (m *MockUserRepository) FindByID(arg0 context.Context, arg1 int64) (*model.User, error) {
+func (m *MockUserRepository) FindByID(arg0 context.Context, arg1 string) (*model.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByID", arg0, arg1)
 	ret0, _ := ret[0].(*model.User)
@@ -123,7 +123,7 @@ func (mr *MockUserRepositoryMockRecorder) ResetPassword(arg0, arg1 interface{}) 
 }
 
 // Update mocks base method.
-func (m *MockUserRepository) Update(arg0 context.Context, arg1 int64, arg2 *model.User) error {
+func (m *MockUserRepository) Update(arg0 context.Context, arg1 string, arg2 *model.User) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
